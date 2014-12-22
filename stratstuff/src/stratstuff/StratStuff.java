@@ -1,12 +1,18 @@
 package stratstuff;
 
-public class StratStuff {
+public class StratStuff implements Runnable {
 
 	public StratStuff() {
 	}
 
-	public static void main(String[] args) {
-		System.out.println("Wow.");
+	@Override
+	public void run() {
+		while (true) {
+
+		}
 	}
 
+	public static void main(String[] args) {
+		new Thread(new StratStuff()).start();
+	}
 }
