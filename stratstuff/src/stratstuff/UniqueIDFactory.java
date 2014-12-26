@@ -3,11 +3,10 @@ package stratstuff;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UniqueIDFactory {
-	
-	private static AtomicInteger idMaker;
 
-	public static int getID()
-	{
+	private static AtomicInteger idMaker = new AtomicInteger();
+
+	public static int getID() {
 		return idMaker.incrementAndGet();
 	}
 
