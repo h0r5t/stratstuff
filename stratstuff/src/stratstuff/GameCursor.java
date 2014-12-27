@@ -62,13 +62,13 @@ public class GameCursor implements Drawable {
 				GameSettings.TILE_SIZE, null);
 
 		g.setColor(Color.BLACK);
-		g.fillRect(GameSettings.FRAME_WIDTH - box_length,
-				GameSettings.FRAME_HEIGHT - box_height, box_length, box_height);
+		g.fillRect(GameSettings.GAME_FRAME_WIDTH - box_length,
+				GameSettings.GAME_FRAME_HEIGHT - box_height, box_length, box_height);
 
 		String text = "X=" + x + " Y=" + y + " Z=" + camera.getLayer();
 		g.setColor(Color.WHITE);
-		g.drawString(text, GameSettings.FRAME_WIDTH - box_length,
-				GameSettings.FRAME_HEIGHT - box_height + 20);
+		g.drawString(text, GameSettings.GAME_FRAME_WIDTH - box_length,
+				GameSettings.GAME_FRAME_HEIGHT - box_height + 20);
 
 	}
 }

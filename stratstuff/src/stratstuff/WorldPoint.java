@@ -10,7 +10,7 @@ public class WorldPoint extends GraphNode implements Drawable {
 	private int attachedGround;
 	private ArrayList<Integer> attachedElements;
 	private ArrayList<MovingObject> attachedMovingObjects;
-	public GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
+	private GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
 
 	public WorldPoint(int x, int y, int z, int ground) {
 		super(UniqueIDFactory.getID(), x, y, z);
@@ -74,4 +74,25 @@ public class WorldPoint extends GraphNode implements Drawable {
 	public int getY() {
 		return (int) y();
 	}
+
+	public int getGround() {
+		return attachedGround;
+	}
+
+	public ArrayList<Integer> getAttachedElements() {
+		return attachedElements;
+	}
+
+	public ArrayList<MovingObject> getAttachedMovingObjects() {
+		return attachedMovingObjects;
+	}
+
+	public GraphEdgeInfo getMyEdges() {
+		return myEdges;
+	}
+
+	public void setMyEdges(GraphEdgeInfo myEdges) {
+		this.myEdges = myEdges;
+	}
+
 }

@@ -15,6 +15,15 @@ public class GraphEdgeInfo {
 		return outgoing;
 	}
 
+	public GraphEdgeInfo getCopy() {
+		GraphEdgeInfo i = new GraphEdgeInfo(outgoing);
+		i.setDown(down);
+		i.setRight(right);
+		i.setLeft(left);
+		i.setUp(up);
+		return i;
+	}
+
 	public boolean canLeft() {
 		return left;
 	}

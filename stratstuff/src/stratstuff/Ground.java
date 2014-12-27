@@ -21,14 +21,14 @@ public class Ground {
 
 			groundMap.put(
 					0,
-					new GroundInfo("rock", ImageIO.read(new File(
+					new GroundInfo("grass", ImageIO.read(new File(
 							FileSystem.TEXTURES_GROUNDS_DIR + "/0/0.png")),
 							false));
 			groundMap.put(
 					1,
-					new GroundInfo("grass", ImageIO.read(new File(
+					new GroundInfo("rock", ImageIO.read(new File(
 							FileSystem.TEXTURES_GROUNDS_DIR + "/1/0.png")),
-							false));
+							true));
 
 		} catch (Exception e) {
 			e.printStackTrace();

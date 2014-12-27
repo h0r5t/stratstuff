@@ -8,6 +8,8 @@ public class Main implements Runnable {
 	private GameCamera gameCamera;
 	private GameCursor gameCursor;
 
+	private static DebugConsole debugConsole;
+
 	private ArrayList<Updatable> updatables;
 
 	private VisualManager visualManager;
@@ -15,6 +17,11 @@ public class Main implements Runnable {
 	private InputManager inputManager;
 
 	public Main() {
+		updatables = new ArrayList<Updatable>();
+
+		debugConsole = new DebugConsole(this);
+		updatables.add(debugConsole);
+
 		Element.loadElements();
 		Ground.loadGrounds();
 		world = WorldLoader.loadWorld("test");
@@ -24,15 +31,13 @@ public class Main implements Runnable {
 
 		createUpdatables();
 
-		worldManager.initialCreationOfEdges();
+		world.initialCreationOfEdges();
 
 		visualManager.activate();
 	}
 
 	private void createUpdatables() {
-		updatables = new ArrayList<Updatable>();
-
-		inputManager = new InputManager(world, gameCamera, gameCursor);
+		inputManager = new InputManager(gameCamera, gameCursor);
 		updatables.add(inputManager);
 
 		visualManager = new VisualManager(world, gameCamera, inputManager,
@@ -67,7 +72,19 @@ public class Main implements Runnable {
 		}
 	}
 
+	public static void printDebug(String message) {
+		debugConsole.print(message);
+	}
+
 	public static void main(String[] args) {
 		new Thread(new Main()).start();
+	}
+
+	public GameCamera getCamera() {
+		return gameCamera;
+	}
+
+	public World getWorld() {
+		return world;
 	}
 }

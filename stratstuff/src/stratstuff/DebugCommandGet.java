@@ -10,7 +10,7 @@ public class DebugCommandGet extends DebugCommand {
 
 	@Override
 	protected boolean checkArguments(ArrayList<String> args) {
-		if (args.get(0).startsWith("$")) {
+		if (args.size() == 1 && args.get(0).startsWith("$")) {
 			return true;
 		}
 		return false;

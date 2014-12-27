@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class DebugConsole {
+public class DebugConsole implements Updatable {
 
 	private Main main;
 	private DebugConsoleFrame frame;
@@ -26,6 +26,8 @@ public class DebugConsole {
 		commandMap = new HashMap<String, DebugCommand>();
 		commandMap.put("set", new DebugCommandSet(this));
 		commandMap.put("get", new DebugCommandGet(this));
+		commandMap.put("edges", new DebugCommandPrintEdges(this));
+		commandMap.put("chg", new DebugCommandChange(this));
 	}
 
 	public void commandEntered(String input) {
@@ -38,6 +40,15 @@ public class DebugConsole {
 	}
 
 	private void doCommand(String command, ArrayList<String> arguments) {
+		if (command.equals("set") == false && command.equals("get") == false) {
+			arguments = insertVariables(arguments);
+		}
+
+		if (command.equals("cls")) {
+			frame.resetText();
+			return;
+		}
+
 		if (commandMap.containsKey(command)) {
 			commandMap.get(command).execute(arguments);
 		} else {
@@ -46,17 +57,31 @@ public class DebugConsole {
 		print("\n");
 	}
 
+	private ArrayList<String> insertVariables(ArrayList<String> arguments) {
+		ArrayList<String> newList = new ArrayList<String>();
+		for (String s : arguments) {
+			String value = getVariableValue(s);
+			if (value != null) {
+				if (value.contains(" ")) {
+					String[] split = value.split(" ");
+					for (String a : split) {
+						newList.add(a);
+					}
+
+				}
+
+			} else {
+				newList.add(s);
+			}
+		}
+		return newList;
+	}
+
 	public void setVariable(String var, String value) {
 		variablesMap.put(var, value);
 	}
 
 	public String getVariableValue(String var) {
-		if (var.equals("$cursor")) {
-			String val = main.getCursor().getX() + ","
-					+ main.getCursor().getY() + ","
-					+ main.getCamera().getLayer();
-			return val;
-		}
 		// null if not defined
 		return variablesMap.get(var);
 	}
@@ -65,8 +90,20 @@ public class DebugConsole {
 		frame.print(s);
 	}
 
+	public Main getMain() {
+		return main;
+	}
+
 	public void requestFocus() {
 		frame.requestFocus();
+	}
+
+	@Override
+	public void update() {
+		String val = main.getCursor().getX() + " " + main.getCursor().getY()
+				+ " " + main.getCamera().getLayer();
+		variablesMap.put("$cursor", val);
+		variablesMap.put("$c", val);
 	}
 
 }

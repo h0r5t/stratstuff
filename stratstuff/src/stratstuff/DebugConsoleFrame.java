@@ -12,6 +12,7 @@ public class DebugConsoleFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextArea textArea;
 	private String currentText = "";
+	private String lastCommand = "";
 	private DebugConsole console;
 
 	public DebugConsoleFrame(DebugConsole console) {
@@ -46,7 +47,18 @@ public class DebugConsoleFrame extends JFrame {
 	private void callback() {
 		String newInput = textArea.getText().replace(currentText, "");
 		currentText = textArea.getText();
+		lastCommand = newInput.trim();
 		console.commandEntered(newInput.trim());
+	}
+
+	public void resetText() {
+		textArea.setText("");
+		textArea.repaint();
+		currentText = "";
+	}
+
+	private void loadLastCommand() {
+		print(lastCommand);
 	}
 
 	private class KL implements KeyListener {
@@ -59,6 +71,9 @@ public class DebugConsoleFrame extends JFrame {
 		public void keyReleased(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				callback();
+			}
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				loadLastCommand();
 			}
 		}
 

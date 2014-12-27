@@ -7,12 +7,10 @@ public class InputManager implements Updatable {
 
 	private GameCamera camera;
 	private GameCursor cursor;
-	private World world;
 
 	private HashMap<Integer, Boolean> keyMap;
 
-	public InputManager(World world, GameCamera cam, GameCursor cursor) {
-		this.world = world;
+	public InputManager(GameCamera cam, GameCursor cursor) {
 		this.camera = cam;
 		this.cursor = cursor;
 		keyMap = new HashMap<Integer, Boolean>();
@@ -57,15 +55,6 @@ public class InputManager implements Updatable {
 		if (keyMap.get(KeyEvent.VK_A)) {
 			cursor.moveLeft();
 		}
-
-		// debug
-		if (keyMap.get(KeyEvent.VK_ENTER)) {
-			int x = cursor.getX();
-			int y = cursor.getY();
-			int z = camera.getLayer();
-
-			world.debugPrintEdges(x, y, z);
-		}
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -75,5 +64,4 @@ public class InputManager implements Updatable {
 	public void keyReleased(KeyEvent e) {
 		keyMap.put(e.getKeyCode(), false);
 	}
-
 }

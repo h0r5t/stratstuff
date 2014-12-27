@@ -20,52 +20,262 @@ public class World extends Graph {
 		return (WorldPoint) getNode(worldPointArray[z][x][y]);
 	}
 
-	public void applyEdgeArray(GraphEdgeInfo a) {
-		WorldPoint out = a.getOutgoing();
-		int x = out.getX();
-		int y = out.getY();
-		int z = out.getZ();
+	private void applyEdgeArray(GraphEdgeInfo a) {
+		WorldPoint p = a.getOutgoing();
+		int x = p.getX();
+		int y = p.getY();
+		int z = p.getZ();
 
-		if (out.myEdges.canLeft() && x > 0) {
-			removeEdge(worldPointArray[z][x][y], worldPointArray[z][x - 1][y]);
+		if (p.getMyEdges().canLeft() == false && x > 0) {
+			if (a.canLeft()) {
+				addEdge(worldPointArray[z][x][y], worldPointArray[z][x - 1][y],
+						0);
+			}
+
 		}
 
-		if (out.myEdges.canRight() && x < GameSettings.WORLD_WIDTH) {
-			removeEdge(worldPointArray[z][x][y], worldPointArray[z][x + 1][y]);
+		else if (p.getMyEdges().canLeft() && x > 0) {
+			if (a.canLeft() == false) {
+				System.out.println("ha");
+				removeEdge(worldPointArray[z][x][y],
+						worldPointArray[z][x - 1][y]);
+			}
 		}
 
-		if (out.myEdges.canUp() && y > 0) {
-			removeEdge(worldPointArray[z][x][y], worldPointArray[z][x][y - 1]);
+		if (p.getMyEdges().canRight() == false && x < GameSettings.WORLD_WIDTH) {
+			if (a.canRight()) {
+				addEdge(worldPointArray[z][x][y], worldPointArray[z][x + 1][y],
+						0);
+			}
 		}
 
-		if (out.myEdges.canDown() && y < GameSettings.WORLD_HEIGHT) {
-			removeEdge(worldPointArray[z][x][y], worldPointArray[z][x][y + 1]);
+		else if (p.getMyEdges().canRight() && x < GameSettings.WORLD_WIDTH) {
+			if (a.canRight() == false) {
+				removeEdge(worldPointArray[z][x][y],
+						worldPointArray[z][x + 1][y]);
+			}
 		}
 
-		if (a.canLeft() && x > 0) {
-			addEdge(worldPointArray[z][x][y], worldPointArray[z][x - 1][y], 0);
+		if (p.getMyEdges().canDown() == false && y < GameSettings.WORLD_HEIGHT) {
+			if (a.canDown()) {
+				addEdge(worldPointArray[z][x][y], worldPointArray[z][x][y + 1],
+						0);
+			}
 		}
 
-		if (a.canRight() && x + 1 < GameSettings.WORLD_WIDTH) {
-			addEdge(worldPointArray[z][x][y], worldPointArray[z][x + 1][y], 0);
+		else if (p.getMyEdges().canDown() && y < GameSettings.WORLD_HEIGHT) {
+			if (a.canDown() == false) {
+				removeEdge(worldPointArray[z][x][y],
+						worldPointArray[z][x][y + 1]);
+			}
 		}
 
-		if (a.canDown() && y + 1 < GameSettings.WORLD_HEIGHT) {
-			addEdge(worldPointArray[z][x][y], worldPointArray[z][x][y + 1], 0);
+		if (p.getMyEdges().canUp() == false && y > 0) {
+			if (a.canUp()) {
+				addEdge(worldPointArray[z][x][y], worldPointArray[z][x][y - 1],
+						0);
+			}
 		}
 
-		if (a.canUp() && y > 0) {
-			addEdge(worldPointArray[z][x][y], worldPointArray[z][x][y - 1], 0);
+		else if (p.getMyEdges().canUp() && y > 0) {
+			if (a.canUp() == false) {
+				removeEdge(worldPointArray[z][x][y],
+						worldPointArray[z][x][y - 1]);
+			}
 		}
 
-		out.myEdges = a;
+		p.setMyEdges(a);
 	}
 
-	public void debugPrintEdges(int x, int y, int z) {
-		System.out.println("Edges for " + x + "," + y + "," + z);
+	public String getEdgesString(int x, int y, int z) {
+		String out = "";
+		out += ("Edges for " + x + "," + y + "," + z + " :\n");
 		for (GraphEdge edge : this.getEdgeArray(worldPointArray[z][x][y])) {
-			System.out.println("x:" + edge.to().x() + " y:" + edge.to().y());
+			if (edge.to().x() > x) {
+				out += "→ ";
+			}
+			if (edge.to().x() < x) {
+				out += "← ";
+			}
+			if (edge.to().y() > y) {
+				out += "↓ ";
+			}
+			if (edge.to().y() < y) {
+				out += "↑ ";
+			}
+			out += ("x:" + edge.to().x() + " y:" + edge.to().y());
+			out += "\n";
 		}
-		System.out.println("     ----------");
+		return out;
+	}
+
+	public void changeGround(WorldPoint p, int groundID) {
+		boolean collided = p.collides();
+		p.setGround(groundID);
+		if (p.collides() && collided == false) {
+			updateEdges(p, true);
+		}
+		if (p.collides() == false && collided) {
+			updateEdges(p, false);
+		}
+	}
+
+	public void attachElement(WorldPoint p, int elementID) {
+		boolean collided = p.collides();
+		p.attachElement(elementID);
+		if (p.collides() && collided == false) {
+			updateEdges(p, true);
+		}
+		if (p.collides() == false && collided) {
+			updateEdges(p, false);
+		}
+	}
+
+	public void setOnlyElement(WorldPoint p, int elementID) {
+		// TODO
+		// if (p.collides() && collided == false) {
+		// updateEdges(p, true);
+		// }
+		// if (p.collides() == false && collided) {
+		// updateEdges(p, false);
+		// }
+	}
+
+	private void updateEdges(WorldPoint p, boolean nowCollides) {
+		// update edges from p, then to p
+		// if nowcollides, need to remove edges to and from
+		// if !nowcollides, need to add edges to and from
+
+		int x = p.getX();
+		int y = p.getY();
+		int z = p.getZ();
+
+		if (nowCollides) {
+			// removeEdges
+			WorldPoint current = p;
+			WorldPoint left = getWP(x - 1, y, z);
+			WorldPoint right = getWP(x + 1, y, z);
+			WorldPoint down = getWP(x, y + 1, z);
+			WorldPoint up = getWP(x, y - 1, z);
+			GraphEdgeInfo a = new GraphEdgeInfo(current);
+			applyEdgeArray(a);
+
+			a = left.getMyEdges().getCopy();
+			System.out.println("left " + left.getMyEdges().canRight());
+			a.setRight(false);
+			applyEdgeArray(a);
+
+			a = right.getMyEdges().getCopy();
+			System.out.println("right " + a.canLeft());
+			a.setLeft(false);
+			applyEdgeArray(a);
+
+			a = up.getMyEdges().getCopy();
+			System.out.println("up " + a.canDown());
+			a.setDown(false);
+			applyEdgeArray(a);
+
+			a = down.getMyEdges().getCopy();
+			System.out.println("down " + a.canUp());
+			a.setUp(false);
+			applyEdgeArray(a);
+
+		} else {
+			// addEdges
+			WorldPoint current = p;
+			WorldPoint left = getWP(x - 1, y, z);
+			WorldPoint right = getWP(x + 1, y, z);
+			WorldPoint down = getWP(x, y + 1, z);
+			WorldPoint up = getWP(x, y - 1, z);
+			GraphEdgeInfo a = new GraphEdgeInfo(current);
+
+			if (left.collides() == false) {
+				a.setLeft(true);
+			}
+			if (right.collides() == false) {
+				a.setRight(true);
+			}
+			if (down.collides() == false) {
+				a.setDown(true);
+			}
+			if (up.collides() == false) {
+				a.setUp(true);
+			}
+			applyEdgeArray(a);
+
+			// add edges to current
+
+			a = left.getMyEdges().getCopy();
+			if (left.collides() == false) {
+				a.setRight(true);
+			}
+			applyEdgeArray(a);
+
+			a = right.getMyEdges().getCopy();
+			if (right.collides() == false) {
+				a.setLeft(true);
+			}
+			applyEdgeArray(a);
+
+			a = down.getMyEdges().getCopy();
+			if (down.collides() == false) {
+				a.setUp(true);
+			}
+			applyEdgeArray(a);
+
+			a = up.getMyEdges().getCopy();
+			if (up.collides() == false) {
+				a.setDown(true);
+			}
+			applyEdgeArray(a);
+		}
+	}
+
+	public void initialCreationOfEdges() {
+		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
+			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
+				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+					WorldPoint current = getWP(x, y, z);
+
+					GraphEdgeInfo a = new GraphEdgeInfo(current);
+
+					if (current.collides()) {
+						applyEdgeArray(a);
+					} else {
+						if (x > 0) {
+							WorldPoint left = getWP(x - 1, y, z);
+							if (left.collides() == false) {
+								a.setLeft(true);
+							}
+						}
+
+						if (x < GameSettings.WORLD_WIDTH - 1) {
+							WorldPoint right = getWP(x + 1, y, z);
+							if (right.collides() == false) {
+								a.setRight(true);
+							}
+						}
+
+						if (y > 0) {
+							WorldPoint up = getWP(x, y - 1, z);
+							if (up.collides() == false) {
+								a.setUp(true);
+							}
+						}
+
+						if (y < GameSettings.WORLD_HEIGHT - 1) {
+							WorldPoint down = getWP(x, y + 1, z);
+							if (down.collides() == false) {
+								a.setDown(true);
+							}
+						}
+
+						applyEdgeArray(a);
+					}
+
+				}
+			}
+		}
+
 	}
 }
