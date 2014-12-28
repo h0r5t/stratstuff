@@ -28,6 +28,10 @@ public class MovePath {
 	}
 
 	public WorldPoint getNext() {
+		if (route == null) {
+			// no route possible, this path will be deleted by its task
+			return null;
+		}
 		if (index < route.size()) {
 			GraphNode next = route.get(index);
 			WorldPoint p = world.getWP((int) next.x(), (int) next.y(),
