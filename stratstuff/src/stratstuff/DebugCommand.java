@@ -8,6 +8,7 @@ public abstract class DebugCommand {
 
 	public DebugCommand(DebugConsole console) {
 		this.console = console;
+
 	}
 
 	protected abstract boolean checkArguments(ArrayList<String> args);
