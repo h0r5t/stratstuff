@@ -36,6 +36,8 @@ public class Main implements Runnable {
 		world.initialCreationOfEdges();
 
 		visualManager.activate();
+
+		debugConsole.runDefaultScript();
 	}
 
 	private void createUpdatables() {

@@ -15,11 +15,20 @@ public class DebugConsole implements Updatable {
 		this.main = main;
 		frame = new DebugConsoleFrame(this);
 		frame.setVisible(true);
-		frame.print(">");
-		frame.setInitialCaret();
-
 		initCommands();
 		variablesMap = new HashMap<String, String>();
+	}
+
+	public void runDefaultScript() {
+		runScript("default");
+		print(">");
+		frame.setCaretToLast();
+	}
+
+	private void runScript(String name) {
+		DebugScript s = new DebugScript(this, name);
+		s.execute();
+		frame.setCaretToLast();
 	}
 
 	private void initCommands() {
@@ -27,19 +36,24 @@ public class DebugConsole implements Updatable {
 		commandMap.put("set", new DebugCommandSet(this));
 		commandMap.put("get", new DebugCommandGet(this));
 		commandMap.put("edges", new DebugCommandPrintEdges(this));
-		commandMap.put("chg", new DebugCommandChange(this));
+		commandMap.put("chg", new DebugCommandChangeGround(this));
 		commandMap.put("spawn", new DebugCommandSpawn(this));
 		commandMap.put("ls", new DebugCommandListUnits(this));
-		commandMap.put("movetask", new DebugCommandMoveTask(this));
+		commandMap.put("move", new DebugCommandMoveTask(this));
+		commandMap.put("build", new DebugCommandBuild(this));
+		commandMap.put("destroy", new DebugCommandDestroy(this));
 	}
 
-	public void commandEntered(String input) {
+	public void commandEntered(boolean fromScript, String input) {
 		String[] s = input.split(" ");
 		ArrayList<String> args = new ArrayList<String>(Arrays.asList(Arrays
 				.copyOfRange(s, 1, s.length)));
 		doCommand(s[0], args);
 
-		frame.print(">");
+		if (!fromScript) {
+			frame.print(">");
+
+		}
 	}
 
 	private void doCommand(String command, ArrayList<String> arguments) {
@@ -49,6 +63,11 @@ public class DebugConsole implements Updatable {
 
 		if (command.equals("cls")) {
 			frame.resetText();
+			return;
+		}
+
+		else if (command.equals("run")) {
+			runScript(arguments.get(0));
 			return;
 		}
 

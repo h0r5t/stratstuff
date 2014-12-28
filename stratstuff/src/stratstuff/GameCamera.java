@@ -14,6 +14,18 @@ public class GameCamera {
 		cameraLayer = 0;
 	}
 
+	public void goDeeper() {
+		if (cameraLayer < GameSettings.WORLD_DEPTH - 1) {
+			cameraLayer++;
+		}
+	}
+
+	public void goHigher() {
+		if (cameraLayer > 0) {
+			cameraLayer--;
+		}
+	}
+
 	public int getStartX() {
 		return cameraX;
 	}
@@ -27,7 +39,8 @@ public class GameCamera {
 	}
 
 	public int getEndY() {
-		return cameraY + GameSettings.GAME_FRAME_HEIGHT / GameSettings.TILE_SIZE;
+		return cameraY + GameSettings.GAME_FRAME_HEIGHT
+				/ GameSettings.TILE_SIZE;
 	}
 
 	public int getLayer() {

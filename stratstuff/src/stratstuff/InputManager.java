@@ -23,6 +23,9 @@ public class InputManager implements Updatable {
 		keyMap.put(KeyEvent.VK_S, false);
 		keyMap.put(KeyEvent.VK_D, false);
 		keyMap.put(KeyEvent.VK_A, false);
+		keyMap.put(KeyEvent.VK_Y, false);
+		keyMap.put(KeyEvent.VK_X, false);
+		keyMap.put(KeyEvent.VK_SHIFT, false);
 
 		// debug
 		keyMap.put(KeyEvent.VK_ENTER, false);
@@ -54,6 +57,13 @@ public class InputManager implements Updatable {
 		}
 		if (keyMap.get(KeyEvent.VK_A)) {
 			cursor.moveLeft();
+		}
+
+		if (keyMap.get(KeyEvent.VK_X)) {
+			camera.goDeeper();
+		}
+		if (keyMap.get(KeyEvent.VK_Y)) {
+			camera.goHigher();
 		}
 	}
 

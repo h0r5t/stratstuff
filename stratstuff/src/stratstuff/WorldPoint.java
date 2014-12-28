@@ -19,8 +19,16 @@ public class WorldPoint extends GraphNode implements Drawable {
 		attachedMovingObjects = new ArrayList<MovingObject>();
 	}
 
+	// use method addElement() in World (bridges get registered there
+	@Deprecated
 	public void attachElement(int elementID) {
 		attachedElements.add(elementID);
+	}
+
+	// same here
+	@Deprecated
+	public void removeAttachedElement(int id) {
+		attachedElements.remove(new Integer(id));
 	}
 
 	public void attachMovingObject(MovingObject o) {

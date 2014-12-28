@@ -48,7 +48,7 @@ public class DebugConsoleFrame extends JFrame {
 		String newInput = textArea.getText().replace(currentText, "");
 		currentText = textArea.getText();
 		lastCommand = newInput.trim();
-		console.commandEntered(newInput.trim());
+		console.commandEntered(false, newInput.trim());
 	}
 
 	public void resetText() {
@@ -82,6 +82,10 @@ public class DebugConsoleFrame extends JFrame {
 
 		}
 
+	}
+
+	public void setCaretToLast() {
+		textArea.setCaretPosition(currentText.length());
 	}
 
 }

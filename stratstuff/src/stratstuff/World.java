@@ -34,6 +34,40 @@ public class World extends Graph {
 		return objectMap;
 	}
 
+	private void addZEdgeInBothDirections(WorldPoint a, WorldPoint b) {
+		addZEdge(a, b);
+		addZEdge(b, a);
+	}
+
+	private void addZEdge(WorldPoint from, WorldPoint to) {
+		int xfrom = from.getX();
+		int yfrom = from.getY();
+		int zfrom = from.getZ();
+		int xto = to.getX();
+		int yto = to.getY();
+		int zto = to.getZ();
+
+		addEdge(worldPointArray[zfrom][xfrom][yfrom],
+				worldPointArray[zto][xto][yto], 0);
+	}
+
+	private void removeZEdgeInBothDirections(WorldPoint a, WorldPoint b) {
+		removeZEdge(a, b);
+		removeZEdge(b, a);
+	}
+
+	private void removeZEdge(WorldPoint from, WorldPoint to) {
+		int xfrom = from.getX();
+		int yfrom = from.getY();
+		int zfrom = from.getZ();
+		int xto = to.getX();
+		int yto = to.getY();
+		int zto = to.getZ();
+
+		removeEdge(worldPointArray[zfrom][xfrom][yfrom],
+				worldPointArray[zto][xto][yto]);
+	}
+
 	public void moveObjectTo(MovingObject o, WorldPoint p) {
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
@@ -66,7 +100,6 @@ public class World extends Graph {
 
 		else if (p.getMyEdges().canLeft() && x > 0) {
 			if (a.canLeft() == false) {
-				System.out.println("ha");
 				removeEdge(worldPointArray[z][x][y],
 						worldPointArray[z][x - 1][y]);
 			}
@@ -150,14 +183,55 @@ public class World extends Graph {
 		}
 	}
 
-	public void attachElement(WorldPoint p, int elementID) {
+	@SuppressWarnings("deprecation")
+	public void attachElement(boolean initial, WorldPoint p, int elementID) {
 		boolean collided = p.collides();
 		p.attachElement(elementID);
+
+		if (initial == false) {
+			if (p.collides() && collided == false) {
+				updateEdges(p, true);
+			}
+			if (p.collides() == false && collided) {
+				updateEdges(p, false);
+			}
+			if (Element.isLadderDown(elementID)) {
+				addZEdgeInBothDirections(p,
+						getWP(p.getX(), p.getY(), p.getZ() + 1));
+				getWP(p.getX(), p.getY(), p.getZ() + 1).attachElement(
+						Element.getByName("ladderup"));
+			}
+			if (Element.isLadderUp(elementID)) {
+				addZEdgeInBothDirections(p,
+						getWP(p.getX(), p.getY(), p.getZ() - 1));
+				getWP(p.getX(), p.getY(), p.getZ() - 1).attachElement(
+						Element.getByName("ladderdown"));
+			}
+		}
+
+	}
+
+	@SuppressWarnings("deprecation")
+	public void removeElementFromWP(WorldPoint p, int elementID) {
+		boolean collided = p.collides();
+		p.removeAttachedElement(elementID);
 		if (p.collides() && collided == false) {
 			updateEdges(p, true);
 		}
 		if (p.collides() == false && collided) {
 			updateEdges(p, false);
+		}
+		if (Element.isLadderDown(elementID)) {
+			removeZEdgeInBothDirections(p,
+					getWP(p.getX(), p.getY(), p.getZ() + 1));
+			getWP(p.getX(), p.getY(), p.getZ() + 1).removeAttachedElement(
+					Element.getByName("ladderup"));
+		}
+		if (Element.isLadderUp(elementID)) {
+			removeZEdgeInBothDirections(p,
+					getWP(p.getX(), p.getY(), p.getZ() - 1));
+			getWP(p.getX(), p.getY(), p.getZ() - 1).removeAttachedElement(
+					Element.getByName("ladderdown"));
 		}
 	}
 
@@ -191,22 +265,18 @@ public class World extends Graph {
 			applyEdgeInfo(a);
 
 			a = left.getMyEdges().getCopy();
-			System.out.println("left " + left.getMyEdges().canRight());
 			a.setRight(false);
 			applyEdgeInfo(a);
 
 			a = right.getMyEdges().getCopy();
-			System.out.println("right " + a.canLeft());
 			a.setLeft(false);
 			applyEdgeInfo(a);
 
 			a = up.getMyEdges().getCopy();
-			System.out.println("up " + a.canDown());
 			a.setDown(false);
 			applyEdgeInfo(a);
 
 			a = down.getMyEdges().getCopy();
-			System.out.println("down " + a.canUp());
 			a.setUp(false);
 			applyEdgeInfo(a);
 

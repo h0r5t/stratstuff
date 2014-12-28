@@ -23,13 +23,13 @@ public class WorldLoader {
 		for (int a = 0; a < amount; a++) {
 			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH);
 			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT);
-			w.getWP(x, y, 0).attachElement(0);
+			w.attachElement(true, w.getWP(x, y, 0), 0);
 		}
 		amount = 1000;
 		for (int a = 0; a < amount; a++) {
 			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH);
 			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT);
-			w.getWP(x, y, 0).attachElement(1);
+			w.attachElement(true, w.getWP(x, y, 0), 1);
 		}
 		return w;
 	}

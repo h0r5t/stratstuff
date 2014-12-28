@@ -2,9 +2,9 @@ package stratstuff;
 
 import java.util.ArrayList;
 
-public class DebugCommandChange extends DebugCommand {
+public class DebugCommandChangeGround extends DebugCommand {
 
-	public DebugCommandChange(DebugConsole console) {
+	public DebugCommandChangeGround(DebugConsole console) {
 		super(console);
 	}
 
@@ -18,10 +18,10 @@ public class DebugCommandChange extends DebugCommand {
 
 	@Override
 	public void execute(ArrayList<String> args) {
-		int x = Integer.parseInt(args.get(0));
-		int y = Integer.parseInt(args.get(1));
-		int z = Integer.parseInt(args.get(2));
-		int newID = Integer.parseInt(args.get(3));
+		int x = Integer.parseInt(args.get(1));
+		int y = Integer.parseInt(args.get(2));
+		int z = Integer.parseInt(args.get(3));
+		int newID = Integer.parseInt(args.get(0));
 
 		console.getMain()
 				.getWorld()
