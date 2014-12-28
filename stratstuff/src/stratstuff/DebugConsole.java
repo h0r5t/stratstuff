@@ -28,6 +28,9 @@ public class DebugConsole implements Updatable {
 		commandMap.put("get", new DebugCommandGet(this));
 		commandMap.put("edges", new DebugCommandPrintEdges(this));
 		commandMap.put("chg", new DebugCommandChange(this));
+		commandMap.put("spawn", new DebugCommandSpawn(this));
+		commandMap.put("ls", new DebugCommandListUnits(this));
+		commandMap.put("movetask", new DebugCommandMoveTask(this));
 	}
 
 	public void commandEntered(String input) {

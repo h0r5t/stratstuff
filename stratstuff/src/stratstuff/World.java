@@ -1,14 +1,20 @@
 package stratstuff;
 
+import java.util.HashMap;
+
 import pathfinder.Graph;
 import pathfinder.GraphEdge;
 
 public class World extends Graph {
 
 	private Integer[][][] worldPointArray;
+	private HashMap<MovingObject, WorldPoint> objectMap;
+	private Main main;
 
-	public World() {
+	public World(Main main) {
 		worldPointArray = new Integer[GameSettings.WORLD_DEPTH][GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT];
+		objectMap = new HashMap<MovingObject, WorldPoint>();
+		this.main = main;
 	}
 
 	public void addWorldPoint(WorldPoint p) {
@@ -20,7 +26,31 @@ public class World extends Graph {
 		return (WorldPoint) getNode(worldPointArray[z][x][y]);
 	}
 
-	private void applyEdgeArray(GraphEdgeInfo a) {
+	public int getID(WorldPoint p) {
+		return worldPointArray[p.getZ()][p.getX()][p.getY()];
+	}
+
+	public HashMap<MovingObject, WorldPoint> getObjectMap() {
+		return objectMap;
+	}
+
+	public void moveObjectTo(MovingObject o, WorldPoint p) {
+		o.getPosition().removeObjectAttachment(o);
+		p.attachMovingObject(o);
+		objectMap.put(o, p);
+	}
+
+	public void spawnObject(MovingObject o, WorldPoint p) {
+		objectMap.put(o, p);
+		p.attachMovingObject(o);
+		main.getUnitManager().addUnit(o);
+	}
+
+	public WorldPoint getObjectPosition(MovingObject o) {
+		return objectMap.get(o);
+	}
+
+	private void applyEdgeInfo(GraphEdgeInfo a) {
 		WorldPoint p = a.getOutgoing();
 		int x = p.getX();
 		int y = p.getY();
@@ -158,27 +188,27 @@ public class World extends Graph {
 			WorldPoint down = getWP(x, y + 1, z);
 			WorldPoint up = getWP(x, y - 1, z);
 			GraphEdgeInfo a = new GraphEdgeInfo(current);
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = left.getMyEdges().getCopy();
 			System.out.println("left " + left.getMyEdges().canRight());
 			a.setRight(false);
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = right.getMyEdges().getCopy();
 			System.out.println("right " + a.canLeft());
 			a.setLeft(false);
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = up.getMyEdges().getCopy();
 			System.out.println("up " + a.canDown());
 			a.setDown(false);
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = down.getMyEdges().getCopy();
 			System.out.println("down " + a.canUp());
 			a.setUp(false);
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 		} else {
 			// addEdges
@@ -201,7 +231,7 @@ public class World extends Graph {
 			if (up.collides() == false) {
 				a.setUp(true);
 			}
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			// add edges to current
 
@@ -209,25 +239,25 @@ public class World extends Graph {
 			if (left.collides() == false) {
 				a.setRight(true);
 			}
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = right.getMyEdges().getCopy();
 			if (right.collides() == false) {
 				a.setLeft(true);
 			}
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = down.getMyEdges().getCopy();
 			if (down.collides() == false) {
 				a.setUp(true);
 			}
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 
 			a = up.getMyEdges().getCopy();
 			if (up.collides() == false) {
 				a.setDown(true);
 			}
-			applyEdgeArray(a);
+			applyEdgeInfo(a);
 		}
 	}
 
@@ -240,7 +270,7 @@ public class World extends Graph {
 					GraphEdgeInfo a = new GraphEdgeInfo(current);
 
 					if (current.collides()) {
-						applyEdgeArray(a);
+						applyEdgeInfo(a);
 					} else {
 						if (x > 0) {
 							WorldPoint left = getWP(x - 1, y, z);
@@ -270,7 +300,7 @@ public class World extends Graph {
 							}
 						}
 
-						applyEdgeArray(a);
+						applyEdgeInfo(a);
 					}
 
 				}

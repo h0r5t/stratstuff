@@ -27,6 +27,10 @@ public class WorldPoint extends GraphNode implements Drawable {
 		attachedMovingObjects.add(o);
 	}
 
+	public void removeObjectAttachment(MovingObject o) {
+		attachedMovingObjects.remove(o);
+	}
+
 	public void setGround(int groundID) {
 		attachedGround = groundID;
 	}

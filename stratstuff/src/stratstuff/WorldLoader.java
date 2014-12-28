@@ -5,8 +5,8 @@ public class WorldLoader {
 	public WorldLoader() {
 	}
 
-	public static World loadWorld(String worldName) {
-		World w = new World();
+	public static World loadWorld(Main main, String worldName) {
+		World w = new World(main);
 
 		// todo THIS IS TEST STUFF RIGHT NOW
 
@@ -19,13 +19,13 @@ public class WorldLoader {
 
 		}
 
-		int amount = 1000;
+		int amount = 3000;
 		for (int a = 0; a < amount; a++) {
 			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH);
 			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT);
 			w.getWP(x, y, 0).attachElement(0);
 		}
-		amount = 50;
+		amount = 1000;
 		for (int a = 0; a < amount; a++) {
 			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH);
 			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT);

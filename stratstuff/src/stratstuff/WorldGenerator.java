@@ -5,8 +5,8 @@ public class WorldGenerator {
 	public WorldGenerator() {
 	}
 
-	public World generateSimpleTestingWorld(int x, int y, int z) {
-		World w = new World();
+	public World generateSimpleTestingWorld(Main main, int x, int y, int z) {
+		World w = new World(main);
 		return w;
 	}
 }

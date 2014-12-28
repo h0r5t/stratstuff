@@ -15,6 +15,8 @@ public class Main implements Runnable {
 	private VisualManager visualManager;
 	private WorldManager worldManager;
 	private InputManager inputManager;
+	private TaskManager taskManager;
+	private UnitManager unitManager;
 
 	public Main() {
 		updatables = new ArrayList<Updatable>();
@@ -24,7 +26,7 @@ public class Main implements Runnable {
 
 		Element.loadElements();
 		Ground.loadGrounds();
-		world = WorldLoader.loadWorld("test");
+		world = WorldLoader.loadWorld(this, "test");
 
 		gameCamera = new GameCamera(this);
 		gameCursor = new GameCursor(gameCamera);
@@ -46,6 +48,12 @@ public class Main implements Runnable {
 
 		worldManager = new WorldManager(world);
 		updatables.add(worldManager);
+
+		taskManager = new TaskManager(this);
+		updatables.add(taskManager);
+
+		unitManager = new UnitManager(this);
+		updatables.add(unitManager);
 	}
 
 	public GameCursor getCursor() {
@@ -86,5 +94,13 @@ public class Main implements Runnable {
 
 	public World getWorld() {
 		return world;
+	}
+
+	public TaskManager getTaskManager() {
+		return taskManager;
+	}
+
+	public UnitManager getUnitManager() {
+		return unitManager;
 	}
 }
