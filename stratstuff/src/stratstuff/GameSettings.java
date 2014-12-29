@@ -17,5 +17,4 @@ public class GameSettings {
 	public static final int WORLD_WIDTH = 120;
 	public static final int WORLD_HEIGHT = 120;
 	public static final int WORLD_DEPTH = 10;
-
 }
