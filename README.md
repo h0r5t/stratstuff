@@ -1,4 +1,5 @@
-stratstuff - Dwarf Fortress clone xD
+stratstuff
+Dwarf Fortress Java Clone... xD
 ==========
 
 Currently implemented debug_commands:
@@ -13,5 +14,15 @@ Currently implemented debug_commands:
 | build elementID x y z | Builds element at x y z |
 | destroy elementID x y z | Destroys element at x y z |
 | move unitID x y z | creates a unit move task for that unit to x y z |
+
+==========
+
+Scripts have to be placed in /resources/scripts/
+default.script will be executed automatically after world creation.
+
+==========
+
+Library used for pathfinding:
+https://code.google.com/p/path-finder-library/
 
 
