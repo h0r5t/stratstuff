@@ -1,5 +1,5 @@
 #stratstuff
-##A Dwarf Fortress Java Clone... xD
+###A Dwarf Fortress Java Clone... xD
 
 <hr>
 
