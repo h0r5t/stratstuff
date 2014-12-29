@@ -23,7 +23,7 @@ public class DebugScript {
 
 	private void loadScript() throws FileNotFoundException {
 		commands = new ArrayList<String>();
-		Scanner scanner = new Scanner(new File(FileSystem.SCRIPTS_DIR + "/"
+		Scanner scanner = new Scanner(new File(FileSystem.DEBUG_SCRIPTS_DIR + "/"
 				+ scriptName + ".script"));
 
 		while (scanner.hasNextLine()) {
