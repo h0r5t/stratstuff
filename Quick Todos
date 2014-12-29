@@ -1,0 +1,7 @@
+- Rotate some textures and change id system accordingly so ground and element textures look better
+- Attach paths to each WorldPoint they cross so paths can be recalculated when a WP change event occurs 
+  (only when WP goes from !collides to collides)
+- Make Task Management "convenient" and modular
+  --> make abstract class ComplexTask that contains multiple simple tasks
+  --> tasks should have the method isFinished
+- Make task list "impossibleTasks" in TaskManager, these will be eventually moved to openTasks e.g. when they can be reached
