@@ -1,9 +1,9 @@
-<font size="7">stratstuff</font>
-==========
-<font size="5">A Dwarf Fortress Java Clone... xD</font><br>
-==========
+#stratstuff
 
-Currently implemented debug_commands:
+##A Dwarf Fortress Java Clone... xD
+
+
+**Currently implemented debug_commands:**
 
 | Command | Description |
 | ------------- | ------------- |
@@ -16,14 +16,14 @@ Currently implemented debug_commands:
 | destroy elementID x y z | Destroys element at x y z |
 | move unitID x y z | creates a unit move task for that unit to x y z |
 
-==========
+
 
 Scripts have to be placed in /resources/scripts/
 default.script will be executed automatically after world creation.
 
-==========
 
-Library used for pathfinding:
+
+**Library used for pathfinding:**
 https://code.google.com/p/path-finder-library/
 
 
