@@ -155,16 +155,16 @@ public class World extends Graph {
 		out += ("Edges for " + x + "," + y + "," + z + " :\n");
 		for (GraphEdge edge : this.getEdgeArray(worldPointArray[z][x][y])) {
 			if (edge.to().x() > x) {
-				out += "→ ";
+				out += "right";
 			}
 			if (edge.to().x() < x) {
-				out += "← ";
+				out += "left";
 			}
 			if (edge.to().y() > y) {
-				out += "↓ ";
+				out += "down";
 			}
 			if (edge.to().y() < y) {
-				out += "↑ ";
+				out += "up";
 			}
 			out += ("x:" + edge.to().x() + " y:" + edge.to().y());
 			out += "\n";
