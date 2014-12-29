@@ -1,6 +1,7 @@
-stratstuff
+<font size="7">stratstuff</font>
 ==========
-Dwarf Fortress Java Clone... xD
+<font size="5">A Dwarf Fortress Java Clone... xD</font><br>
+==========
 
 Currently implemented debug_commands:
 
