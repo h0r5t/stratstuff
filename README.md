@@ -1,6 +1,6 @@
 stratstuff
-Dwarf Fortress Java Clone... xD
 ==========
+Dwarf Fortress Java Clone... xD
 
 Currently implemented debug_commands:
 
