@@ -1,7 +1,7 @@
 #stratstuff
 ##A Dwarf Fortress Java Clone... xD
 
-
+<hr>
 
 **Currently implemented debug_commands:**
 
