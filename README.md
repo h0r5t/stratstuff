@@ -3,7 +3,7 @@
 
 <hr>
 
-**Currently implemented debug_commands:**
+Currently implemented **debug commands**:
 
 | Command | Description |
 | ------------- | ------------- |
