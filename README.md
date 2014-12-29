@@ -1,6 +1,6 @@
 #stratstuff
-
 ##A Dwarf Fortress Java Clone... xD
+
 
 
 **Currently implemented debug_commands:**
