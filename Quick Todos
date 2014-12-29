@@ -1,3 +1,4 @@
+- Set up Maven!!
 - Rotate some textures and change id system accordingly so ground and element textures look better
 - Attach paths to each WorldPoint they cross so paths can be recalculated when a WP change event occurs 
   (only when WP goes from !collides to collides)
