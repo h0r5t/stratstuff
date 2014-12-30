@@ -16,7 +16,6 @@ sourceSets {
         }
         resources {
        		srcDir 'resources'
-            //srcDir 'lib/pathfinding.jar'
         }
     }
 }
