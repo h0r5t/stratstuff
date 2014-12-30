@@ -27,7 +27,6 @@ jar {
     }
     from(zipTree("lib/pathfinding.jar"))
     eachFile { file ->
-        println(file.getSourcePath())
     	String cut = file.getSourcePath().split("/")[0]
     	if (cut.endsWith(new String("scripts"))) {
     		file.setPath('resources/scripts/' + file.getSourcePath().replace("scripts/", ""))
