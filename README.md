@@ -1,5 +1,6 @@
 #stratstuff
 ###Java 2D Engine in a tile-based 3D environment
+###configurable with Python
 
 <hr>
 
@@ -25,5 +26,3 @@ default.script will be executed automatically after world creation.
 
 **Library used for pathfinding:**
 https://code.google.com/p/path-finder-library/
-
-

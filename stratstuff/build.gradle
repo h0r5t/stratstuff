@@ -14,21 +14,29 @@ sourceSets {
         java {
             srcDir 'src/stratstuff'
         }
+        resources {
+       		srcDir 'resources'
+            //srcDir 'lib/pathfinding.jar'
+        }
     }
 }
 
-apply plugin: 'gradle-one-jar'
-
-buildscript {
-    repositories {
-        mavenCentral()
+jar {
+    manifest {
+        attributes 'Main-Class': 'stratstuff.Main'
     }
-    dependencies {
-        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
-    }
-}
-
-task createOneJar(type: OneJar) {
-    mainClass = 'stratstuff.Main'
-	additionalDir = file('resources')
+    from(zipTree("lib/pathfinding.jar"))
+    eachFile { file ->
+        println(file.getSourcePath())
+    	String cut = file.getSourcePath().split("/")[0]
+    	if (cut.endsWith(new String("scripts"))) {
+    		file.setPath('resources/scripts/' + file.getSourcePath().replace("scripts/", ""))
+    	}
+    	if (cut.endsWith(new String("worlds"))) {
+    		file.setPath('resources/worlds/'  + file.getSourcePath().replace("worlds/", ""))
+    	}
+    	if (cut.endsWith(new String("textures"))) {
+    		file.setPath('resources/textures/'  + file.getSourcePath().replace("textures/", ""))
+    	}
+  }
 }
