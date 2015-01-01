@@ -16,6 +16,7 @@ sourceSets {
         }
         resources {
        		srcDir 'resources'
+            srcDir 'python'
         }
     }
 }
@@ -35,6 +36,9 @@ jar {
     	}
     	if (cut.endsWith(new String("textures"))) {
     		file.setPath('resources/textures/'  + file.getSourcePath().replace("textures/", ""))
+    	}
+        if (cut.endsWith(new String("src"))) {
+    		file.setPath('python/src/'  + file.getSourcePath().replace("src/", ""))
     	}
   }
 }

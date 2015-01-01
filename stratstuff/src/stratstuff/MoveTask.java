@@ -4,9 +4,9 @@ public class MoveTask extends Task {
 
 	private MovingObject object;
 	private MovePath path;
-	private Main main;
+	private Core main;
 
-	public MoveTask(Main main, MovingObject o, WorldPoint target) {
+	public MoveTask(Core main, MovingObject o, WorldPoint target) {
 		this.object = o;
 		this.main = main;
 		path = new MovePath(main.getTaskManager(), main.getWorld(),

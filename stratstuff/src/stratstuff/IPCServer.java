@@ -3,13 +3,15 @@ package stratstuff;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class IPCServer implements Runnable {
 
 	private DatagramSocket socket;
+	private FrontendAdapter adapter;
 
-	public IPCServer() {
+	public IPCServer(FrontendAdapter adapter) {
+		this.adapter = adapter;
 		try {
 			socket = new DatagramSocket(32000);
 		} catch (IOException e) {
@@ -25,13 +27,18 @@ public class IPCServer implements Runnable {
 			e.printStackTrace();
 		}
 
-		InetAddress address = packet.getAddress();
-		int port = packet.getPort();
-		int len = packet.getLength();
 		byte[] data = packet.getData();
 
-		System.out.printf("Anfrage von %s vom Port %d mit der Länge %d:%n%s%n",
-				address, port, len, new String(data, 0, len));
+		String dataString = new String(data);
+		ArrayList<String> list = new ArrayList<String>();
+
+		for (String line : dataString.split("\n")) {
+			list.add(line);
+		}
+		// remove last element since it contains nothing
+		list.remove(list.size() - 1);
+
+		adapter.messageReceived(list);
 	}
 
 	@Override

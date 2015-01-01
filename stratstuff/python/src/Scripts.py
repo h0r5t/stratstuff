@@ -8,6 +8,10 @@ class IDynamicScript(Script):
     
     def __init__(self, adapterCallback):
         self.adapter = adapterCallback
+        self.customInit()
+        
+    def customInit(self):
+        raise NotImplementedError("Should have implemented this")
         
     def update(self):
         raise NotImplementedError("Should have implemented this")

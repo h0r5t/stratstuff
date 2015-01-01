@@ -7,4 +7,4 @@ class IPCClient():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
     def send(self, data):
-        self.sock.sendto(data + "\n" , (self.HOST, self.PORT))
+        self.sock.sendto(data, (self.HOST, self.PORT))

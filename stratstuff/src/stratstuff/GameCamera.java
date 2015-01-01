@@ -5,9 +5,9 @@ public class GameCamera {
 	private int cameraLayer;
 	private int cameraX;
 	private int cameraY;
-	private Main main;
+	private Core main;
 
-	public GameCamera(Main main) {
+	public GameCamera(Core main) {
 		this.main = main;
 		cameraX = 0;
 		cameraY = 0;

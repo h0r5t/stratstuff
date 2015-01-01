@@ -19,7 +19,6 @@ public class IPCClient {
 	}
 
 	public void send(String s, int port) {
-		System.out.println("sending");
 		try {
 			byte[] raw = s.getBytes();
 
@@ -28,10 +27,8 @@ public class IPCClient {
 
 			socket.send(packet);
 
-			System.out.println("sent");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		socket.close();
 	}
 }

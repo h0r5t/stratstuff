@@ -6,7 +6,7 @@ callbackFunction = None
 class IPCServerHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         data = self.request[0].strip()
-        list_of_lines = [line.rstrip() for line in data]
+        list_of_lines = data.split('\n');
         callbackFunction(list_of_lines)
 
 def start(callback):

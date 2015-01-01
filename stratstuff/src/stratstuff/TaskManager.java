@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class TaskManager implements Updatable {
 
-	private Main main;
+	private Core main;
 	private ArrayList<Task> runningTasks;
 	private ArrayList<Task> openTasks;
 	private ArrayList<Task> deletableTasks;
 
-	public TaskManager(Main main) {
+	public TaskManager(Core main) {
 		this.main = main;
 		runningTasks = new ArrayList<Task>();
 		openTasks = new ArrayList<Task>();

@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 public class UnitManager implements Updatable {
 
-	private Main main;
+	private Core main;
 	private HashMap<Integer, MovingObject> livingObjects;
 	private int idCount = 0;
 
-	public UnitManager(Main main) {
+	public UnitManager(Core main) {
 		this.main = main;
 		livingObjects = new HashMap<Integer, MovingObject>();
 	}

@@ -9,9 +9,9 @@ public class World extends Graph {
 
 	private Integer[][][] worldPointArray;
 	private HashMap<MovingObject, WorldPoint> objectMap;
-	private Main main;
+	private Core main;
 
-	public World(Main main) {
+	public World(Core main) {
 		worldPointArray = new Integer[GameSettings.WORLD_DEPTH][GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT];
 		objectMap = new HashMap<MovingObject, WorldPoint>();
 		this.main = main;
@@ -181,6 +181,8 @@ public class World extends Graph {
 		if (p.collides() == false && collided) {
 			updateEdges(p, false);
 		}
+		main.tellFrontend(FrontendMessaging.groundUpdate(groundID, p.getX(),
+				p.getY(), p.getZ()));
 	}
 
 	@SuppressWarnings("deprecation")

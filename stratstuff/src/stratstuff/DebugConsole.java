@@ -6,12 +6,12 @@ import java.util.HashMap;
 
 public class DebugConsole implements Updatable {
 
-	private Main main;
+	private Core main;
 	private DebugConsoleFrame frame;
 	private HashMap<String, DebugCommand> commandMap;
 	private HashMap<String, String> variablesMap;
 
-	public DebugConsole(Main main) {
+	public DebugConsole(Core main) {
 		this.main = main;
 		frame = new DebugConsoleFrame(this);
 		frame.setVisible(true);
@@ -48,15 +48,15 @@ public class DebugConsole implements Updatable {
 		String[] s = input.split(" ");
 		ArrayList<String> args = new ArrayList<String>(Arrays.asList(Arrays
 				.copyOfRange(s, 1, s.length)));
-		doCommand(s[0], args);
+		doCommand(fromScript, s[0], args);
 
 		if (!fromScript) {
 			frame.print(">");
-
 		}
 	}
 
-	private void doCommand(String command, ArrayList<String> arguments) {
+	private void doCommand(boolean fromScript, String command,
+			ArrayList<String> arguments) {
 		if (command.equals("set") == false && command.equals("get") == false) {
 			arguments = insertVariables(arguments);
 		}
@@ -76,7 +76,10 @@ public class DebugConsole implements Updatable {
 		} else {
 			print(command + " is not a valid command");
 		}
-		print("\n");
+		if (!fromScript) {
+			print("\n");
+
+		}
 	}
 
 	private ArrayList<String> insertVariables(ArrayList<String> arguments) {
@@ -112,7 +115,7 @@ public class DebugConsole implements Updatable {
 		frame.print(s);
 	}
 
-	public Main getMain() {
+	public Core getMain() {
 		return main;
 	}
 

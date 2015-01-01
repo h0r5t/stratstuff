@@ -2,7 +2,7 @@ package stratstuff;
 
 import java.util.ArrayList;
 
-public class Main implements Runnable {
+public class Core implements Runnable {
 
 	private World world;
 	private GameCamera gameCamera;
@@ -18,7 +18,9 @@ public class Main implements Runnable {
 	private TaskManager taskManager;
 	private UnitManager unitManager;
 
-	public Main() {
+	private FrontendAdapter frontendAdapter;
+
+	public Core() {
 		updatables = new ArrayList<Updatable>();
 
 		debugConsole = new DebugConsole(this);
@@ -56,6 +58,10 @@ public class Main implements Runnable {
 
 		unitManager = new UnitManager(this);
 		updatables.add(unitManager);
+
+		frontendAdapter = new FrontendAdapter(this);
+		frontendAdapter.start();
+		updatables.add(frontendAdapter);
 	}
 
 	public GameCursor getCursor() {
@@ -87,7 +93,7 @@ public class Main implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		new Thread(new Main()).start();
+		new Thread(new Core()).start();
 	}
 
 	public GameCamera getCamera() {
@@ -104,5 +110,13 @@ public class Main implements Runnable {
 
 	public UnitManager getUnitManager() {
 		return unitManager;
+	}
+
+	public DebugConsole getConsole() {
+		return debugConsole;
+	}
+
+	public void tellFrontend(String message) {
+		frontendAdapter.addToQueue(message);
 	}
 }
