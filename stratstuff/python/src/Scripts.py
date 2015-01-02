@@ -17,6 +17,12 @@ class IDynamicScript(Script):
     def update(self):
         raise NotImplementedError("Should have implemented this")
     
+    def pleaseUpdate(self):
+        if self.waitingForEventCallback == True:
+            return False
+        else:
+            return True
+    
     def eventOccurred(self, event):
         self.waitingForEventCallback = False;
         m = event.getMethod()
