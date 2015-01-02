@@ -3,12 +3,29 @@
   (only when WP goes from !collides to collides)
 - Make Task Management so Frontend can create/register own tasks
 - Make task list "impossibleTasks" in TaskManager, these will be eventually moved to openTasks e.g. when they can be reached
+- DebugConsole: add commands for: 
+    - (un)registering scripts, see Frontend part
+    - event registering, events have to be defined in the code
+- Enable pausing the game --> will pause frontend too (via a message ofc), unpausing similar
+  --> make sure when game gets paused all commands stay in queue, when unpausing get applied
+
+
 
 ++++  Frontend  ++++
+
 - Load world, elements, objects:
       values = [[0 for x in range(300)] for x in range(300)] 
       for o in range(0,300):
         for i in range(0, 300):
             values[i][o] = i+o
-- Ensure working event system --> use registerEvent in IDynamicScript!!!!!
+- Ensure working event system 
+    --> use registerEvent in IDynamicScript!!!!!
+    - 2 Main event types
+        - local event: doesnt affect engine: argument is a method that returns true if the statement is correct
+            ---> registerLocalEvent
+        - engine event: gets evaluated in the engine, (things such as completed move tasks etc.)
+            ---> registerEngineEvent
 - Remove script on errors in it and inform the user/player about it (future: pause game etc.)
+- Idea: User pauses game: edits script: assigns script as singleton or attaches it to unit/item/whatever:
+  --> when attached to an object, a new instance of that script is assigned everytime an object of that type is created
+  --> example: AI of a certain unit type: user assigns that script in debugconsole
