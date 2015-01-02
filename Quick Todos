@@ -26,7 +26,7 @@
             ---> registerLocalEvent
         - engine event: gets evaluated in the engine, (things such as completed move tasks etc.)
             ---> registerEngineEvent
-- Remove script on errors in it and inform the user/player about it (future: pause game etc.)
+- Remove script on errors occurring in it and inform the user/player about it (future: pause game etc.)
 - Idea: User pauses game: edits script: assigns script as singleton or attaches it to unit/item/whatever:
   --> when attached to an object, a new instance of that script is assigned everytime an object of that type is created
   --> example: AI of a certain unit type: user assigns that script in debugconsole
