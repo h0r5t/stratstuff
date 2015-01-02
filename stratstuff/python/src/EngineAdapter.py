@@ -25,7 +25,8 @@ class EngineAdapterClass:
         while 1:
             for script in self.scripts:
                 try:
-                    script.update()
+                    if script.pleaseUpdate():
+                        script.update()
                 except:
                     # this will avoid the adapter from crashing if script
                     # contains any errors
