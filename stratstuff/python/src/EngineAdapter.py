@@ -20,6 +20,10 @@ class EngineAdapterClass:
         print "received:"
         for s in stringlist:
             print s
+            
+    def registerEvent(self, event):
+        # IMPLEMENT
+        pass
         
     def loop(self):
         while 1:
