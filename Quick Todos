@@ -8,6 +8,7 @@
     - event registering, events have to be defined in the code
 - Enable pausing the game --> will pause frontend too (via a message ofc), unpausing similar
   --> make sure when game gets paused all commands stay in queue, when unpausing get applied
+- FrontendAdapter starts EngineAdapter.py in his constructor
 
 
 
