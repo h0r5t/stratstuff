@@ -1,8 +1,13 @@
-- Set up git so libs get uplodaded, move pathfinding lib to /libs/?! or maven...
 - Rotate some textures and change id system accordingly so ground and element textures look better
 - Attach paths to each WorldPoint they cross so paths can be recalculated when a WP change event occurs 
   (only when WP goes from !collides to collides)
-- Make Task Management "convenient" and modular
-  --> make abstract class ComplexTask that contains multiple simple tasks
-  --> tasks should have the method isFinished
+- Make Task Management so Frontend can create/register own tasks
 - Make task list "impossibleTasks" in TaskManager, these will be eventually moved to openTasks e.g. when they can be reached
+
+++++  Frontend  ++++
+- Load world, elements, objects:
+      values = [[0 for x in range(300)] for x in range(300)] 
+      for o in range(0,300):
+        for i in range(0, 300):
+            values[i][o] = i+o
+- Ensure working event system --> use registerEvent in IDynamicScript!!!!!
