@@ -1,5 +1,7 @@
 #stratstuff
-###Java 2D Engine in a tile-based 3D environment
+####Java 2D Engine in a tile-based 3D environment
+
+####providing a python API
 
 <hr>
 
