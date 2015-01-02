@@ -11,3 +11,4 @@
         for i in range(0, 300):
             values[i][o] = i+o
 - Ensure working event system --> use registerEvent in IDynamicScript!!!!!
+- Remove script on errors in it and inform the user/player about it (future: pause game etc.)
