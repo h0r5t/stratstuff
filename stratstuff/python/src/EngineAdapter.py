@@ -24,7 +24,12 @@ class EngineAdapterClass:
     def loop(self):
         while 1:
             for script in self.scripts:
-                script.update()
+                try:
+                    script.update()
+                except:
+                    # this will avoid the adapter from crashing if script
+                    # contains any errors
+                    print "Unexpected error:", sys.exc_info()[0]
                 
             self.sendMessages()
                 
