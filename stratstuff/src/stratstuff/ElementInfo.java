@@ -1,6 +1,10 @@
 package stratstuff;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class ElementInfo {
 
@@ -22,13 +26,17 @@ public class ElementInfo {
 		return collides;
 	}
 
-	public ElementInfo(String name, BufferedImage image, boolean collides,
-			boolean isLadderDown, boolean isLadderUp) {
-		this.name = name;
-		this.image = image;
-		this.collides = collides;
-		this.isLadderDown = isLadderDown;
-		this.isLadderUp = isLadderUp;
+	public ElementInfo(LoadedInfo info) {
+		this.name = info.getValueString("name");
+		try {
+			this.image = ImageIO.read(new File(FileSystem.TEXTURES_ELEMENTS_DIR
+					+ info.getValueString("image")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.collides = info.getValueBool("collides");
+		this.isLadderDown = info.getValueBool("ladderdown");
+		this.isLadderUp = info.getValueBool("ladderup");
 	}
 
 	public boolean isLadderDown() {

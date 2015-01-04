@@ -13,17 +13,14 @@ public class Ground {
 	}
 
 	public static void loadGrounds() {
-		try {
-			// TODO: load from file
-			groundMap = new HashMap<Integer, GroundInfo>();
+		groundMap = new HashMap<Integer, GroundInfo>();
 
-			groundMap.put(0, new GroundInfo("grass",
-					FileSystem.TEXTURES_GROUNDS_DIR + "/0/", true, false));
-			groundMap.put(1, new GroundInfo("rock",
-					FileSystem.TEXTURES_GROUNDS_DIR + "/1/", true, true));
+		HashMap<String, LoadedInfo> loadedMap = InfoFileReader
+				.readFile(FileSystem.DATA_FILE_GROUNDS);
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		for (String id : loadedMap.keySet()) {
+			int intID = Integer.parseInt(id);
+			groundMap.put(intID, new GroundInfo(loadedMap.get(id)));
 		}
 
 		createByNamesMap();

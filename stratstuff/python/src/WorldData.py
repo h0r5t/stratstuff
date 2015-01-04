@@ -1,35 +1,78 @@
 import numpy
+import InfoReader
 
 worldsDir = "/home/h0r5t/code/git/stratstuff/resources/worlds"
-
+dataDir = "/home/h0r5t/code/git/stratstuff/resources/data"
 
 class WorldData():
     def __init__(self, world_name):
         self.worldName = world_name
         self.wp_array = None  # will be initialized via numpy notation
-        self.m_objects = []  # am array of WorldPoints
+        self.m_objects = []  # movingObjects
+        self.groundData = {}  # ground data, will be loaded
+        self.elementData = {}  # element data, will be loaded
         self.loadFromFilesystem()
         
     # ------------------ World changes ---------------------
     
     def groundChanged(self, newgroundID, x, y, z):
+        x = int(x)
+        y = int(y)
+        z = int(z)
         self.wp_array[x, y, z].setGroundID(newgroundID)
+    
+    def elementChanged(self, newElementID, x, y, z):
+        x = int(x)
+        y = int(y)
+        z = int(z)
+        self.wp_array[x, y, z].setElementID(newElementID)
         
     def movingObjectPositionChanged(self, objID, newX, newY, newZ):
         for o in self.m_objects:
             if o.getObjectID() == objID:
-                o.setX(newX)
-                o.setY(newY)
-                o.setZ(newZ)
-                print "changed" 
-                # FALSCH DAS IST DER TYPE NICHT DIE ID!!!!!!!
+                o.setX(int(newX))
+                o.setY(int(newY))
+                o.setZ(int(newZ))
         
-     # ------------------ World changes ---------------------
+    # ------------------ World changes ---------------------
+     
+    def groundCollides(self, groundID):
+        if groundID == -1:
+            return False
+        type = self.groundData[str(groundID)]
+        return "true" == type["collides"]
+    
+    def getObjects(self):
+        return self.m_objects
+    
+    def getObjectByID(self, theID):
+        for obj in self.m_objects:
+            if obj.getObjectID() == theID:
+                return obj
+    
+    def getObjectByIndexInList(self, index):
+        return self.m_objects[index]
+    
+    def elementCollides(self, elementID):
+        if elementID == -1:
+            return False
+        type = self.elementData[str(elementID)]
+        return "true" == type["collides"]
+    
+    def worldPointCollides(self, x, y, z):
+        wp = self.wp_array[x, y, z]        
+        
+        if self.groundCollides(wp.getGroundID()) or self.elementCollides(wp.getElementID()):
+            return True
+        
+        return False
     
     def loadFromFilesystem(self):
         self.loadGroundIDs()
         self.loadElements()
         self.loadObjects()
+        self.loadGroundData()
+        self.loadElementData()
         
     def loadGroundIDs(self):
         self.wp_array = numpy.empty((120, 120, 10), dtype=object)
@@ -59,9 +102,9 @@ class WorldData():
             split = line.split()
             
             element_id = split[0]
-            x = split[len(split) - 3]
-            y = split[len(split) - 2]
-            z = split[len(split) - 1]
+            x = int(split[len(split) - 3])
+            y = int(split[len(split) - 2])
+            z = int(split[len(split) - 1])
             
             self.wp_array[x, y, z].setElementID(element_id)
     
@@ -71,14 +114,23 @@ class WorldData():
             line = line.rstrip("\n")
             split = line.split()
             
-            object_id = split[0]
+            object_type = split[0]
+            objID = split[1]
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             
-            obj = MovingObject(object_id, x, y, z)
+            obj = MovingObject(object_type, objID, int(x), int(y), int(z))
             
             self.m_objects.append(obj)
+            
+    def loadGroundData(self):
+        f = dataDir + "/grounds.info"
+        self.groundData = InfoReader.readFile(f)
+    
+    def loadElementData(self):
+        f = dataDir + "/elements.info"
+        self.elementData = InfoReader.readFile(f)
                     
 class WorldPoint():
     def __init__(self, ground_id):
@@ -96,18 +148,17 @@ class WorldPoint():
     
     def setGroundID(self, newgroundID):
         self.groundID = newgroundID
-    
-    def collides(self):
-        # TODO via ground attributes JSON File, 
-        # also checks if element collides
-        return False
 
 class MovingObject():
-    def __init__(self, obj_id, x, y, z):
+    def __init__(self, obj_type, obj_id, x, y, z):
+        self.obj_type = obj_type
         self.obj_id = obj_id
         self.x = x
         self.y = y
         self.z = z
+    
+    def getObjectType(self):
+        return self.obj_type
     
     def getObjectID(self):
         return self.obj_id

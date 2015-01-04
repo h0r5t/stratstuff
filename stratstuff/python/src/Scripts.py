@@ -8,8 +8,8 @@ class IDynamicScript(Script):
     
     def __init__(self, adapterCallback):
         self.adapter = adapterCallback
-        self.customInit()
         self.waitingForEventCallback = False;
+        self.customInit()
         
     def customInit(self):
         raise NotImplementedError("Should have implemented this")
@@ -28,22 +28,10 @@ class IDynamicScript(Script):
         m = event.getMethod()
         m()
         
-    def registerEvent(self, event):
-        self.adapter.registerEvent(event)
-        self.waitingForEventCallback = True;
+    def waitForEventCallback(self):
+        self.waitingForEventCallback = True
 
 class IStaticScript(Script):
 
     def update(self):
         raise NotImplementedError("Should have implemented this")
-    
-class Event():
-    def __init__(self, callbackMethod, ID):
-        self.id = ID
-        self.method = callbackMethod
-    
-    def getID(self):
-        return self.id
-        
-    def getMethod(self):
-        return self.method

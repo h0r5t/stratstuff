@@ -22,6 +22,11 @@ public class MovePath {
 		calculatePath();
 	}
 
+	public void recalculatePath(WorldPoint from) {
+		this.from = from;
+		calculatePath();
+	}
+
 	private void calculatePath() {
 		GraphSearch_Astar search = new GraphSearch_Astar(world);
 		route = search.search(world.getID(from), world.getID(to));
@@ -36,6 +41,16 @@ public class MovePath {
 			GraphNode next = route.get(index);
 			WorldPoint p = world.getWP((int) next.x(), (int) next.y(),
 					(int) next.z());
+
+			// this changed since the calculation
+			if (p.collides()) {
+				GraphNode current = route.get(index - 1);
+				WorldPoint c = world.getWP((int) current.x(),
+						(int) current.y(), (int) current.z());
+				recalculatePath(c);
+				index = 0;
+				return c;
+			}
 
 			index++;
 			return p;

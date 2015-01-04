@@ -1,0 +1,10 @@
+0:{
+    name = grass
+    image = /0/0.png
+    collides = false
+}
+1:{
+    name = rock
+    image = /1/0.png
+    collides = true
+}

@@ -20,7 +20,7 @@ public class Core implements Runnable {
 
 	private GameWindowAdapter windowAdapter;
 
-	private FrontendAdapter frontendAdapter;
+	private static FrontendAdapter frontendAdapter;
 
 	public Core() {
 		updatables = new ArrayList<Updatable>();
@@ -62,6 +62,10 @@ public class Core implements Runnable {
 	}
 
 	private void createUpdatables() {
+		frontendAdapter = new FrontendAdapter(this);
+		frontendAdapter.start();
+		updatables.add(frontendAdapter);
+
 		inputManager = new InputManager(gameCamera, gameCursor);
 		updatables.add(inputManager);
 
@@ -73,10 +77,6 @@ public class Core implements Runnable {
 
 		unitManager = new UnitManager(this);
 		updatables.add(unitManager);
-
-		frontendAdapter = new FrontendAdapter(this);
-		frontendAdapter.start();
-		updatables.add(frontendAdapter);
 	}
 
 	public GameCursor getCursor() {
@@ -85,15 +85,19 @@ public class Core implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		try {
+			while (true) {
 
-			updateUpdatables();
+				updateUpdatables();
 
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.sleep(50);
+
+				frontendAdapter.update();
+
+				Thread.sleep(50);
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -127,11 +131,15 @@ public class Core implements Runnable {
 		return unitManager;
 	}
 
+	public FrontendAdapter getFrontendAdapter() {
+		return frontendAdapter;
+	}
+
 	public DebugConsole getConsole() {
 		return debugConsole;
 	}
 
-	public void tellFrontend(String message) {
+	public static void tellFrontend(String message) {
 		frontendAdapter.addToQueue(message);
 	}
 

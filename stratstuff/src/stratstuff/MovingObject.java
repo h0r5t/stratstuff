@@ -53,7 +53,8 @@ public abstract class MovingObject implements Drawable, Saveable {
 	@Override
 	public String save() {
 		WorldPoint p = world.getObjectPosition(this);
-		return myType + " " + p.getX() + " " + p.getY() + " " + p.getZ();
+		return myType + " " + uniqueID + " " + p.getX() + " " + p.getY() + " "
+				+ p.getZ();
 	}
 
 	@Override

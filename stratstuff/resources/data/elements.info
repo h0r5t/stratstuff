@@ -1,0 +1,28 @@
+0:{
+    name = tree
+    image = /0/0.png
+    collides = true
+    ladderdown = false
+    ladderup = false
+}
+1:{
+    name = bush
+    image = /1/0.png
+    collides = false
+    ladderdown = false
+    ladderup = false
+}
+2:{
+    name = ladderdown
+    image = /2/0.png
+    collides = false
+    ladderdown = true
+    ladderup = false
+}
+3:{
+    name = ladderup
+    image = /3/0.png
+    collides = false
+    ladderdown = false
+    ladderup = true
+}

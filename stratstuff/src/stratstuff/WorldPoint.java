@@ -23,6 +23,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 	@Deprecated
 	public void setElement(int elementID) {
 		attachedElement = elementID;
+		Core.tellFrontend(FrontendMessaging.elementUpdate(elementID, getX(),
+				getY(), getZ()));
 	}
 
 	// same here

@@ -183,7 +183,7 @@ public class World extends Graph implements Saveable {
 		if (p.collides() == false && collided) {
 			updateEdges(p, false);
 		}
-		main.tellFrontend(FrontendMessaging.groundUpdate(groundID, p.getX(),
+		Core.tellFrontend(FrontendMessaging.groundUpdate(groundID, p.getX(),
 				p.getY(), p.getZ()));
 	}
 
