@@ -5,7 +5,7 @@ import java.util.HashMap;
 import pathfinder.Graph;
 import pathfinder.GraphEdge;
 
-public class World extends Graph {
+public class World extends Graph implements Saveable {
 
 	private Integer[][][] worldPointArray;
 	private HashMap<MovingObject, WorldPoint> objectMap;
@@ -72,6 +72,8 @@ public class World extends Graph {
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
 		objectMap.put(o, p);
+		main.tellFrontend(FrontendMessaging.objectMovedUpdate(o.getUniqueID(),
+				p.getX(), p.getY(), p.getZ()));
 	}
 
 	public void spawnObject(MovingObject o, WorldPoint p) {
@@ -186,9 +188,11 @@ public class World extends Graph {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void attachElement(boolean initial, WorldPoint p, int elementID) {
+	public void setElementForWP(boolean initial, WorldPoint p, int elementID) {
+		// initial should only be true when world is being loaded
+
 		boolean collided = p.collides();
-		p.attachElement(elementID);
+		p.setElement(elementID);
 
 		if (initial == false) {
 			if (p.collides() && collided == false) {
@@ -200,13 +204,13 @@ public class World extends Graph {
 			if (Element.isLadderDown(elementID)) {
 				addZEdgeInBothDirections(p,
 						getWP(p.getX(), p.getY(), p.getZ() + 1));
-				getWP(p.getX(), p.getY(), p.getZ() + 1).attachElement(
+				getWP(p.getX(), p.getY(), p.getZ() + 1).setElement(
 						Element.getByName("ladderup"));
 			}
 			if (Element.isLadderUp(elementID)) {
 				addZEdgeInBothDirections(p,
 						getWP(p.getX(), p.getY(), p.getZ() - 1));
-				getWP(p.getX(), p.getY(), p.getZ() - 1).attachElement(
+				getWP(p.getX(), p.getY(), p.getZ() - 1).setElement(
 						Element.getByName("ladderdown"));
 			}
 		}
@@ -216,7 +220,7 @@ public class World extends Graph {
 	@SuppressWarnings("deprecation")
 	public void removeElementFromWP(WorldPoint p, int elementID) {
 		boolean collided = p.collides();
-		p.removeAttachedElement(elementID);
+		p.removeElement();
 		if (p.collides() && collided == false) {
 			updateEdges(p, true);
 		}
@@ -226,25 +230,13 @@ public class World extends Graph {
 		if (Element.isLadderDown(elementID)) {
 			removeZEdgeInBothDirections(p,
 					getWP(p.getX(), p.getY(), p.getZ() + 1));
-			getWP(p.getX(), p.getY(), p.getZ() + 1).removeAttachedElement(
-					Element.getByName("ladderup"));
+			getWP(p.getX(), p.getY(), p.getZ() + 1).removeElement();// ladderup
 		}
 		if (Element.isLadderUp(elementID)) {
 			removeZEdgeInBothDirections(p,
 					getWP(p.getX(), p.getY(), p.getZ() - 1));
-			getWP(p.getX(), p.getY(), p.getZ() - 1).removeAttachedElement(
-					Element.getByName("ladderdown"));
+			getWP(p.getX(), p.getY(), p.getZ() - 1).removeElement(); // ladderdown
 		}
-	}
-
-	public void setOnlyElement(WorldPoint p, int elementID) {
-		// TODO
-		// if (p.collides() && collided == false) {
-		// updateEdges(p, true);
-		// }
-		// if (p.collides() == false && collided) {
-		// updateEdges(p, false);
-		// }
 	}
 
 	private void updateEdges(WorldPoint p, boolean nowCollides) {
@@ -379,5 +371,16 @@ public class World extends Graph {
 			}
 		}
 
+	}
+
+	@Override
+	public String save() {
+		return null;
+	}
+
+	@Override
+	public Saveable load(String fromString) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

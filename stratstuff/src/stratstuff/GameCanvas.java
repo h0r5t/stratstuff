@@ -16,10 +16,12 @@ public class GameCanvas extends Canvas {
 	private GameCamera cam;
 	private GameCursor cursor;
 	private InputManager inputHandler;
+	private VisualManager visualManager;
 
-	public GameCanvas(World world, InputManager handler, GameCamera cam,
-			GameCursor cursor) {
+	public GameCanvas(World world, VisualManager visualManager,
+			InputManager handler, GameCamera cam, GameCursor cursor) {
 		this.world = world;
+		this.visualManager = visualManager;
 		this.inputHandler = handler;
 		this.cam = cam;
 		this.cursor = cursor;
@@ -28,6 +30,9 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void paint(Graphics g) {
+		if (!visualManager.drawNow()) {
+			return;
+		}
 		Graphics2D g2 = (Graphics2D) g;
 
 		drawWPs(g2);

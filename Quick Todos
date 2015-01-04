@@ -1,9 +1,9 @@
 - Rotate some textures and change id system accordingly so ground and element textures look better
-- Attach paths to each WorldPoint they cross so paths can be recalculated when a WP change event occurs 
+- Attach paths to each WorldPoint they cross so paths can be recalculated when a WP change event occurs
   (only when WP goes from !collides to collides)
 - Make Task Management so Frontend can create/register own tasks
 - Make task list "impossibleTasks" in TaskManager, these will be eventually moved to openTasks e.g. when they can be reached
-- DebugConsole: add commands for: 
+- DebugConsole: add commands for:
     - (un)registering scripts, see Frontend part
     - event registering, events have to be defined in the code
 - Enable pausing the game --> will pause frontend too (via a message ofc), unpausing similar
@@ -14,12 +14,7 @@
 
 ++++  Frontend  ++++
 
-- Load world, elements, objects:
-      values = [[0 for x in range(300)] for x in range(300)] 
-      for o in range(0,300):
-        for i in range(0, 300):
-            values[i][o] = i+o
-- Ensure working event system 
+- Ensure working event system
     --> use registerEvent in IDynamicScript!!!!!
     - 2 Main event types
         - local event: doesnt affect engine: argument is a method that returns true if the statement is correct

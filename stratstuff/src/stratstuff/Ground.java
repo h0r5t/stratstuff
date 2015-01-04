@@ -1,14 +1,12 @@
 package stratstuff;
 
 import java.awt.Graphics2D;
-import java.io.File;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
 
 public class Ground {
 
 	private static HashMap<Integer, GroundInfo> groundMap;
+	private static HashMap<String, Integer> byNamesMap;
 
 	public Ground() {
 
@@ -19,19 +17,23 @@ public class Ground {
 			// TODO: load from file
 			groundMap = new HashMap<Integer, GroundInfo>();
 
-			groundMap.put(
-					0,
-					new GroundInfo("grass", ImageIO.read(new File(
-							FileSystem.TEXTURES_GROUNDS_DIR + "/0/0.png")),
-							false));
-			groundMap.put(
-					1,
-					new GroundInfo("rock", ImageIO.read(new File(
-							FileSystem.TEXTURES_GROUNDS_DIR + "/1/0.png")),
-							true));
+			groundMap.put(0, new GroundInfo("grass",
+					FileSystem.TEXTURES_GROUNDS_DIR + "/0/", true, false));
+			groundMap.put(1, new GroundInfo("rock",
+					FileSystem.TEXTURES_GROUNDS_DIR + "/1/", true, true));
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		createByNamesMap();
+	}
+
+	private static void createByNamesMap() {
+		byNamesMap = new HashMap<String, Integer>();
+
+		for (int id : groundMap.keySet()) {
+			byNamesMap.put(groundMap.get(id).getName(), id);
 		}
 	}
 
@@ -46,6 +48,10 @@ public class Ground {
 
 	public static String getName(int id) {
 		return groundMap.get(id).getName();
+	}
+
+	public static int getByName(String groundName) {
+		return byNamesMap.get(groundName);
 	}
 
 }

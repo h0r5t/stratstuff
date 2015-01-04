@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class GroundInfo {
 
 	private String name;
-	private BufferedImage image;
+	private Texture texture;
 	private boolean collides;
 
 	public String getName() {
@@ -13,16 +13,17 @@ public class GroundInfo {
 	}
 
 	public BufferedImage getImage() {
-		return image;
+		return texture.getImage();
 	}
 
 	public boolean collides() {
 		return collides;
 	}
 
-	public GroundInfo(String name, BufferedImage image, boolean collides) {
+	public GroundInfo(String name, String imageDir, boolean randomTexture,
+			boolean collides) {
 		this.name = name;
-		this.image = image;
+		texture = new Texture(imageDir, randomTexture);
 		this.collides = collides;
 	}
 }

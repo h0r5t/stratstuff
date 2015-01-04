@@ -12,7 +12,7 @@ public class Worker extends MovingObject {
 			+ "/units/worker.png";
 
 	public Worker(World world) {
-		super(world);
+		super(MovingObject.getTypeInt("worker"), world);
 	}
 
 	@Override

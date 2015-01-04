@@ -4,26 +4,34 @@ public class VisualManager implements Updatable {
 
 	private GameFrame gameFrame;
 	private GameCanvas gameCanvas;
+	private boolean canDraw = false;
 
 	public VisualManager(World world, GameCamera cam,
-			InputManager inputHandler, GameCursor cursor) {
-		initFrame(inputHandler);
+			InputManager inputHandler, GameCursor cursor,
+			GameWindowAdapter windowAdapter) {
+		initFrame(inputHandler, windowAdapter);
 		initCanvas(world, inputHandler, cam, cursor);
 	}
 
 	private void initCanvas(World world, InputManager handler, GameCamera cam,
 			GameCursor cursor) {
-		gameCanvas = new GameCanvas(world, handler, cam, cursor);
+		gameCanvas = new GameCanvas(world, this, handler, cam, cursor);
 		gameFrame.add(gameCanvas);
 	}
 
-	private void initFrame(InputManager inputHandler) {
-		gameFrame = new GameFrame(inputHandler);
+	private void initFrame(InputManager inputHandler,
+			GameWindowAdapter windowAdapter) {
+		gameFrame = new GameFrame(inputHandler, windowAdapter);
 	}
 
 	public void activate() {
 		gameFrame.setVisible(true);
 		gameCanvas.requestFocus();
+		canDraw = true;
+	}
+
+	public boolean drawNow() {
+		return canDraw;
 	}
 
 	@Override

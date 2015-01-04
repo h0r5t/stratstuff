@@ -30,7 +30,7 @@ public class DebugCommandBuild extends DebugCommand {
 
 		console.getMain()
 				.getWorld()
-				.attachElement(false,
+				.setElementForWP(false,
 						console.getMain().getWorld().getWP(x, y, z), elementID);
 	}
 

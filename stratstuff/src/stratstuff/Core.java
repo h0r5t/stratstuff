@@ -18,37 +18,52 @@ public class Core implements Runnable {
 	private TaskManager taskManager;
 	private UnitManager unitManager;
 
+	private GameWindowAdapter windowAdapter;
+
 	private FrontendAdapter frontendAdapter;
 
 	public Core() {
 		updatables = new ArrayList<Updatable>();
 
-		debugConsole = new DebugConsole(this);
+		windowAdapter = new GameWindowAdapter(this);
+
+		debugConsole = new DebugConsole(this, windowAdapter);
 		updatables.add(debugConsole);
 
 		Element.loadElements();
 		Ground.loadGrounds();
-		world = WorldLoader.loadWorld(this, "test");
 
 		gameCamera = new GameCamera(this);
 		gameCursor = new GameCursor(gameCamera);
 
 		createUpdatables();
 
+		loadOrGenerateWorld();
+
+		visualManager = new VisualManager(world, gameCamera, inputManager,
+				gameCursor, windowAdapter);
+		updatables.add(visualManager);
+
 		world.initialCreationOfEdges();
+
+		frontendAdapter.startPythonFrontend();
 
 		visualManager.activate();
 
 		debugConsole.runDefaultScript();
 	}
 
+	private void loadOrGenerateWorld() {
+		if (GameSettings.GENERATE_NEW_WORLD) {
+			world = WorldGenerator.generateWorld(this);
+		} else {
+			world = PersistanceManager.load(this, "test");
+		}
+	}
+
 	private void createUpdatables() {
 		inputManager = new InputManager(gameCamera, gameCursor);
 		updatables.add(inputManager);
-
-		visualManager = new VisualManager(world, gameCamera, inputManager,
-				gameCursor);
-		updatables.add(visualManager);
 
 		worldManager = new WorldManager(world);
 		updatables.add(worldManager);
@@ -118,5 +133,9 @@ public class Core implements Runnable {
 
 	public void tellFrontend(String message) {
 		frontendAdapter.addToQueue(message);
+	}
+
+	public void saveWorldState() {
+		PersistanceManager.save(this, "test");
 	}
 }

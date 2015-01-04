@@ -1,5 +1,6 @@
 package stratstuff;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FrontendAdapter implements Updatable {
@@ -42,6 +43,16 @@ public class FrontendAdapter implements Updatable {
 
 	public void addToQueue(String message) {
 		queueToSend.add(message);
+	}
+
+	public void startPythonFrontend() {
+		String adapterStarterLocation = FileSystem.ADAPTER_STARTER_LOCATION;
+		String[] command = { "gnome-terminal", "--command", adapterStarterLocation };
+		try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// look at all commands and execute them

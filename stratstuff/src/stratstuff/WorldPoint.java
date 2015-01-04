@@ -8,27 +8,27 @@ import pathfinder.GraphNode;
 public class WorldPoint extends GraphNode implements Drawable {
 
 	private int attachedGround;
-	private ArrayList<Integer> attachedElements;
+	private int attachedElement;
 	private ArrayList<MovingObject> attachedMovingObjects;
 	private GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
 
 	public WorldPoint(int x, int y, int z, int ground) {
 		super(UniqueIDFactory.getID(), x, y, z);
 		attachedGround = ground;
-		attachedElements = new ArrayList<Integer>();
+		attachedElement = -1;
 		attachedMovingObjects = new ArrayList<MovingObject>();
 	}
 
-	// use method addElement() in World (bridges get registered there
+	// use method addElement() in World (bridges get registered there)
 	@Deprecated
-	public void attachElement(int elementID) {
-		attachedElements.add(elementID);
+	public void setElement(int elementID) {
+		attachedElement = elementID;
 	}
 
 	// same here
 	@Deprecated
-	public void removeAttachedElement(int id) {
-		attachedElements.remove(new Integer(id));
+	public void removeElement() {
+		attachedElement = -1;
 	}
 
 	public void attachMovingObject(MovingObject o) {
@@ -47,8 +47,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 	public void draw(Graphics2D g, int x, int y) {
 		Ground.draw(g, attachedGround, x, y);
 
-		for (Integer i : attachedElements) {
-			Element.draw(g, i, x, y);
+		if (attachedElement != -1) {
+			Element.draw(g, attachedElement, x, y);
 		}
 
 		for (MovingObject o : attachedMovingObjects) {
@@ -61,8 +61,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 			return true;
 		}
 
-		for (Integer element : attachedElements) {
-			if (Element.collides(element)) {
+		if (attachedElement != -1) {
+			if (Element.collides(attachedElement)) {
 				return true;
 			}
 		}
@@ -91,8 +91,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 		return attachedGround;
 	}
 
-	public ArrayList<Integer> getAttachedElements() {
-		return attachedElements;
+	public int getAttachedElement() {
+		return attachedElement;
 	}
 
 	public ArrayList<MovingObject> getAttachedMovingObjects() {

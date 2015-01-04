@@ -15,7 +15,8 @@ public class DebugConsoleFrame extends JFrame {
 	private String lastCommand = "";
 	private DebugConsole console;
 
-	public DebugConsoleFrame(DebugConsole console) {
+	public DebugConsoleFrame(DebugConsole console,
+			GameWindowAdapter windowAdapter) {
 		super("debug_console");
 
 		this.console = console;
@@ -23,7 +24,7 @@ public class DebugConsoleFrame extends JFrame {
 		setSize(GameSettings.DEBUG_FRAME_WIDTH, GameSettings.DEBUG_FRAME_HEIGHT);
 		setLocation(GameSettings.DEBUG_FRAME_XPOS,
 				GameSettings.DEBUG_FRAME_YPOS);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		addWindowListener(windowAdapter);
 
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);

@@ -11,9 +11,9 @@ public class DebugConsole implements Updatable {
 	private HashMap<String, DebugCommand> commandMap;
 	private HashMap<String, String> variablesMap;
 
-	public DebugConsole(Core main) {
+	public DebugConsole(Core main, GameWindowAdapter windowAdapter) {
 		this.main = main;
-		frame = new DebugConsoleFrame(this);
+		frame = new DebugConsoleFrame(this, windowAdapter);
 		frame.setVisible(true);
 		initCommands();
 		variablesMap = new HashMap<String, String>();

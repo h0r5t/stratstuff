@@ -5,12 +5,7 @@ class TestScript(IDynamicScript):
         self.counter = 0;
         
     def update(self):
-        if self.counter == 0:
-            self.counter = 1;
-        else:
-            self.counter = 0;
-        self.adapter.registerGroundChange(self.counter, 20, 20, 0)
-        self.adapter.registerGroundChange(self.counter, 20, 20, 0)
+        pass
         
     def eventOccurred(self, event):
         pass
