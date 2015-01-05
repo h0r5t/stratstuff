@@ -9,11 +9,13 @@ public class World extends Graph implements Saveable {
 
 	private Integer[][][] worldPointArray;
 	private HashMap<MovingObject, WorldPoint> objectMap;
+	private HashMap<Integer, MovingObject> objectMapByID;
 	private Core main;
 
 	public World(Core main) {
 		worldPointArray = new Integer[GameSettings.WORLD_DEPTH][GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT];
 		objectMap = new HashMap<MovingObject, WorldPoint>();
+		objectMapByID = new HashMap<Integer, MovingObject>();
 		this.main = main;
 	}
 
@@ -72,14 +74,17 @@ public class World extends Graph implements Saveable {
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
 		objectMap.put(o, p);
-		main.tellFrontend(FrontendMessaging.objectMovedUpdate(o.getUniqueID(),
+		Core.tellFrontend(FrontendMessaging.objectMovedUpdate(o.getUniqueID(),
 				p.getX(), p.getY(), p.getZ()));
 	}
 
 	public void spawnObject(MovingObject o, WorldPoint p) {
+		objectMapByID.put(o.getUniqueID(), o);
 		objectMap.put(o, p);
 		p.attachMovingObject(o);
 		main.getUnitManager().addUnit(o);
+		Core.tellFrontend(FrontendMessaging.objectSpawnedUpdate(
+				o.getUniqueID(), o.getTypeInt(), p.getX(), p.getY(), p.getZ()));
 	}
 
 	public WorldPoint getObjectPosition(MovingObject o) {
@@ -371,6 +376,10 @@ public class World extends Graph implements Saveable {
 			}
 		}
 
+	}
+
+	public MovingObject getObjectByID(int objID) {
+		return objectMapByID.get(objID);
 	}
 
 	@Override

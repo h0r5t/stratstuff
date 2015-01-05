@@ -1,32 +1,38 @@
 package stratstuff;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 
-public abstract class MovingObject implements Drawable, Saveable {
+import javax.imageio.ImageIO;
+
+public class MovingObject implements Drawable, Saveable {
 
 	private World world;
-	protected BufferedImage image;
-	private static int uniqueID;
-	private static int myType;
+	private BufferedImage image;
+	private int uniqueID;
+	private int myType;
+	private String name;
+	private boolean collides;
+	private boolean paint = true;
+	private static HashMap<String, LoadedInfo> info;
 
-	public MovingObject(int id, World world) {
+	public MovingObject(int myType, World world) {
+		LoadedInfo myInfo = info.get(myType + "");
+		name = myInfo.getValueString("name");
+		try {
+			image = ImageIO.read(new File(FileSystem.TEXTURES_DIR + "/units/"
+					+ myInfo.getValueString("image")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.collides = myInfo.getValueBool("collides");
 		this.world = world;
 		uniqueID = UniqueIDFactory.getID();
-		myType = id;
-		init();
+		this.myType = myType;
 	}
-
-	public MovingObject(int id, World world, WorldPoint location) {
-		this.world = world;
-		myType = id;
-		uniqueID = UniqueIDFactory.getID();
-		init();
-		moveTo(location);
-	}
-
-	public abstract String getType();
-
-	protected abstract void init();
 
 	public WorldPoint getPosition() {
 		return world.getObjectPosition(this);
@@ -36,14 +42,8 @@ public abstract class MovingObject implements Drawable, Saveable {
 		world.moveObjectTo(this, p);
 	}
 
-	public abstract boolean collides();
-
-	public static MovingObject createFromType(int id, World world) {
-		if (id == 0) {
-			return new Worker(world);
-		}
-
-		return null;
+	public boolean collides() {
+		return collides;
 	}
 
 	public int getUniqueID() {
@@ -59,15 +59,33 @@ public abstract class MovingObject implements Drawable, Saveable {
 
 	@Override
 	public Saveable load(String fromString) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static int getTypeInt(String string) {
-		if (string.equals("worker")) {
-			return 0;
+	public int getTypeInt() {
+		return myType;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setPaintBool(boolean bool) {
+		paint = bool;
+	}
+
+	@Override
+	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
+		if (paint) {
+			g.drawImage(image, xinpixels, yinpixels, GameSettings.TILE_SIZE,
+					GameSettings.TILE_SIZE, null);
 		}
 
-		return -1;
+	}
+
+	// ------------ static -----------
+
+	public static void loadFromInfoFile() {
+		info = InfoFileReader.readFile(FileSystem.DATA_FILE_OBJECTS);
 	}
 }

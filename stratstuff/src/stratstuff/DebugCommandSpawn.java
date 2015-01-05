@@ -25,9 +25,7 @@ public class DebugCommandSpawn extends DebugCommand {
 			int y = Integer.parseInt(args.get(2));
 			int z = Integer.parseInt(args.get(3));
 
-			if (unitID == 0) {
-				w.spawnObject(new Worker(w), w.getWP(x, y, z));
-			}
+			w.spawnObject(new MovingObject(unitID, w), w.getWP(x, y, z));
 		} else {
 			printErrorMessage();
 		}

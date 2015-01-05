@@ -20,6 +20,10 @@ public class Core implements Runnable {
 
 	private GameWindowAdapter windowAdapter;
 
+	private SimpleTimer timer;
+
+	private boolean locked = false;
+
 	private static FrontendAdapter frontendAdapter;
 
 	public Core() {
@@ -27,14 +31,16 @@ public class Core implements Runnable {
 
 		windowAdapter = new GameWindowAdapter(this);
 
+		Element.loadElements();
+		Ground.loadGrounds();
+		MovingObject.loadFromInfoFile();
+
 		debugConsole = new DebugConsole(this, windowAdapter);
 		updatables.add(debugConsole);
 
-		Element.loadElements();
-		Ground.loadGrounds();
-
 		gameCamera = new GameCamera(this);
 		gameCursor = new GameCursor(gameCamera);
+		timer = new SimpleTimer();
 
 		createUpdatables();
 
@@ -64,7 +70,6 @@ public class Core implements Runnable {
 	private void createUpdatables() {
 		frontendAdapter = new FrontendAdapter(this);
 		frontendAdapter.start();
-		updatables.add(frontendAdapter);
 
 		inputManager = new InputManager(gameCamera, gameCursor);
 		updatables.add(inputManager);
@@ -86,19 +91,51 @@ public class Core implements Runnable {
 	@Override
 	public void run() {
 		try {
-			while (true) {
-
-				updateUpdatables();
-
-				Thread.sleep(50);
-
-				frontendAdapter.update();
-
-				Thread.sleep(50);
-			}
+			update();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void update() throws InterruptedException {
+
+		initialSleep();
+		timer.start();
+		while (true) {
+			if (!locked) {
+				long sleepTime = GameSettings.TICK_MILLIS - timer.stop();
+				if (sleepTime > 0)
+					Thread.sleep(sleepTime);
+
+				updateUpdatables();
+
+				frontendAdapter.sendStartMessage();
+				timer.start();
+
+				lock();
+			}
+
+			frontendAdapter.waitForFrontendFIN();
+
+			Thread.sleep(10);
+		}
+
+	}
+
+	private void lock() {
+		locked = true;
+	}
+
+	private void initialSleep() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public void unlock() {
+		locked = false;
 	}
 
 	private void updateUpdatables() {

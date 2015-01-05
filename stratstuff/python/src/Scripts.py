@@ -1,4 +1,3 @@
-from EngineAdapter import EngineAdapterClass
 
 class Script():
     def __init__(self):

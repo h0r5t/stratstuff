@@ -4,6 +4,7 @@
     collides = true
     ladderdown = false
     ladderup = false
+    drops = wood
 }
 1:{
     name = bush

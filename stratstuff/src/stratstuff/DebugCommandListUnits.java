@@ -21,7 +21,7 @@ public class DebugCommandListUnits extends DebugCommand {
 
 		for (Integer i : units.keySet()) {
 			MovingObject o = units.get(i);
-			console.print(i + " : " + o.getType() + " "
+			console.print(i + " : " + o.getName() + " "
 					+ o.getPosition().getX() + " " + o.getPosition().getY()
 					+ " " + o.getPosition().getZ());
 			console.print("\n");

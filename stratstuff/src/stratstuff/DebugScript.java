@@ -23,8 +23,8 @@ public class DebugScript {
 
 	private void loadScript() throws FileNotFoundException {
 		commands = new ArrayList<String>();
-		Scanner scanner = new Scanner(new File(FileSystem.DEBUG_SCRIPTS_DIR + "/"
-				+ scriptName + ".script"));
+		Scanner scanner = new Scanner(new File(FileSystem.DEBUG_SCRIPTS_DIR
+				+ "/" + scriptName + ".script"));
 
 		while (scanner.hasNextLine()) {
 			commands.add(scanner.nextLine().trim());
@@ -39,6 +39,6 @@ public class DebugScript {
 			console.commandEntered(true, c);
 		}
 
-		console.print("%%%%%%%%%%%%%%%%%%\n");
+		console.print("\n%%%%%%%%%%%%%%%%%%\n");
 	}
 }

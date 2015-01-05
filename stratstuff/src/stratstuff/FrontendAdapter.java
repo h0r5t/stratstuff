@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FrontendAdapter implements Updatable {
+public class FrontendAdapter {
 
 	private IPCServer ipcServer;
 	private IPCClient ipcClient;
@@ -13,6 +13,8 @@ public class FrontendAdapter implements Updatable {
 
 	private ArrayList<String> newCommands;
 	private ArrayList<String> queueToSend;
+
+	private boolean frontendIsFinished = false;
 
 	// Events
 	private HashMap<Integer, Integer> taskEndedTaskIdEventId;
@@ -40,7 +42,7 @@ public class FrontendAdapter implements Updatable {
 		}
 	}
 
-	public void messageReceived(ArrayList<String> list) {
+	public void messagesReceived(ArrayList<String> list) {
 		for (String s : list) {
 			newCommands.add(s);
 		}
@@ -52,13 +54,15 @@ public class FrontendAdapter implements Updatable {
 
 	public void startPythonFrontend() {
 		String adapterStarterLocation = FileSystem.ADAPTER_STARTER_LOCATION;
+		String argument = " " + FileSystem.STRATSTUFF_DIR;
 		String[] command = { "gnome-terminal", "--command",
-				adapterStarterLocation };
+				adapterStarterLocation + argument };
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		queueToSend.clear();
 	}
 
 	public void taskEnded(int taskID) {
@@ -69,24 +73,48 @@ public class FrontendAdapter implements Updatable {
 		}
 	}
 
+	public void frontendIsFinished() {
+		frontendIsFinished = true;
+	}
+
 	// look at all commands and execute them
-	@Override
-	public void update() {
+	public void waitForFrontendFIN() {
+		if (frontendIsFinished) {
+			parseCommands();
+		}
+		sendQueue();
+	}
+
+	private void parseCommands() {
 		while (!newCommands.isEmpty()) {
 			String command = newCommands.remove(0);
 			String name = command.split(" ")[0];
 
-			if (name.equals("event")) {
+			if (name.equals("FIN")) {
+				main.unlock();
+				frontendIsFinished = false;
+				return;
+			}
+
+			else if (name.equals("event")) {
 				registerEvent(command.split(" "));
 			}
 
-			else {
-				// it's a debug console command...
-				main.getConsole().commandEntered(true, command);
+			else if (name.equals("paintObj")) {
+				setPaintObject(command.split(" "));
 			}
 
+			else {
+				main.getConsole().commandEntered(true, command);
+			}
 		}
-		sendQueue();
+	}
+
+	private void setPaintObject(String[] command) {
+		boolean bool = Boolean.parseBoolean(command[2]);
+		int objID = Integer.parseInt(command[1]);
+
+		main.getWorld().getObjectByID(objID).setPaintBool(bool);
 	}
 
 	private void registerEvent(String[] commands) {
@@ -95,5 +123,9 @@ public class FrontendAdapter implements Updatable {
 			int taskID = Integer.parseInt(commands[3]);
 			taskEndedTaskIdEventId.put(taskID, eventID);
 		}
+	}
+
+	public void sendStartMessage() {
+		send("START");
 	}
 }

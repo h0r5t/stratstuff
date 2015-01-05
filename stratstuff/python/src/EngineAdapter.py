@@ -1,9 +1,11 @@
+from random import randint
 import sys
 import time
 
 from Events import LocalEvent, RemoteEvent
 import IPCClient
 import IPCServer
+import Managers
 import TestScript
 from WorldData import WorldData
 
@@ -18,29 +20,35 @@ class EngineAdapterClass:
         self.remoteEvents = {}  # events that happen in the engine
         self.localEvents = {}  # events that will be evaluated in frontend
         self.world = WorldData("test")
+        self.locked = True
         
         self.setupScripts()
     
     def setupScripts(self):
         s1 = TestScript.TestScript(self)
         self.addScript(s1)
+        itemMgr = Managers.ItemManager(self)
+        self.addScript(itemMgr)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
             self.parseEngineMessage(s)
             
     def registerLocalEvent(self, statementMethod, callbackMethod):
-        eventID = self.getSmallesAvailableyKey(self.localEvents)
+        eventID = self.getSmallestAvailableyKey(self.localEvents)
         event = LocalEvent(eventID, statementMethod, callbackMethod)
         self.localEvents[eventID] = event
         
     def loop(self):
         while 1:
-            self.updateLocalEvents()
-            self.updateScripts()
-            self.sendMessages()
+            if self.locked == False:
+                self.updateLocalEvents()
+                self.updateScripts()
+                self.sendMessages()
                 
-            time.sleep(SLEEP_TIME)
+                self.lock()
+            
+            time.sleep(0.01)
     
     def updateScripts(self):
         for script in self.scripts:
@@ -53,14 +61,24 @@ class EngineAdapterClass:
                     print "Unexpected error:", sys.exc_info()[0]
                     
     def updateLocalEvents(self):
-        for event in self.localEvents.values():
+        for item in self.localEvents.items():
+            event = item[1]
             if event.evaluate():
                 event.callback()
+                del self.localEvents[item[0]]
+                
+    def lock(self):
+        self.locked = True
+    
+    def unlock(self):
+        self.locked = False
                 
     def sendMessages(self):
         message = ""
         for msg in self.messages:
             message = message + msg + "\n";
+            
+        message = message + "FIN\n"
               
         self.messages = []
         client.send(message);
@@ -71,20 +89,22 @@ class EngineAdapterClass:
     def getWorld(self):
         return self.world
         
-    def getSmallesAvailableyKey(self, dictionary):
-        for key in dictionary:
-            intkey = int(key)
-            if not intkey + 1 in dictionary:
-                return intkey + 1
+    def getSmallestAvailableyKey(self, dictionary):
         
-        # empty list
-        return 0
+        while 1:
+            random = randint(0, len(dictionary) * 2)
+        
+            if random not in dictionary:
+                return random
         
     # ----------------- Engine Messages ---------------
     
     def parseEngineMessage(self, messageString):
         split = messageString.split()
-        messageID = split[0]
+        messageID = split[0]        
+        
+        if messageID == "START":
+            self.unlock()
         
         if messageID == "0":
             x = split[len(split) - 3]
@@ -112,7 +132,14 @@ class EngineAdapterClass:
             z = split[len(split) - 1]
             newelement = split[1]
             self.world.elementChanged(newelement, x, y, z)
-            print split
+            
+        if messageID == "4":
+            x = split[len(split) - 3]
+            y = split[len(split) - 2]
+            z = split[len(split) - 1]
+            objID = split[1]
+            objType = split[2]
+            self.world.addMovingObject(objID, objType, x, y, z)
     
     # ----------------- Engine Messages ----------------
     
@@ -127,19 +154,23 @@ class EngineAdapterClass:
         self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z))
     
     def registerEventTaskFinished(self, taskID, callbackMethod):
-        eventID = self.getSmallesAvailableyKey(self.remoteEvents)
+        eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID, callbackMethod)
         self.remoteEvents[eventID] = event
         self.messages.append("event " + str(0) + " " + str(eventID) + " " + str(taskID))
+        
+    def registerUnitSpawn(self, unitType, x, y, z):
+        self.messages.append("spawn " + str(unitType) + " " + str(x) + " " + str(y) + " " + str(z))
+        
+    def registerSetPaintObject(self, unitID, boolVal):
+        self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
     
     # ----------------- Commands -----------------------
 
 if __name__ == '__main__':
-    
     adapter = EngineAdapterClass()
     
-    print("starting...")
+    print(">>> starting...")
     IPCServer.start(adapter.messageReceived)
-    print("server started.")
-    
+    print(">>> server started.")
     adapter.loop()

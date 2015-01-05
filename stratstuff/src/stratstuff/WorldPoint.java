@@ -31,6 +31,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 	@Deprecated
 	public void removeElement() {
 		attachedElement = -1;
+		Core.tellFrontend(FrontendMessaging.elementUpdate(-1, getX(), getY(),
+				getZ()));
 	}
 
 	public void attachMovingObject(MovingObject o) {

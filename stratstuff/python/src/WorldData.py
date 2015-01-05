@@ -34,13 +34,19 @@ class WorldData():
                 o.setY(int(newY))
                 o.setZ(int(newZ))
         
+    def addMovingObject(self, objID, objType, x, y, z):
+        foundList = [x for x in self.m_objects if x.getObjectID() == objID]
+        if len(foundList) == 0:
+            obj = MovingObject(objType, objID, x, y, z)
+            self.m_objects.append(obj)
+        
     # ------------------ World changes ---------------------
      
     def groundCollides(self, groundID):
         if groundID == -1:
             return False
-        type = self.groundData[str(groundID)]
-        return "true" == type["collides"]
+        a = self.groundData[str(groundID)]
+        return "true" == a["collides"]
     
     def getObjects(self):
         return self.m_objects
@@ -56,8 +62,8 @@ class WorldData():
     def elementCollides(self, elementID):
         if elementID == -1:
             return False
-        type = self.elementData[str(elementID)]
-        return "true" == type["collides"]
+        a = self.elementData[str(elementID)]
+        return "true" == a["collides"]
     
     def worldPointCollides(self, x, y, z):
         wp = self.wp_array[x, y, z]        

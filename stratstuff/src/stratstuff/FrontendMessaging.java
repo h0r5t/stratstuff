@@ -18,4 +18,9 @@ public class FrontendMessaging {
 	public static String elementUpdate(int newElementID, int x, int y, int z) {
 		return "3 " + newElementID + " " + x + " " + y + " " + z;
 	}
+
+	public static String objectSpawnedUpdate(int objectID, int objectType, int x,
+			int y, int z) {
+		return "4 " + objectID + " " + objectType + " " + x + " " + y + " " + z;
+	}
 }

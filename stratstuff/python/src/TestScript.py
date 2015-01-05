@@ -3,20 +3,25 @@ from Scripts import IDynamicScript
 class TestScript(IDynamicScript):
     def customInit(self):
         self.x = 20
-        self.adapter.registerGroundChange(0, 12, 10, 0)
-        self.adapter.registerGroundChange(0, 11, 10, 0)
+        self.removeBarrier()
+        
         self.adapter.registerMoveTask(0, self.x, 10 , 0)
+        
         self.adapter.registerEventTaskFinished(0, self.callback2)
-        self.adapter.registerLocalEvent(self.statement, self.callback)
+        self.adapter.registerLocalEvent(self.statement, self.makeBarrier)
         
     def update(self):
         pass
             
-    def callback(self):
+    def makeBarrier(self):
         self.adapter.registerGroundChange(1, 12, 10, 0)
+        self.adapter.registerLocalEvent(self.statement, self.makeBarrier)
+    
+    def removeBarrier(self):
+        self.adapter.registerGroundChange(0, 12, 10, 0)
     
     def callback2(self):
-        self.adapter.registerGroundChange(0, 12, 10, 0)
+        self.removeBarrier()
         self.adapter.registerMoveTask(0, self.x, 10 , 0)
         self.adapter.registerEventTaskFinished(0, self.callback2)
         

@@ -38,7 +38,8 @@ public class IPCServer implements Runnable {
 		// remove last element since it contains nothing
 		list.remove(list.size() - 1);
 
-		adapter.messageReceived(list);
+		adapter.messagesReceived(list);
+		adapter.frontendIsFinished();
 	}
 
 	@Override

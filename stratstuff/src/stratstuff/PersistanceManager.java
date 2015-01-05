@@ -101,7 +101,7 @@ public class PersistanceManager {
 				// this allows to add info later if possible, dunno
 				int objectID = Integer.parseInt(splitLine[0]);
 
-				MovingObject object = MovingObject.createFromType(objectID, w);
+				MovingObject object = new MovingObject(objectID, w);
 				w.spawnObject(object, w.getWP(x, y, z));
 			}
 
@@ -161,9 +161,8 @@ public class PersistanceManager {
 					}
 
 				}
-
-				writer.close();
 			}
+			writer.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

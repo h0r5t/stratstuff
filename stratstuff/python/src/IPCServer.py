@@ -9,8 +9,8 @@ class IPCServerHandler(SocketServer.BaseRequestHandler):
         list_of_lines = data.split('\n');
         callbackFunction(list_of_lines)
 
-def start(callback):
+def start(makeBarrier):
     global callbackFunction
-    callbackFunction = callback
+    callbackFunction = makeBarrier
     server = SocketServer.UDPServer(("localhost", 32001), IPCServerHandler)
     start_new_thread(server.serve_forever, ())
