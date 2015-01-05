@@ -7,6 +7,7 @@ import IPCClient
 import IPCServer
 import Managers
 import TestScript
+import TestScript2
 from WorldData import WorldData
 
 
@@ -27,8 +28,11 @@ class EngineAdapterClass:
     def setupScripts(self):
         s1 = TestScript.TestScript(self)
         self.addScript(s1)
+        
         itemMgr = Managers.ItemManager(self)
         self.addScript(itemMgr)
+        s2 = TestScript2.TestScript2(self)
+        self.addScript(s2)
     
     def messageReceived(self, stringlist):
         for s in stringlist:

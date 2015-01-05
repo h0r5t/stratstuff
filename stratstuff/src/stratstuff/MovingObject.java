@@ -80,7 +80,6 @@ public class MovingObject implements Drawable, Saveable {
 			g.drawImage(image, xinpixels, yinpixels, GameSettings.TILE_SIZE,
 					GameSettings.TILE_SIZE, null);
 		}
-
 	}
 
 	// ------------ static -----------
