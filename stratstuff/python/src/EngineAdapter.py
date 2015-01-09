@@ -22,6 +22,7 @@ class EngineAdapterClass:
         self.localEvents = {}  # events that will be evaluated in frontend
         self.world = WorldData("test")
         self.locked = True
+        self.inputMgr = InputManager.InputManager()
         
         self.setupScripts()
     
@@ -105,39 +106,44 @@ class EngineAdapterClass:
     
     def parseEngineMessage(self, messageString):
         split = messageString.split()
-        messageID = split[0]        
+        messageID = split[0]
         
-        if messageID == "START":
+        if messageID.startswith("input::")
+            # it's an actual game feature, the user wants to do smth
+            # the whole string should only look like: "input::dosomedefinedtask"
+            self.inputMgr.handleInput(messageString)
+        
+        elif messageID == "START":
             self.unlock()
         
-        if messageID == "0":
+        elif messageID == "0":
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             newground = split[1]
             self.world.groundChanged(newground, x, y, z)
             
-        if messageID == "1":
+        elif messageID == "1":
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             movingObjectID = split[1]
             self.world.movingObjectPositionChanged(movingObjectID, x, y, z)
         
-        if messageID == "2":
+        elif messageID == "2":
             eventID = int(split[1])
             event = self.remoteEvents[eventID]
             del self.remoteEvents[eventID]
             event.callback()
             
-        if messageID == "3":
+        elif messageID == "3":
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             newelement = split[1]
             self.world.elementChanged(newelement, x, y, z)
             
-        if messageID == "4":
+        elif messageID == "4":
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
