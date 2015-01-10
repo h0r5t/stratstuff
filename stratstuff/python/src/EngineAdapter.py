@@ -5,6 +5,7 @@ import time
 from Events import LocalEvent, RemoteEvent
 import IPCClient
 import IPCServer
+import InputManager
 import Managers
 import TestScript
 import TestScript2
@@ -30,10 +31,10 @@ class EngineAdapterClass:
         s1 = TestScript.TestScript(self)
         self.addScript(s1)
         
-        itemMgr = Managers.ItemManager(self)
-        self.addScript(itemMgr)
-        s2 = TestScript2.TestScript2(self)
-        self.addScript(s2)
+        # itemMgr = Managers.ItemManager(self)
+        # self.addScript(itemMgr)
+        # s2 = TestScript2.TestScript2(self)
+        # self.addScript(s2)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
@@ -108,7 +109,7 @@ class EngineAdapterClass:
         split = messageString.split()
         messageID = split[0]
         
-        if messageID.startswith("input::")
+        if messageID.startswith("input::"):
             # it's an actual game feature, the user wants to do smth
             # the whole string should only look like: "input::dosomedefinedtask"
             self.inputMgr.handleInput(messageString)

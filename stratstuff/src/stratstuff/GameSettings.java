@@ -4,7 +4,7 @@ public class GameSettings {
 
 	public static final boolean GENERATE_NEW_WORLD = false;
 
-	public static final long TICK_MILLIS = 80;
+	public static final long TICK_MILLIS = 90;
 
 	public static final int TILE_SIZE = 15;
 

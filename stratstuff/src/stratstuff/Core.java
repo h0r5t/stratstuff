@@ -117,7 +117,7 @@ public class Core implements Runnable {
 
 			frontendAdapter.waitForFrontendFIN();
 
-			Thread.sleep(10);
+			Thread.sleep(5);
 		}
 
 	}

@@ -28,7 +28,6 @@ public class DebugConsoleFrame extends JFrame {
 
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);
-		textArea.setAutoscrolls(true);
 		textArea.setCaretColor(Color.BLACK);
 		textArea.setBackground(Color.decode("#99FF99"));
 		textArea.addKeyListener(new KL());

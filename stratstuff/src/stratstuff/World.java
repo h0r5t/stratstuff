@@ -372,6 +372,22 @@ public class World extends Graph implements Saveable {
 						applyEdgeInfo(a);
 					}
 
+					int elementID = current.getAttachedElement();
+
+					if (elementID != -1) {
+						if (z < GameSettings.WORLD_DEPTH - 1) {
+							if (Element.isLadderDown(elementID)) {
+								addZEdge(current, getWP(x, y, z + 1));
+							}
+						}
+
+						if (z > 0) {
+							if (Element.isLadderUp(elementID)) {
+								addZEdge(current, getWP(x, y, z - 1));
+							}
+						}
+					}
+
 				}
 			}
 		}

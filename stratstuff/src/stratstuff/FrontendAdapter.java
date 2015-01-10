@@ -102,7 +102,9 @@ public class FrontendAdapter {
 
 			else if (name.equals("paintObj")) {
 				setPaintObject(command.split(" "));
-			} else {
+			}
+
+			else {
 				main.getConsole().commandEntered(true, command);
 			}
 		}
