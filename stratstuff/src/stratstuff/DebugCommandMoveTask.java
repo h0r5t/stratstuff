@@ -29,7 +29,7 @@ public class DebugCommandMoveTask extends DebugCommand {
 		int y = Integer.parseInt(args.get(2));
 		int z = Integer.parseInt(args.get(3));
 
-		MovingObject o = console.getMain().getUnitManager().getUnit(unitID);
+		MovingObject o = console.getMain().getObjectManager().getUnit(unitID);
 		MoveTask task = new MoveTask(console.getMain(), o, console.getMain()
 				.getWorld().getWP(x, y, z));
 		mgr.runTask(task);

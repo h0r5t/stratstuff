@@ -2,12 +2,13 @@ from Scripts import IDynamicScript
 
 class TestScript(IDynamicScript):
     def customInit(self):
-        self.x = 20
+        self.x = 7
         self.removeBarrier()
+        self.objectID = 144001
         
-        self.adapter.registerMoveTask(0, self.x, 10 , 0)
+        self.taskID = self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0)
         
-        self.adapter.registerEventTaskFinished(0, self.callback2)
+        self.adapter.registerEventTaskFinished(self.taskID, self.callback2)
         self.adapter.registerLocalEvent(self.statement, self.makeBarrier)
         
     def update(self):
@@ -22,8 +23,8 @@ class TestScript(IDynamicScript):
     
     def callback2(self):
         self.removeBarrier()
-        self.adapter.registerMoveTask(0, self.x, 10 , 0)
-        self.adapter.registerEventTaskFinished(0, self.callback2)
+        self.taskID = self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0)
+        self.adapter.registerEventTaskFinished(self.taskID, self.callback2)
         
         if self.x == 20:
             self.x = 7
@@ -31,7 +32,7 @@ class TestScript(IDynamicScript):
             self.x = 20
         
     def statement(self):
-        if self.adapter.getWorld().getObjectByIndexInList(0).getX() == 13:
+        if self.adapter.getWorld().getObjectByID(self.objectID).getX() == 13:
             return True
         
         return False

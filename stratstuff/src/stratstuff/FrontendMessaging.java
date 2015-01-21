@@ -19,8 +19,13 @@ public class FrontendMessaging {
 		return "3 " + newElementID + " " + x + " " + y + " " + z;
 	}
 
-	public static String objectSpawnedUpdate(int objectID, int objectType, int x,
-			int y, int z) {
+	public static String objectSpawnedUpdate(int objectID, int objectType,
+			int x, int y, int z) {
 		return "4 " + objectID + " " + objectType + " " + x + " " + y + " " + z;
+	}
+
+	public static String menuInputMessage(String name, String type,
+			String areaData) {
+		return "input::" + name + " " + type + " " + areaData;
 	}
 }

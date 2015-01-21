@@ -35,7 +35,8 @@ public class GameCamera {
 	}
 
 	public int getEndX() {
-		return cameraX + GameSettings.GAME_FRAME_WIDTH / GameSettings.TILE_SIZE;
+		return cameraX
+				+ ((GameSettings.GAME_FRAME_WIDTH - GameSettings.MENU_WIDTH) / GameSettings.TILE_SIZE);
 	}
 
 	public int getEndY() {

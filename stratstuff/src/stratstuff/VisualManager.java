@@ -8,14 +8,14 @@ public class VisualManager implements Updatable {
 
 	public VisualManager(World world, GameCamera cam,
 			InputManager inputHandler, GameCursor cursor,
-			GameWindowAdapter windowAdapter) {
+			GameWindowAdapter windowAdapter, GameMenu menu) {
 		initFrame(inputHandler, windowAdapter);
-		initCanvas(world, inputHandler, cam, cursor);
+		initCanvas(world, inputHandler, cam, cursor, menu);
 	}
 
 	private void initCanvas(World world, InputManager handler, GameCamera cam,
-			GameCursor cursor) {
-		gameCanvas = new GameCanvas(world, this, handler, cam, cursor);
+			GameCursor cursor, GameMenu menu) {
+		gameCanvas = new GameCanvas(world, this, handler, cam, cursor, menu);
 		gameFrame.add(gameCanvas);
 	}
 

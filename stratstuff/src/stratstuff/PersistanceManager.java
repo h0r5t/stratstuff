@@ -176,7 +176,7 @@ public class PersistanceManager {
 			PrintWriter writer = new PrintWriter(f);
 
 			ArrayList<MovingObject> objects = new ArrayList<MovingObject>(main
-					.getUnitManager().getUnits().values());
+					.getObjectManager().getUnits().values());
 
 			for (MovingObject object : objects) {
 				String out = object.save() + "\n";

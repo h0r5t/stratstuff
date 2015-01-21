@@ -28,8 +28,9 @@ class WorldData():
         self.wp_array[x, y, z].setElementID(newElementID)
         
     def movingObjectPositionChanged(self, objID, newX, newY, newZ):
+        intID = int(objID)
         for o in self.m_objects:
-            if o.getObjectID() == objID:
+            if o.getObjectID() == intID:
                 o.setX(int(newX))
                 o.setY(int(newY))
                 o.setZ(int(newZ))
@@ -56,14 +57,20 @@ class WorldData():
             if obj.getObjectID() == theID:
                 return obj
     
-    def getObjectByIndexInList(self, index):
-        return self.m_objects[index]
-    
     def elementCollides(self, elementID):
         if elementID == -1:
             return False
         a = self.elementData[str(elementID)]
         return "true" == a["collides"]
+    
+    def getAllWPsInRange(self, x, y, z, w, h, d):
+        wps = []
+        for xx in range(x, x + w):
+            for yy in range(y, y + h):
+                for zz in range(z, z + d):
+                    wps.append(self.wp_array[xx, yy, zz])
+                
+        return wps
     
     def worldPointCollides(self, x, y, z):
         wp = self.wp_array[x, y, z]        
@@ -94,7 +101,7 @@ class WorldData():
                 split = line.split()  # splits whitespaces per default
                 for id_string in split:
                     ground_id = int(id_string)
-                    wp = WorldPoint(ground_id)
+                    wp = WorldPoint(ground_id, x, y, z)
                     self.wp_array[x, y, z] = wp
                     x = x + 1
                 y = y + 1
@@ -120,8 +127,8 @@ class WorldData():
             line = line.rstrip("\n")
             split = line.split()
             
-            object_type = split[0]
-            objID = split[1]
+            object_type = int(split[0])
+            objID = int(split[1])
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
@@ -139,8 +146,11 @@ class WorldData():
         self.elementData = InfoReader.readFile(f)
                     
 class WorldPoint():
-    def __init__(self, ground_id):
+    def __init__(self, ground_id, x, y, z):
         self.groundID = ground_id
+        self.x = int(x)
+        self.y = int(y)
+        self.z = int(z)
         self.element = -1;
     
     def setElementID(self, element):
@@ -154,6 +164,24 @@ class WorldPoint():
     
     def setGroundID(self, newgroundID):
         self.groundID = newgroundID
+    
+    def getX(self):
+        return self.x
+    
+    def getY(self):
+        return self.y
+    
+    def getZ(self):
+        return self.z
+    
+    def setX(self, x):
+        self.x = x
+    
+    def setY(self, y):
+        self.y = y
+        
+    def setZ(self, z):
+        self.z = z
 
 class MovingObject():
     def __init__(self, obj_type, obj_id, x, y, z):

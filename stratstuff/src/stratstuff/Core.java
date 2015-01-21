@@ -7,6 +7,7 @@ public class Core implements Runnable {
 	private World world;
 	private GameCamera gameCamera;
 	private GameCursor gameCursor;
+	private GameMenu gameMenu;
 
 	private static DebugConsole debugConsole;
 
@@ -16,7 +17,7 @@ public class Core implements Runnable {
 	private WorldManager worldManager;
 	private InputManager inputManager;
 	private TaskManager taskManager;
-	private UnitManager unitManager;
+	private ObjectManager objectManager;
 
 	private GameWindowAdapter windowAdapter;
 
@@ -35,6 +36,8 @@ public class Core implements Runnable {
 		Ground.loadGrounds();
 		MovingObject.loadFromInfoFile();
 
+		gameMenu = new GameMenu(this);
+
 		debugConsole = new DebugConsole(this, windowAdapter);
 		updatables.add(debugConsole);
 
@@ -47,7 +50,7 @@ public class Core implements Runnable {
 		loadOrGenerateWorld();
 
 		visualManager = new VisualManager(world, gameCamera, inputManager,
-				gameCursor, windowAdapter);
+				gameCursor, windowAdapter, gameMenu);
 		updatables.add(visualManager);
 
 		world.initialCreationOfEdges();
@@ -71,7 +74,7 @@ public class Core implements Runnable {
 		frontendAdapter = new FrontendAdapter(this);
 		frontendAdapter.start();
 
-		inputManager = new InputManager(gameCamera, gameCursor);
+		inputManager = new InputManager(gameCamera, gameCursor, gameMenu);
 		updatables.add(inputManager);
 
 		worldManager = new WorldManager(world);
@@ -80,8 +83,8 @@ public class Core implements Runnable {
 		taskManager = new TaskManager(this);
 		updatables.add(taskManager);
 
-		unitManager = new UnitManager(this);
-		updatables.add(unitManager);
+		objectManager = new ObjectManager(this);
+		updatables.add(objectManager);
 	}
 
 	public GameCursor getCursor() {
@@ -128,7 +131,7 @@ public class Core implements Runnable {
 
 	private void initialSleep() {
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(GameSettings.INITIAL_SLEEP_TIME);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
@@ -164,8 +167,8 @@ public class Core implements Runnable {
 		return taskManager;
 	}
 
-	public UnitManager getUnitManager() {
-		return unitManager;
+	public ObjectManager getObjectManager() {
+		return objectManager;
 	}
 
 	public FrontendAdapter getFrontendAdapter() {
@@ -182,5 +185,9 @@ public class Core implements Runnable {
 
 	public void saveWorldState() {
 		PersistanceManager.save(this, "test");
+	}
+
+	public InputManager getInputManager() {
+		return inputManager;
 	}
 }

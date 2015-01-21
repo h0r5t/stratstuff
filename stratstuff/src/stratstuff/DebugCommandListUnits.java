@@ -17,7 +17,7 @@ public class DebugCommandListUnits extends DebugCommand {
 	@Override
 	public void execute(ArrayList<String> args) {
 		HashMap<Integer, MovingObject> units = console.getMain()
-				.getUnitManager().getUnits();
+				.getObjectManager().getUnits();
 
 		for (Integer i : units.keySet()) {
 			MovingObject o = units.get(i);

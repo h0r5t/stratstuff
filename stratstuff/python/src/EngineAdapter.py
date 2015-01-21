@@ -8,7 +8,6 @@ import IPCServer
 import InputManager
 import Managers
 import TestScript
-import TestScript2
 from WorldData import WorldData
 
 
@@ -23,7 +22,7 @@ class EngineAdapterClass:
         self.localEvents = {}  # events that will be evaluated in frontend
         self.world = WorldData("test")
         self.locked = True
-        self.inputMgr = InputManager.InputManager()
+        self.inputMgr = InputManager.InputManager(self)
         
         self.setupScripts()
     
@@ -31,8 +30,8 @@ class EngineAdapterClass:
         s1 = TestScript.TestScript(self)
         self.addScript(s1)
         
-        # itemMgr = Managers.ItemManager(self)
-        # self.addScript(itemMgr)
+        itemMgr = Managers.ItemManager(self)
+        self.addScript(itemMgr)
         # s2 = TestScript2.TestScript2(self)
         # self.addScript(s2)
     
@@ -155,6 +154,8 @@ class EngineAdapterClass:
     # ----------------- Engine Messages ----------------
     
         
+        
+        
     # ----------------- Commands -----------------------
     
     def registerGroundChange(self, newGround, x, y, z):
@@ -163,6 +164,8 @@ class EngineAdapterClass:
         
     def registerMoveTask(self, unitID, x, y, z):
         self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z))
+        # return smallest key as this is the task ID we need
+        return self.getSmallestAvailableyKey(self.remoteEvents)
     
     def registerEventTaskFinished(self, taskID, callbackMethod):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)

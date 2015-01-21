@@ -118,6 +118,7 @@ public class FrontendAdapter {
 	}
 
 	private void registerEvent(String[] commands) {
+		// zero to register
 		if (Integer.parseInt(commands[1]) == 0) {
 			int eventID = Integer.parseInt(commands[2]);
 			int taskID = Integer.parseInt(commands[3]);

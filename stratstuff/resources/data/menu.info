@@ -1,0 +1,17 @@
+m:move
+{
+    >m:movetest single
+}
+t:work
+{
+    >t:trees area
+    >m:mine area
+    h:htest
+    {
+        >h:htest area
+    }
+    j:jm
+    {
+        >k:kaka area
+    }
+}
