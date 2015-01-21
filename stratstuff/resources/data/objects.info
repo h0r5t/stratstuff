@@ -3,7 +3,7 @@
     image = worker.png
     collides = false
 }
-0:{
+1:{
     name = testmob
     image = worker.png
     collides = false
