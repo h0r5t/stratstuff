@@ -34,6 +34,21 @@ public class MovingObject implements Drawable, Saveable {
 		this.myType = myType;
 	}
 
+	public MovingObject(int myType, World world, int uniqueID) {
+		LoadedInfo myInfo = info.get(myType + "");
+		name = myInfo.getValueString("name");
+		try {
+			image = ImageIO.read(new File(FileSystem.TEXTURES_DIR + "/units/"
+					+ myInfo.getValueString("image")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.collides = myInfo.getValueBool("collides");
+		this.world = world;
+		this.uniqueID = uniqueID;
+		this.myType = myType;
+	}
+
 	public WorldPoint getPosition() {
 		return world.getObjectPosition(this);
 	}

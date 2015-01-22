@@ -10,7 +10,7 @@ public class DebugCommandMoveTask extends DebugCommand {
 
 	@Override
 	protected boolean checkArguments(ArrayList<String> args) {
-		if (args.size() == 4) {
+		if (args.size() == 5) {
 			return true;
 		}
 		return false;
@@ -28,11 +28,12 @@ public class DebugCommandMoveTask extends DebugCommand {
 		int x = Integer.parseInt(args.get(1));
 		int y = Integer.parseInt(args.get(2));
 		int z = Integer.parseInt(args.get(3));
+		int ID = Integer.parseInt(args.get(4));
 
 		MovingObject o = console.getMain().getObjectManager().getUnit(unitID);
 		MoveTask task = new MoveTask(console.getMain(), o, console.getMain()
 				.getWorld().getWP(x, y, z));
-		mgr.runTask(task);
+		mgr.runTask(task, ID);
 	}
 
 	@Override

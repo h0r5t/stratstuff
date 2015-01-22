@@ -100,8 +100,9 @@ public class PersistanceManager {
 				int z = Integer.parseInt(splitLine[splitLine.length - 1]);
 				// this allows to add info later if possible, dunno
 				int objectID = Integer.parseInt(splitLine[0]);
+				int uniqueID = Integer.parseInt(splitLine[1]);
 
-				MovingObject object = new MovingObject(objectID, w);
+				MovingObject object = new MovingObject(objectID, w, uniqueID);
 				w.spawnObject(object, w.getWP(x, y, z));
 			}
 

@@ -6,9 +6,8 @@ class TestScript(IDynamicScript):
         self.removeBarrier()
         self.objectID = 144001
         
-        self.taskID = self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0)
+        self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0, self.callback2)
         
-        self.adapter.registerEventTaskFinished(self.taskID, self.callback2)
         self.adapter.registerLocalEvent(self.statement, self.makeBarrier)
         
     def update(self):
@@ -23,8 +22,7 @@ class TestScript(IDynamicScript):
     
     def callback2(self):
         self.removeBarrier()
-        self.taskID = self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0)
-        self.adapter.registerEventTaskFinished(self.taskID, self.callback2)
+        self.taskID = self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0, self.callback2)
         
         if self.x == 20:
             self.x = 7

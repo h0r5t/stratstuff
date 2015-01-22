@@ -8,6 +8,7 @@ import IPCServer
 import InputManager
 import Managers
 import TestScript
+import TestScript2
 from WorldData import WorldData
 
 
@@ -32,8 +33,9 @@ class EngineAdapterClass:
         
         itemMgr = Managers.ItemManager(self)
         self.addScript(itemMgr)
-        # s2 = TestScript2.TestScript2(self)
-        # self.addScript(s2)
+        
+        s2 = TestScript2.TestScript2(self)
+        self.addScript(s2)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
@@ -162,22 +164,24 @@ class EngineAdapterClass:
         self.messages.append("chg " + str(newGround) + " " + str(x) + " " + str(y) + " " + str(z))
         self.world.groundChanged(newGround, x, y, z)
         
-    def registerMoveTask(self, unitID, x, y, z):
-        self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z))
-        # return smallest key as this is the task ID we need
-        return self.getSmallestAvailableyKey(self.remoteEvents)
-    
-    def registerEventTaskFinished(self, taskID, callbackMethod):
+    def registerMoveTask(self, unitID, x, y, z, callbackMethod):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID, callbackMethod)
         self.remoteEvents[eventID] = event
-        self.messages.append("event " + str(0) + " " + str(eventID) + " " + str(taskID))
+        self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
         
     def registerUnitSpawn(self, unitType, x, y, z):
         self.messages.append("spawn " + str(unitType) + " " + str(x) + " " + str(y) + " " + str(z))
         
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
+        
+    def registerIdleTask(self, millis, callbackMethod):
+        eventID = self.getSmallestAvailableyKey(self.remoteEvents)
+        event = RemoteEvent(eventID, callbackMethod)
+        self.remoteEvents[eventID] = event
+        self.messages.append("idletask " + str(millis) + " " + str(eventID))
+        
     
     # ----------------- Commands -----------------------
 

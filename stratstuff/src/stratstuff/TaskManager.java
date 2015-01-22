@@ -10,7 +10,6 @@ public class TaskManager implements Updatable {
 	private ArrayList<Task> openTasks;
 	private ArrayList<Task> deletableTasks;
 	private HashMap<Integer, Task> allTasksByID;
-	private int currentIdIndex = 0;
 
 	public TaskManager(Core main) {
 		this.main = main;
@@ -20,18 +19,9 @@ public class TaskManager implements Updatable {
 		deletableTasks = new ArrayList<Task>();
 	}
 
-	public void addOpenTask(Task t) {
-		openTasks.add(t);
-		allTasksByID.put(currentIdIndex, t);
-		currentIdIndex++;
-	}
-
-	public void runTask(Task t) {
+	public void runTask(Task t, int id) {
 		runningTasks.add(t);
-		if (!openTasks.remove(t)) {
-			allTasksByID.put(currentIdIndex, t);
-			currentIdIndex++;
-		}
+		allTasksByID.put(id, t);
 	}
 
 	public void addToDelete(Task t) {
@@ -49,9 +39,12 @@ public class TaskManager implements Updatable {
 	@Override
 	public void update() {
 		for (Task t : deletableTasks) {
-			main.getFrontendAdapter().taskEnded(t.getID());
+			for (Integer i : allTasksByID.keySet()) {
+				if (allTasksByID.get(i).equals(t)) {
+					main.getFrontendAdapter().taskEnded(i);
+				}
+			}
 			runningTasks.remove(t);
-			// so frontend gets the message
 		}
 		deletableTasks.clear();
 		for (Task t : runningTasks) {

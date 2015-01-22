@@ -2,7 +2,6 @@ package stratstuff;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FrontendAdapter {
 
@@ -16,16 +15,12 @@ public class FrontendAdapter {
 
 	private boolean frontendIsFinished = false;
 
-	// Events
-	private HashMap<Integer, Integer> taskEndedTaskIdEventId;
-
 	public FrontendAdapter(Core main) {
 		this.main = main;
 		ipcServer = new IPCServer(this);
 		ipcClient = new IPCClient();
 		newCommands = new ArrayList<String>();
 		queueToSend = new ArrayList<String>();
-		taskEndedTaskIdEventId = new HashMap<Integer, Integer>();
 	}
 
 	public void start() {
@@ -66,11 +61,7 @@ public class FrontendAdapter {
 	}
 
 	public void taskEnded(int taskID) {
-		if (taskEndedTaskIdEventId.keySet().contains(taskID)) {
-			addToQueue(FrontendMessaging.eventOccurred(taskEndedTaskIdEventId
-					.get(taskID)));
-			taskEndedTaskIdEventId.remove(taskID);
-		}
+		addToQueue(FrontendMessaging.eventOccurred(taskID));
 	}
 
 	public void frontendIsFinished() {
@@ -96,12 +87,15 @@ public class FrontendAdapter {
 				return;
 			}
 
-			else if (name.equals("event")) {
-				registerEvent(command.split(" "));
-			}
-
 			else if (name.equals("paintObj")) {
 				setPaintObject(command.split(" "));
+			}
+
+			else if (name.equals("idletask")) {
+				int ID = Integer.parseInt(command.split(" ")[2]);
+				double millis = Double.parseDouble(command.split(" ")[1]);
+				IdleTask task = new IdleTask(main.getTaskManager(), millis);
+				main.getTaskManager().runTask(task, ID);
 			}
 
 			else {
@@ -115,15 +109,6 @@ public class FrontendAdapter {
 		int objID = Integer.parseInt(command[1]);
 
 		main.getWorld().getObjectByID(objID).setPaintBool(bool);
-	}
-
-	private void registerEvent(String[] commands) {
-		// zero to register
-		if (Integer.parseInt(commands[1]) == 0) {
-			int eventID = Integer.parseInt(commands[2]);
-			int taskID = Integer.parseInt(commands[3]);
-			taskEndedTaskIdEventId.put(taskID, eventID);
-		}
 	}
 
 	public void sendStartMessage() {
