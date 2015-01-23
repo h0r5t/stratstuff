@@ -28,14 +28,17 @@ class EngineAdapterClass:
         self.setupScripts()
     
     def setupScripts(self):
-        s1 = TestScript.TestScript(self)
-        self.addScript(s1)
+        # s1 = TestScript.TestScript(self)
+        # self.addScript(s1)
+        
+        # s2 = TestScript2.TestScript2(self)
+        # self.addScript(s2)
         
         itemMgr = Managers.ItemManager(self)
         self.addScript(itemMgr)
         
-        s2 = TestScript2.TestScript2(self)
-        self.addScript(s2)
+        unitMgr = Managers.UnitManager(self)
+        self.addScript(unitMgr)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
@@ -163,7 +166,7 @@ class EngineAdapterClass:
     def registerGroundChange(self, newGround, x, y, z):
         self.messages.append("chg " + str(newGround) + " " + str(x) + " " + str(y) + " " + str(z))
         self.world.groundChanged(newGround, x, y, z)
-        
+    
     def registerMoveTask(self, unitID, x, y, z, callbackMethod):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID, callbackMethod)
@@ -172,10 +175,10 @@ class EngineAdapterClass:
         
     def registerUnitSpawn(self, unitType, x, y, z):
         self.messages.append("spawn " + str(unitType) + " " + str(x) + " " + str(y) + " " + str(z))
-        
+    
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
-        
+      
     def registerIdleTask(self, millis, callbackMethod):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID, callbackMethod)

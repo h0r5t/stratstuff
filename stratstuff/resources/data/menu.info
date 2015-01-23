@@ -1,6 +1,6 @@
 m:move
 {
-    >m:movetest single
+    >m:move area
 }
 t:work
 {

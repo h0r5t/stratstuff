@@ -7,7 +7,6 @@ class TestScript(IDynamicScript):
         self.objectID = 144001
         
         self.adapter.registerMoveTask(self.objectID, self.x, 10 , 0, self.callback2)
-        
         self.adapter.registerLocalEvent(self.statement, self.makeBarrier)
         
     def update(self):

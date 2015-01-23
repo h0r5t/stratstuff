@@ -52,6 +52,14 @@ class WorldData():
     def getObjects(self):
         return self.m_objects
     
+    def getObjectsWithType(self, typeID):
+        sublist = []
+        for obj in self.m_objects:
+            if str(obj.getObjectType()) == str(typeID):
+                sublist.append(obj)
+                
+        return sublist
+    
     def getObjectByID(self, theID):
         for obj in self.m_objects:
             if obj.getObjectID() == theID:
