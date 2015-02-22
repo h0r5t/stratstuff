@@ -86,6 +86,10 @@ public class GameMenuTree {
 		return false;
 	}
 
+	public void setParentTree(GameMenuTree parent) {
+		this.parentTree = parent;
+	}
+
 	public void print() {
 		System.out.println(hotKey + " " + name);
 		for (GameMenuTree tree : subTrees) {

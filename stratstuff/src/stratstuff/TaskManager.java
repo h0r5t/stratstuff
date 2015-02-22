@@ -36,6 +36,10 @@ public class TaskManager implements Updatable {
 		return openTasks;
 	}
 
+	public Task getTaskWithID(int id) {
+		return allTasksByID.get(id);
+	}
+
 	@Override
 	public void update() {
 		for (Task t : deletableTasks) {
@@ -51,5 +55,4 @@ public class TaskManager implements Updatable {
 			t.update();
 		}
 	}
-
 }

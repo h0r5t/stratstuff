@@ -6,9 +6,12 @@ from Events import LocalEvent, RemoteEvent
 import IPCClient
 import IPCServer
 import InputManager
-import Managers
+from ItemManager import ItemManager
+import ItemManager
+from Tasks import TaskDepot
 import TestScript
 import TestScript2
+from UnitManager import UnitManager
 from WorldData import WorldData
 
 
@@ -24,21 +27,16 @@ class EngineAdapterClass:
         self.world = WorldData("test")
         self.locked = True
         self.inputMgr = InputManager.InputManager(self)
+        self.taskdepot = TaskDepot()
         
         self.setupScripts()
     
     def setupScripts(self):
-        # s1 = TestScript.TestScript(self)
-        # self.addScript(s1)
+        self.unitMgr = UnitManager(self)
+        self.addScript(self.unitMgr)
         
-        # s2 = TestScript2.TestScript2(self)
-        # self.addScript(s2)
-        
-        itemMgr = Managers.ItemManager(self)
-        self.addScript(itemMgr)
-        
-        unitMgr = Managers.UnitManager(self)
-        self.addScript(unitMgr)
+        self.itemMgr = ItemManager.ItemManager(self)
+        self.addScript(self.itemMgr)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
@@ -98,9 +96,17 @@ class EngineAdapterClass:
     
     def getWorld(self):
         return self.world
+    
+    def getItemManager(self):
+        return self.itemMgr
+    
+    def getUnitManager(self):
+        return self.unitMgr
+    
+    def getTaskDepot(self):
+        return self.taskdepot
         
-    def getSmallestAvailableyKey(self, dictionary):
-        
+    def getSmallestAvailableyKey(self, dictionary):      
         while 1:
             random = randint(0, len(dictionary) * 2)
         
@@ -117,6 +123,9 @@ class EngineAdapterClass:
             # it's an actual game feature, the user wants to do smth
             # the whole string should only look like: "input::dosomedefinedtask"
             self.inputMgr.handleInput(messageString)
+            
+        elif messageID == "SHUTDOWN":
+            self.doShutdown()
         
         elif messageID == "START":
             self.unlock()
@@ -139,7 +148,11 @@ class EngineAdapterClass:
             eventID = int(split[1])
             event = self.remoteEvents[eventID]
             del self.remoteEvents[eventID]
-            event.callback()
+            if len(split) == 3:
+                datastring = str(split[2])
+                event.callback(datastring)
+            else:
+                event.callback(None)
             
         elif messageID == "3":
             x = split[len(split) - 3]
@@ -167,15 +180,24 @@ class EngineAdapterClass:
         self.messages.append("chg " + str(newGround) + " " + str(x) + " " + str(y) + " " + str(z))
         self.world.groundChanged(newGround, x, y, z)
     
+    def registerElementChange(self, newElement, x, y, z):
+        self.messages.append("che " + str(newElement) + " " + str(x) + " " + str(y) + " " + str(z))
+        self.world.elementChanged(newElement, x, y, z)
+    
     def registerMoveTask(self, unitID, x, y, z, callbackMethod):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID, callbackMethod)
         self.remoteEvents[eventID] = event
         self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
         
-    def registerUnitSpawn(self, unitType, x, y, z):
-        self.messages.append("spawn " + str(unitType) + " " + str(x) + " " + str(y) + " " + str(z))
-    
+    def registerObjectSpawn(self, unitType, newObjID, x, y, z):
+        self.messages.append("spawn " + str(unitType) + " " + str(newObjID) + " " + str(x) + " " + str(y) + " " + str(z))
+        self.world.addMovingObject(newObjID, unitType, x, y, z)
+        
+    def registerObjectRemoval(self, uniqueObjID):
+        self.messages.append("remObj " + str(uniqueObjID))
+        self.world.removeMovingObject(uniqueObjID)
+     
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
       
@@ -184,9 +206,14 @@ class EngineAdapterClass:
         event = RemoteEvent(eventID, callbackMethod)
         self.remoteEvents[eventID] = event
         self.messages.append("idletask " + str(millis) + " " + str(eventID))
-        
+    
+    def registerDisplayInfo(self, infoString):
+        self.messages.append("dispInfo " + str(infoString))
     
     # ----------------- Commands -----------------------
+    
+    def doShutdown(self):
+        self.itemMgr.save()
 
 if __name__ == '__main__':
     adapter = EngineAdapterClass()

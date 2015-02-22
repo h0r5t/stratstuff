@@ -18,6 +18,7 @@ public class Core implements Runnable {
 	private InputManager inputManager;
 	private TaskManager taskManager;
 	private ObjectManager objectManager;
+	private LightManager lightManager;
 
 	private GameWindowAdapter windowAdapter;
 
@@ -49,11 +50,14 @@ public class Core implements Runnable {
 
 		loadOrGenerateWorld();
 
-		visualManager = new VisualManager(world, gameCamera, inputManager,
-				gameCursor, windowAdapter, gameMenu);
+		visualManager = new VisualManager(this, world, gameCamera,
+				inputManager, gameCursor, windowAdapter, gameMenu);
 		updatables.add(visualManager);
 
 		world.initialCreationOfEdges();
+
+		lightManager = new LightManager(this);
+		updatables.add(lightManager);
 
 		frontendAdapter.startPythonFrontend();
 
@@ -65,6 +69,7 @@ public class Core implements Runnable {
 	private void loadOrGenerateWorld() {
 		if (GameSettings.GENERATE_NEW_WORLD) {
 			world = WorldGenerator.generateWorld(this);
+			PersistanceManager.save(this, "test");
 		} else {
 			world = PersistanceManager.load(this, "test");
 		}
@@ -163,6 +168,10 @@ public class Core implements Runnable {
 		return world;
 	}
 
+	public GameCanvas getCanvas() {
+		return visualManager.getCanvas();
+	}
+
 	public TaskManager getTaskManager() {
 		return taskManager;
 	}
@@ -179,6 +188,10 @@ public class Core implements Runnable {
 		return debugConsole;
 	}
 
+	public LightManager getLightManager() {
+		return lightManager;
+	}
+
 	public static void tellFrontend(String message) {
 		frontendAdapter.addToQueue(message);
 	}
@@ -189,5 +202,9 @@ public class Core implements Runnable {
 
 	public InputManager getInputManager() {
 		return inputManager;
+	}
+
+	public void tellFrontendToShutdown() {
+		frontendAdapter.sendShutDownMessage();
 	}
 }

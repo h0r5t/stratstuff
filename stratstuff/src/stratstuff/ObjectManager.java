@@ -21,6 +21,10 @@ public class ObjectManager implements Updatable {
 		return movingObjects;
 	}
 
+	public void removeUnit(int uniqueID) {
+		movingObjects.remove(uniqueID);
+	}
+
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub

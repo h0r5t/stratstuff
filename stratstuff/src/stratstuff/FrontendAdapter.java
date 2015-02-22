@@ -53,7 +53,7 @@ public class FrontendAdapter {
 		String[] command = { "gnome-terminal", "--command",
 				adapterStarterLocation + argument };
 		try {
-			Runtime.getRuntime().exec(command);
+			Process p = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +61,14 @@ public class FrontendAdapter {
 	}
 
 	public void taskEnded(int taskID) {
-		addToQueue(FrontendMessaging.eventOccurred(taskID));
+		String msg = main.getTaskManager().getTaskWithID(taskID)
+				.getDeletionMessage();
+		if (msg != null) {
+			addToQueue(FrontendMessaging.eventOccurred(taskID, msg));
+		} else {
+			addToQueue(FrontendMessaging.eventOccurred(taskID));
+		}
+
 	}
 
 	public void frontendIsFinished() {
@@ -98,6 +105,27 @@ public class FrontendAdapter {
 				main.getTaskManager().runTask(task, ID);
 			}
 
+			else if (name.equals("che")) {
+				int elementID = Integer.parseInt(command.split(" ")[1]);
+				int x = Integer.parseInt(command.split(" ")[2]);
+				int y = Integer.parseInt(command.split(" ")[3]);
+				int z = Integer.parseInt(command.split(" ")[4]);
+				WorldPoint wp = main.getWorld().getWP(x, y, z);
+				main.getWorld().setElementForWP(false, wp, elementID);
+			}
+
+			else if (name.equals("remObj")) {
+				int uniqueID = Integer.parseInt(command.split(" ")[1]);
+				MovingObject o = main.getObjectManager().getUnit(uniqueID);
+				main.getWorld().removeObjectFromWorld(o);
+			}
+
+			else if (name.equals("dispInfo")) {
+				String infoString = command.split(" ")[1];
+				main.getCanvas().setInfoScreen(
+						new InfoScreen(infoString, 100, 100));
+			}
+
 			else {
 				main.getConsole().commandEntered(true, command);
 			}
@@ -113,5 +141,9 @@ public class FrontendAdapter {
 
 	public void sendStartMessage() {
 		send("START");
+	}
+
+	public void sendShutDownMessage() {
+		send("SHUTDOWN");
 	}
 }

@@ -11,14 +11,17 @@ public class MovePath {
 	private WorldPoint to;
 	private World world;
 	private TaskManager mgr;
+	private Task myTask;
 	private LinkedList<GraphNode> route;
 	private int index = 0;
 
-	public MovePath(TaskManager mgr, World w, WorldPoint from, WorldPoint to) {
+	public MovePath(Task myTask, TaskManager mgr, World w, WorldPoint from,
+			WorldPoint to) {
 		this.from = from;
 		this.to = to;
 		this.world = w;
 		this.mgr = mgr;
+		this.myTask = myTask;
 		calculatePath();
 	}
 
@@ -35,7 +38,10 @@ public class MovePath {
 	public WorldPoint getNext() {
 		if (route == null) {
 			// no route possible, this path will be deleted by its task
+			myTask.setDeletionMessage("false");
 			return null;
+		} else {
+			myTask.setDeletionMessage("true");
 		}
 		if (index < route.size()) {
 			GraphNode next = route.get(index);

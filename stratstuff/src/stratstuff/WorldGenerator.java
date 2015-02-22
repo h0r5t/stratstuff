@@ -3,35 +3,17 @@ package stratstuff;
 public class WorldGenerator {
 
 	public static World generateWorld(Core main) {
-		World w = new World(main);
+		World world = new World(main);
 
-		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-			for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
-				for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-					w.addWorldPoint(new WorldPoint(x, y, z, Ground
-							.getByName("grass")));
-				}
-			}
-		}
+		Area3D wholeWorld = new Area3D(0, 0, 0, GameSettings.WORLD_WIDTH,
+				GameSettings.WORLD_HEIGHT, GameSettings.WORLD_DEPTH);
 
-		int amount = 1000;
-		for (int a = 0; a < amount; a++) {
-			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH - 1);
-			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT - 1);
-			int z = 0;
+		TerrainGenerator terrainGen = new TerrainGenerator(wholeWorld);
+		world = terrainGen.modify(world);
 
-			w.setElementForWP(true, w.getWP(x, y, z), Element.getByName("tree"));
-		}
+		BiomeGenerator biomeGen = new BiomeGenerator();
+		world = biomeGen.generateAndModify(world);
 
-		amount = 500;
-		for (int a = 0; a < amount; a++) {
-			int x = (int) (Math.random() * GameSettings.WORLD_WIDTH - 1);
-			int y = (int) (Math.random() * GameSettings.WORLD_HEIGHT - 1);
-			int z = 0;
-
-			w.setElementForWP(true, w.getWP(x, y, z), Element.getByName("bush"));
-		}
-
-		return w;
+		return world;
 	}
 }

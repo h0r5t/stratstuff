@@ -10,7 +10,7 @@ public class DebugCommandSpawn extends DebugCommand {
 
 	@Override
 	protected boolean checkArguments(ArrayList<String> args) {
-		if (args.size() == 4) {
+		if (args.size() == 5) {
 			return true;
 		}
 		return false;
@@ -21,11 +21,13 @@ public class DebugCommandSpawn extends DebugCommand {
 		if (checkArguments(args)) {
 			World w = console.getMain().getWorld();
 			int unitID = Integer.parseInt(args.get(0));
-			int x = Integer.parseInt(args.get(1));
-			int y = Integer.parseInt(args.get(2));
-			int z = Integer.parseInt(args.get(3));
+			int uniqueID = Integer.parseInt(args.get(1));
+			int x = Integer.parseInt(args.get(2));
+			int y = Integer.parseInt(args.get(3));
+			int z = Integer.parseInt(args.get(4));
 
-			w.spawnObject(new MovingObject(unitID, w), w.getWP(x, y, z));
+			w.spawnObject(new MovingObject(unitID, w, uniqueID),
+					w.getWP(x, y, z));
 		} else {
 			printErrorMessage();
 		}

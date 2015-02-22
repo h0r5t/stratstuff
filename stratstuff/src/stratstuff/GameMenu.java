@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -30,6 +31,7 @@ public class GameMenu implements Drawable {
 		Scanner scanner = new Scanner(menuDataFile);
 
 		menuTree = new GameMenuTree("root", "", null);
+		menuTree.setParentTree(menuTree);
 
 		String temp;
 		GameMenuTree currentParent = menuTree;
@@ -45,6 +47,10 @@ public class GameMenu implements Drawable {
 			if (temp.equals("}")) {
 				if (parentStack.size() > 1) {
 					parentStack.pop();
+				}
+				if (parentStack.peek().getName().equals("root")) {
+					currentParent = menuTree;
+				} else if (parentStack.size() > 1) {
 					currentParent = parentStack.pop();
 				}
 				continue;
@@ -76,16 +82,25 @@ public class GameMenu implements Drawable {
 
 	public void evaluateInput(int keyCode) {
 		if (keyCode == KeyEvent.VK_ESCAPE) {
-			currentMenu = currentMenu.getParent();
+			if (core.getCanvas().infoScreenIsShown()) {
+				core.getCanvas().setInfoScreen(null);
+			} else if (core.getInputManager().selectionAreaIsOn()) {
+				core.getInputManager().endSelectionArea();
+			} else {
+				currentMenu = currentMenu.getParent();
+			}
 		} else {
 			String c = String.valueOf((char) keyCode);
 			c = c.toLowerCase();
 			if (currentMenu.isLeaf(c)) {
 				GameMenuItem item = currentMenu.getLeaf(c);
 				if (item.getType().equals(GameMenuItem.TYPE_SINGLE)) {
+					String positionInfo = core.getCursor().getX() + ","
+							+ core.getCursor().getY() + ","
+							+ core.getCamera().getLayer();
 					String frontendMessage = FrontendMessaging
 							.menuInputMessage(item.getName(), item.getType(),
-									"todo");
+									positionInfo);
 					core.getFrontendAdapter().addToQueue(frontendMessage);
 				} else {
 					currentItemForSelection = item;
@@ -114,6 +129,7 @@ public class GameMenu implements Drawable {
 				GameSettings.GAME_FRAME_HEIGHT);
 
 		drawMenuData(g);
+		drawCursorPositionInfo(g);
 	}
 
 	private void drawMenuData(Graphics2D g) {
@@ -146,5 +162,59 @@ public class GameMenu implements Drawable {
 			g.drawString(leaf.getName(), GameSettings.MENU_X + 50, y);
 			y += 25;
 		}
+	}
+
+	private void drawCursorPositionInfo(Graphics2D g) {
+		GameCursor cursor = core.getCursor();
+		int x = cursor.getX();
+		int y = cursor.getY();
+		int z = core.getCamera().getLayer();
+
+		WorldPoint cursorWP = core.getWorld().getWP(x, y, z);
+		int groundID = cursorWP.getGround();
+		int elementID = cursorWP.getAttachedElement();
+		ArrayList<MovingObject> objects = cursorWP.getAttachedMovingObjects();
+
+		String groundText = Ground.getName(groundID);
+		String elementText = "";
+		if (elementID != -1) {
+			elementText = Element.getName(elementID);
+		}
+		ArrayList<String> objectNames = new ArrayList<String>();
+		for (MovingObject obj : objects) {
+			objectNames.add(obj.getName() + " " + obj.getUniqueID());
+		}
+
+		int amountOfInfo = 2;
+		if (objectNames.size() > 0) {
+			amountOfInfo += objectNames.size();
+		} else {
+			amountOfInfo = 3;
+		}
+
+		int xpos = GameSettings.MENU_X;
+		int xposinfo = GameSettings.MENU_X + 55;
+		int ypos = GameSettings.GAME_FRAME_HEIGHT - amountOfInfo * 25 - 50;
+
+		g.setColor(Color.YELLOW);
+		g.drawString("Objects: ", xpos, ypos);
+
+		for (String s : objectNames) {
+			g.drawString(s, xposinfo, ypos);
+			ypos += 25;
+		}
+
+		if (objectNames.size() == 0) {
+			ypos += 25;
+		}
+
+		g.setColor(Color.WHITE);
+		g.drawString("Element: " + elementText, xpos, ypos);
+
+		ypos += 25;
+
+		g.setColor(Color.GREEN);
+		g.drawString("Ground: " + groundText, xpos, ypos);
+
 	}
 }

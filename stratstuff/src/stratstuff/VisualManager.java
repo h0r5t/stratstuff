@@ -6,16 +6,17 @@ public class VisualManager implements Updatable {
 	private GameCanvas gameCanvas;
 	private boolean canDraw = false;
 
-	public VisualManager(World world, GameCamera cam,
+	public VisualManager(Core core, World world, GameCamera cam,
 			InputManager inputHandler, GameCursor cursor,
 			GameWindowAdapter windowAdapter, GameMenu menu) {
 		initFrame(inputHandler, windowAdapter);
-		initCanvas(world, inputHandler, cam, cursor, menu);
+		initCanvas(core, world, inputHandler, cam, cursor, menu);
 	}
 
-	private void initCanvas(World world, InputManager handler, GameCamera cam,
-			GameCursor cursor, GameMenu menu) {
-		gameCanvas = new GameCanvas(world, this, handler, cam, cursor, menu);
+	private void initCanvas(Core core, World world, InputManager handler,
+			GameCamera cam, GameCursor cursor, GameMenu menu) {
+		gameCanvas = new GameCanvas(core, world, this, handler, cam, cursor,
+				menu);
 		gameFrame.add(gameCanvas);
 	}
 
@@ -28,6 +29,10 @@ public class VisualManager implements Updatable {
 		gameFrame.setVisible(true);
 		gameCanvas.requestFocus();
 		canDraw = true;
+	}
+
+	public GameCanvas getCanvas() {
+		return gameCanvas;
 	}
 
 	public boolean drawNow() {

@@ -84,6 +84,13 @@ public class World extends Graph implements Saveable {
 				o.getUniqueID(), o.getTypeInt(), p.getX(), p.getY(), p.getZ()));
 	}
 
+	public void removeObjectFromWorld(MovingObject o) {
+		WorldPoint point = objectMap.get(o);
+		point.removeObjectAttachment(o);
+		objectMap.remove(o);
+		main.getObjectManager().removeUnit(o.getUniqueID());
+	}
+
 	public WorldPoint getObjectPosition(MovingObject o) {
 		return objectMap.get(o);
 	}
@@ -194,6 +201,7 @@ public class World extends Graph implements Saveable {
 		// initial should only be true when world is being loaded
 
 		boolean collided = p.collides();
+		boolean wasLightSource = p.isLightSource();
 		p.setElement(elementID);
 
 		if (initial == false) {
@@ -214,6 +222,14 @@ public class World extends Graph implements Saveable {
 						getWP(p.getX(), p.getY(), p.getZ() - 1));
 				getWP(p.getX(), p.getY(), p.getZ() - 1).setElement(
 						Element.getByName("ladderdown"));
+			}
+			if (!wasLightSource && p.isLightSource()) {
+				main.getLightManager().registerLightSource(p.getX(), p.getY(),
+						p.getZ());
+
+			} else if (wasLightSource && !p.isLightSource()) {
+				main.getLightManager().unregisterLightSource(p.getX(),
+						p.getY(), p.getZ());
 			}
 		}
 
@@ -253,75 +269,112 @@ public class World extends Graph implements Saveable {
 		if (nowCollides) {
 			// removeEdges
 			WorldPoint current = p;
-			WorldPoint left = getWP(x - 1, y, z);
-			WorldPoint right = getWP(x + 1, y, z);
-			WorldPoint down = getWP(x, y + 1, z);
-			WorldPoint up = getWP(x, y - 1, z);
+			WorldPoint up = null, down = null, left = null, right = null;
+			if (x - 1 > 0) {
+				left = getWP(x - 1, y, z);
+			}
+			if (x + 1 < GameSettings.WORLD_WIDTH) {
+				right = getWP(x + 1, y, z);
+			}
+			if (y + 1 < GameSettings.WORLD_HEIGHT) {
+				down = getWP(x, y + 1, z);
+			}
+			if (y - 1 > 0) {
+				up = getWP(x, y - 1, z);
+			}
 			GraphEdgeInfo a = new GraphEdgeInfo(current);
 			applyEdgeInfo(a);
 
-			a = left.getMyEdges().getCopy();
-			a.setRight(false);
+			if (left != null) {
+				a = left.getMyEdges().getCopy();
+				a.setRight(false);
+			}
 			applyEdgeInfo(a);
 
-			a = right.getMyEdges().getCopy();
-			a.setLeft(false);
+			if (right != null) {
+				a = right.getMyEdges().getCopy();
+				a.setLeft(false);
+			}
 			applyEdgeInfo(a);
 
-			a = up.getMyEdges().getCopy();
-			a.setDown(false);
+			if (up != null) {
+				a = up.getMyEdges().getCopy();
+				a.setDown(false);
+			}
 			applyEdgeInfo(a);
 
-			a = down.getMyEdges().getCopy();
-			a.setUp(false);
+			if (down != null) {
+				a = down.getMyEdges().getCopy();
+				a.setUp(false);
+			}
 			applyEdgeInfo(a);
 
 		} else {
 			// addEdges
 			WorldPoint current = p;
-			WorldPoint left = getWP(x - 1, y, z);
-			WorldPoint right = getWP(x + 1, y, z);
-			WorldPoint down = getWP(x, y + 1, z);
-			WorldPoint up = getWP(x, y - 1, z);
+			WorldPoint up = null, down = null, left = null, right = null;
+			if (x - 1 > 0) {
+				left = getWP(x - 1, y, z);
+			}
+			if (x + 1 < GameSettings.WORLD_WIDTH) {
+				right = getWP(x + 1, y, z);
+			}
+			if (y + 1 < GameSettings.WORLD_HEIGHT) {
+				down = getWP(x, y + 1, z);
+			}
+			if (y - 1 > 0) {
+				up = getWP(x, y - 1, z);
+			}
 			GraphEdgeInfo a = new GraphEdgeInfo(current);
 
-			if (left.collides() == false) {
+			if (left != null && left.collides() == false) {
 				a.setLeft(true);
 			}
-			if (right.collides() == false) {
+			if (right != null && right.collides() == false) {
 				a.setRight(true);
 			}
-			if (down.collides() == false) {
+			if (down != null && down.collides() == false) {
 				a.setDown(true);
 			}
-			if (up.collides() == false) {
+			if (up != null && up.collides() == false) {
 				a.setUp(true);
 			}
 			applyEdgeInfo(a);
 
 			// add edges to current
 
-			a = left.getMyEdges().getCopy();
-			if (left.collides() == false) {
-				a.setRight(true);
+			if (left != null) {
+				a = left.getMyEdges().getCopy();
+				if (left.collides() == false) {
+					a.setRight(true);
+				}
+
 			}
 			applyEdgeInfo(a);
 
-			a = right.getMyEdges().getCopy();
-			if (right.collides() == false) {
-				a.setLeft(true);
+			if (right != null) {
+				a = right.getMyEdges().getCopy();
+				if (right.collides() == false) {
+					a.setLeft(true);
+				}
+
 			}
 			applyEdgeInfo(a);
 
-			a = down.getMyEdges().getCopy();
-			if (down.collides() == false) {
-				a.setUp(true);
+			if (down != null) {
+				a = down.getMyEdges().getCopy();
+				if (down.collides() == false) {
+					a.setUp(true);
+				}
+
 			}
 			applyEdgeInfo(a);
 
-			a = up.getMyEdges().getCopy();
-			if (up.collides() == false) {
-				a.setDown(true);
+			if (up != null) {
+				a = up.getMyEdges().getCopy();
+				if (up.collides() == false) {
+					a.setDown(true);
+				}
 			}
 			applyEdgeInfo(a);
 		}

@@ -144,6 +144,11 @@ public class InputManager implements Updatable {
 		return selectionAreaIsOn;
 	}
 
+	public void endSelectionArea() {
+		selectionAreaIsOn = false;
+		selectionAreaState = 0;
+	}
+
 	public Area3D getSelectionArea() {
 		return selectionArea;
 	}

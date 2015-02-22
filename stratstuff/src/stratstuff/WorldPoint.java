@@ -91,6 +91,10 @@ public class WorldPoint extends GraphNode implements Drawable {
 		return (int) y();
 	}
 
+	public boolean isLightSource() {
+		return Element.isLightSource(attachedElement);
+	}
+
 	public int getGround() {
 		return attachedGround;
 	}

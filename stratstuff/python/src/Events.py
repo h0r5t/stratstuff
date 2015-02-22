@@ -23,5 +23,8 @@ class RemoteEvent():
     def getID(self):
         return self.ID
         
-    def callback(self):
-        self.method()
+    def callback(self, datastring):
+        if datastring == None:
+            self.method()
+        else:   
+            self.method(datastring)

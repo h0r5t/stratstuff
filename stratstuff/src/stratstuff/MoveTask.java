@@ -9,7 +9,7 @@ public class MoveTask extends Task {
 	public MoveTask(Core main, MovingObject o, WorldPoint target) {
 		this.object = o;
 		this.main = main;
-		path = new MovePath(main.getTaskManager(), main.getWorld(),
+		path = new MovePath(this, main.getTaskManager(), main.getWorld(),
 				o.getPosition(), target);
 	}
 

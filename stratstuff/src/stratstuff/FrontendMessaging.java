@@ -15,6 +15,10 @@ public class FrontendMessaging {
 		return "2 " + eventID;
 	}
 
+	public static String eventOccurred(int eventID, String data) {
+		return "2 " + eventID + " " + data;
+	}
+
 	public static String elementUpdate(int newElementID, int x, int y, int z) {
 		return "3 " + newElementID + " " + x + " " + y + " " + z;
 	}
@@ -28,4 +32,9 @@ public class FrontendMessaging {
 			String areaData) {
 		return "input::" + name + " " + type + " " + areaData;
 	}
+
+	public static String shutdownMessage() {
+		return "SHUTDOWN";
+	}
+
 }

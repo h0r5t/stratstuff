@@ -40,6 +40,9 @@ public class Element {
 	}
 
 	public static boolean collides(int id) {
+		if (id == -1) {
+			return false;
+		}
 		return elementMap.get(id).collides();
 	}
 
@@ -48,11 +51,24 @@ public class Element {
 	}
 
 	public static boolean isLadderDown(int id) {
+		if (id == -1) {
+			return false;
+		}
 		return elementMap.get(id).isLadderDown();
 	}
 
 	public static boolean isLadderUp(int id) {
+		if (id == -1) {
+			return false;
+		}
 		return elementMap.get(id).isLadderUp();
+	}
+
+	public static boolean isLightSource(int id) {
+		if (id == -1) {
+			return false;
+		}
+		return elementMap.get(id).isLightSource();
 	}
 
 }

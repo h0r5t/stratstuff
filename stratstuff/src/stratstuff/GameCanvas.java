@@ -13,16 +13,19 @@ public class GameCanvas extends Canvas {
 	private Image bufImage;
 	private Graphics bufG;
 
+	private Core core;
 	private World world;
 	private GameCamera cam;
 	private GameCursor cursor;
 	private InputManager inputHandler;
 	private VisualManager visualManager;
 	private GameMenu gameMenu;
+	private InfoScreen currentInfoScreen;
 
-	public GameCanvas(World world, VisualManager visualManager,
+	public GameCanvas(Core core, World world, VisualManager visualManager,
 			InputManager handler, GameCamera cam, GameCursor cursor,
 			GameMenu gameMenu) {
+		this.core = core;
 		this.world = world;
 		this.visualManager = visualManager;
 		this.inputHandler = handler;
@@ -43,6 +46,22 @@ public class GameCanvas extends Canvas {
 		drawGameMenu(g2);
 		drawCursor(g2);
 		drawSelectionArea(g2);
+
+		drawInfoScreen(g2);
+	}
+
+	private void drawInfoScreen(Graphics2D g2) {
+		if (currentInfoScreen != null) {
+			currentInfoScreen.draw(g2, 100, 100);
+		}
+	}
+
+	public void setInfoScreen(InfoScreen screen) {
+		currentInfoScreen = screen;
+	}
+
+	public void leaveInfoScreen() {
+		currentInfoScreen = null;
 	}
 
 	private void drawSelectionArea(Graphics2D g) {
@@ -62,6 +81,10 @@ public class GameCanvas extends Canvas {
 		gameMenu.draw(g2, -1, -1);
 	}
 
+	public boolean infoScreenIsShown() {
+		return currentInfoScreen != null;
+	}
+
 	private void drawWPs(Graphics2D g) {
 		int layer = cam.getLayer();
 		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
@@ -69,6 +92,13 @@ public class GameCanvas extends Canvas {
 				world.getWP(x, y, layer).draw(g,
 						(x - cam.getStartX()) * GameSettings.TILE_SIZE,
 						(y - cam.getStartY()) * GameSettings.TILE_SIZE);
+
+				Image image = core.getLightManager().getShadowImage(
+						world.getWP(x, y, layer));
+				g.drawImage(image, (x - cam.getStartX())
+						* GameSettings.TILE_SIZE, (y - cam.getStartY())
+						* GameSettings.TILE_SIZE, GameSettings.TILE_SIZE,
+						GameSettings.TILE_SIZE, null);
 			}
 		}
 	}

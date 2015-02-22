@@ -1,5 +1,8 @@
 import numpy
+from random import randint
+
 import InfoReader
+
 
 worldsDir = "/home/h0r5t/code/git/stratstuff/resources/worlds"
 dataDir = "/home/h0r5t/code/git/stratstuff/resources/data"
@@ -11,6 +14,7 @@ class WorldData():
         self.m_objects = []  # movingObjects
         self.groundData = {}  # ground data, will be loaded
         self.elementData = {}  # element data, will be loaded
+        self.objectData = {}  # object data, will be loaded
         self.loadFromFilesystem()
         
     # ------------------ World changes ---------------------
@@ -36,10 +40,15 @@ class WorldData():
                 o.setZ(int(newZ))
         
     def addMovingObject(self, objID, objType, x, y, z):
-        foundList = [x for x in self.m_objects if x.getObjectID() == objID]
+        foundList = [a for a in self.m_objects if a.getObjectID() == objID]
         if len(foundList) == 0:
             obj = MovingObject(objType, objID, x, y, z)
             self.m_objects.append(obj)
+            
+    def removeMovingObject(self, uniqueID):
+        foundList = [a for a in self.m_objects if a.getObjectID() == uniqueID]
+        for obj in foundList:
+            self.m_objects.remove(obj)
         
     # ------------------ World changes ---------------------
      
@@ -62,14 +71,48 @@ class WorldData():
     
     def getObjectByID(self, theID):
         for obj in self.m_objects:
-            if obj.getObjectID() == theID:
+            if int(obj.getObjectID()) == int(theID):
                 return obj
+            
+    def getAvailableObjectID(self):
+        templist = []
+        for obj in self.m_objects:
+            templist.append(int(obj.getObjectID()))
+        while 1:
+            random = randint(0, len(self.m_objects) * 2)
+        
+            if random not in templist:
+                return random
     
     def elementCollides(self, elementID):
         if elementID == -1:
             return False
         a = self.elementData[str(elementID)]
         return "true" == a["collides"]
+    
+    def getNoncollidingPositionNearWP(self, wp):
+        x = int(wp.getX())
+        y = int(wp.getY())
+        z = int(wp.getZ())
+        
+        #testen ob out of world!!!!
+        
+        
+        if not self.worldPointCollides(x + 1, y, z):
+            return self.wp_array[x + 1, y, z]
+        
+        if x - 1 > 0:
+            if not self.worldPointCollides(x - 1, y, z):
+                return self.wp_array[x - 1, y, z]
+        
+        if not self.worldPointCollides(x, y + 1, z):
+            return self.wp_array[x, y + 1, z]
+        
+        if y - 1 > 0:
+            if not self.worldPointCollides(x, y - 1, z):
+                return self.wp_array[x, y - 1, z]
+        
+        return None
     
     def getAllWPsInRange(self, x, y, z, w, h, d):
         wps = []
@@ -80,6 +123,14 @@ class WorldData():
                 
         return wps
     
+    def getObjectsAt(self, x, y, z):
+        objs = []
+        for obj in self.m_objects:
+            if obj.getX() == x and obj.getY() == y and obj.getZ() == z:
+                objs.append(obj)
+                
+        return objs
+    
     def worldPointCollides(self, x, y, z):
         wp = self.wp_array[x, y, z]        
         
@@ -88,12 +139,37 @@ class WorldData():
         
         return False
     
+    def getElementIDByName(self, name):
+        for item in self.elementData.items():
+            if item[1]["name"] == name:
+                return item[0]
+            
+    def getGroundIDByName(self, name):
+        for item in self.groundData.items():
+            if item[1]["name"] == name:
+                return item[0]
+            
+    def getObjectIDByName(self, name):
+        for item in self.objectData.items():
+            if item[1]["name"] == name:
+                return item[0]
+            
+    def getElementData(self):
+        return self.elementData
+    
+    def getGroundData(self):
+        return self.groundData
+    
+    def getObjectData(self):
+        return self.objectData
+    
     def loadFromFilesystem(self):
         self.loadGroundIDs()
         self.loadElements()
         self.loadObjects()
         self.loadGroundData()
         self.loadElementData()
+        self.loadObjectData()
         
     def loadGroundIDs(self):
         self.wp_array = numpy.empty((120, 120, 10), dtype=object)
@@ -152,6 +228,10 @@ class WorldData():
     def loadElementData(self):
         f = dataDir + "/elements.info"
         self.elementData = InfoReader.readFile(f)
+        
+    def loadObjectData(self):
+        f = dataDir + "/objects.info"
+        self.objectData = InfoReader.readFile(f)
                     
 class WorldPoint():
     def __init__(self, ground_id, x, y, z):
@@ -222,3 +302,27 @@ class MovingObject():
         
     def setZ(self, z):
         self.z = z
+        
+class Item():
+    def __init__(self, itemID, itemType, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.itemType = itemType
+        self.itemID = itemID
+    
+    def getItemID(self):
+        return self.itemID
+    
+    def getItemType(self):
+        return self.itemType
+    
+    def getX(self):
+        return self.x
+    
+    def getY(self):
+        return self.y
+    
+    def getZ(self):
+        return self.z
+    

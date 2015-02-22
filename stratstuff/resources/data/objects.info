@@ -8,3 +8,23 @@
     image = worker.png
     collides = false
 }
+2:{
+    name = item_wood
+    image = item_sample.png
+    collides = false
+}
+3:{
+    name = item_leaves
+    image = item_sample.png
+    collides = false
+}
+4:{
+    name = item_stones
+    image = item_sample.png
+    collides = false
+}
+5:{
+    name = item_torch
+    image = item_sample.png
+    collides = false
+}

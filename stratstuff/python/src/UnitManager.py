@@ -5,31 +5,38 @@ import Units
 import WorldData
 
 
-class ItemManager(IDynamicScript):
-    def customInit(self):
-        pass
-    
-    def update(self):
-        pass
-
-
 class UnitManager(IDynamicScript):
     def customInit(self):
         self.objectData = self.loadObjectData()
         self.workerObjects = self.adapter.getWorld().getObjectsWithType(0)
         self.workers = []
+        self.units = []
+        self.objectIDToUnitMap = {}
         self.createWorkerUnits()
     
     def update(self):
         for worker in self.workers:
             worker.update()
-        
+                        
+    def addUnit(self, unit):
+        self.units.append(unit)
+        self.objectIDToUnitMap[str(unit.getObject().getObjectID())] = unit
+    
+    def getUnitByObjectID(self, objID):
+        if self.objectIDToUnitMap.has_key(str(objID)):
+            return self.objectIDToUnitMap[str(objID)]
+        return None
+    
+    def getUnits(self):
+        return self.units
+                
     def createWorkerUnits(self):
         for obj in self.workerObjects:
             worker = Units.Unit(obj)
-            ai = ArtInt.MoveTestAI(self.adapter, obj)
+            ai = ArtInt.SubscriberAI(self.adapter, obj)
             worker.setAI(ai)
             self.workers.append(worker)
+            self.addUnit(worker)
     
     def loadObjectData(self):
         f = WorldData.dataDir + "/objects.info"

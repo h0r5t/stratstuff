@@ -1,6 +1,7 @@
 package stratstuff;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -119,6 +120,18 @@ public class PersistanceManager {
 		saveGroundIDs(main.getWorld(), worldName);
 		saveElements(main.getWorld(), worldName);
 		saveObjects(main, worldName);
+		generateItemsTxt();
+	}
+
+	private static void generateItemsTxt() {
+		File itemsTxt = new File(FileSystem.WORLDS_DIR + "/test/items.txt");
+		if (!itemsTxt.exists()) {
+			try {
+				itemsTxt.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static void saveGroundIDs(World w, String worldName) {

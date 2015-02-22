@@ -13,6 +13,7 @@ public class ElementInfo {
 	private boolean collides;
 	private boolean isLadderDown;
 	private boolean isLadderUp;
+	private boolean isLightSource;
 
 	public String getName() {
 		return name;
@@ -37,6 +38,7 @@ public class ElementInfo {
 		this.collides = info.getValueBool("collides");
 		this.isLadderDown = info.getValueBool("ladderdown");
 		this.isLadderUp = info.getValueBool("ladderup");
+		this.isLightSource = info.getValueBool("lightsource");
 	}
 
 	public boolean isLadderDown() {
@@ -45,5 +47,9 @@ public class ElementInfo {
 
 	public boolean isLadderUp() {
 		return isLadderUp;
+	}
+
+	public boolean isLightSource() {
+		return isLightSource;
 	}
 }
