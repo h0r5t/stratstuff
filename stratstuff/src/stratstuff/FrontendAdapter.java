@@ -126,6 +126,16 @@ public class FrontendAdapter {
 						new InfoScreen(infoString, 100, 100));
 			}
 
+			else if (name.equals("getScope")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int eventID = Integer.parseInt(command.split(" ")[2]);
+				Unit unit = main.getWorld().getUnitByObjectID(objUID);
+				String frontendMsg = FrontendMessaging
+						.eventOccurred(eventID, unit.getVisionScope(main)
+								.getParsedFrontendDataString());
+				addToQueue(frontendMsg);
+			}
+
 			else {
 				main.getConsole().commandEntered(true, command);
 			}

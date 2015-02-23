@@ -36,7 +36,7 @@ class EngineAdapterClass:
                 
                 self.lock()
             
-            time.sleep(0.01)
+            time.sleep(SLEEP_TIME)
             
     def setupRobots(self):
         # test
@@ -173,6 +173,13 @@ class EngineAdapterClass:
     
     def registerDisplayInfo(self, infoString):
         self.messages.append("dispInfo " + str(infoString))
+        
+    def registerGetScope(self, objID):
+        eventID = self.getSmallestAvailableyKey(self.remoteEvents)
+        event = RemoteEvent(eventID)
+        self.remoteEvents[eventID] = event
+        self.messages.append("getScope " + str(objID) + " " + str(eventID))
+        return event
     
     # ----------------- Commands -----------------------
     

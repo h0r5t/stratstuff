@@ -30,4 +30,13 @@ public class UnitManager implements Updatable {
 		return new ArrayList<Unit>(unitMap.values());
 	}
 
+	public Unit getUnitByObjectID(int objUID) {
+		for (Unit u : getUnitList()) {
+			if (u.getMovingObjUID() == objUID)
+				return u;
+		}
+
+		return null;
+	}
+
 }

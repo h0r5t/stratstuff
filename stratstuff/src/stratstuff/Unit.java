@@ -11,11 +11,11 @@ public class Unit implements Saveable {
 	private ArrayList<Item> inventory;
 	private static HashMap<String, LoadedInfo> info;
 
-	public Unit(World w, int uniqueID, int unitType, int objectUID) {
+	public Unit(World world, int uniqueID, int unitType, int objectUID) {
 		LoadedInfo myInfo = info.get(unitType + "");
 		myUniqueID = uniqueID;
 		myType = unitType;
-		myObject = w.getObjectByUID(objectUID);
+		myObject = world.getObjectByUID(objectUID);
 		inventory = new ArrayList<Item>();
 	}
 
@@ -25,6 +25,14 @@ public class Unit implements Saveable {
 
 	public void addToInventory(Item item) {
 		inventory.add(item);
+	}
+
+	public int getMovingObjUID() {
+		return myObject.getUniqueID();
+	}
+
+	public VisionScope getVisionScope(Core core) {
+		return new VisionScope(core, this);
 	}
 
 	@Override
@@ -40,5 +48,4 @@ public class Unit implements Saveable {
 	public static void loadFromInfoFile() {
 		info = InfoFileReader.readFile(FileSystem.DATA_FILE_UNITS);
 	}
-
 }

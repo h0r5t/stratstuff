@@ -154,6 +154,13 @@ public class LightManager implements Updatable {
 		}
 	}
 
+	public boolean isDarkAt(WorldPoint p) {
+		if (lightArray[p.getX()][p.getY()][p.getZ()] == 0) {
+			return true;
+		}
+		return false;
+	}
+
 	public Image getShadowImage(WorldPoint p) {
 		return imageMap.get(lightArray[p.getX()][p.getY()][p.getZ()]);
 	}

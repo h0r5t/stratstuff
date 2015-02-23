@@ -1,5 +1,6 @@
 from threading import Thread
 import time
+from src.engine.Scope import Scope
 
 SLEEP_TIME = 0.2
 
@@ -10,9 +11,13 @@ class Robot(Thread):
         self.objectID = m_objectID  
         self.modes = {}     
         self.currentModeIndex = 0
+        self.visionScope = None
         
     def run(self):
         self.execute()
+    
+    def update(self):
+        pass
     
     def getObjectID(self):
         return self.objectID
@@ -30,14 +35,19 @@ class Robot(Thread):
             time.sleep(SLEEP_TIME)
                 
         
-    # commands for the robot    
+    # commands for the robot
     
-    def move(self, x, y, z):
-        # returns true if unit could successfully movet to target, false if not
+    def moveTo(self, x, y, z):
+        # returns true if unit could successfully move to target, false if not
         event = self.adapter.registerMoveTask(self.objectID, x, y, z)
         msg = self.watchEvent(event)
         return bool(msg)
     
     def getScope(self):
-        # returns everything the robot can see
-        pass
+        # returns everything the robot can see as a Scope object
+        event = self.adapter.registerGetScope(self.objectID)
+        msg = self.watchEvent(event)
+        scope = Scope(msg)
+        return scope
+    
+    

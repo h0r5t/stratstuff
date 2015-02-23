@@ -72,6 +72,10 @@ public class World extends Graph implements Saveable {
 		return main.getUnitManager().getUnit(uniqueID);
 	}
 
+	public Unit getUnitByObjectID(int objUID) {
+		return main.getUnitManager().getUnitByObjectID(objUID);
+	}
+
 	public void addItem(Item item) {
 		main.getItemManager().addItem(item);
 	}

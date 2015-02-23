@@ -23,11 +23,12 @@ class MoveState1(State):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.move(20, 20, 0)
+        self.robot.moveTo(20, 20, 0)
+        scope = self.robot.getScope()
         
 class MoveState2(State):
     def __init__(self, adapter, robot, mode):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.move(10, 10, 0)
+        self.robot.moveTo(10, 10, 0)
