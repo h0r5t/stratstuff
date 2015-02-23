@@ -120,6 +120,11 @@ public class GameMenu implements Drawable {
 				currentItemForSelection.getName(),
 				currentItemForSelection.getType(), area.toAreaString());
 		core.getFrontendAdapter().addToQueue(frontendMessage);
+		// needs to be changed TEST ONLY
+
+		World w = core.getWorld();
+		WorldPoint p = w.getWP(area.getX(), area.getY(), area.getZ());
+		w.removeElementFromWP(p);
 	}
 
 	@Override

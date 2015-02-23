@@ -116,7 +116,7 @@ public class FrontendAdapter {
 
 			else if (name.equals("remObj")) {
 				int uniqueID = Integer.parseInt(command.split(" ")[1]);
-				MovingObject o = main.getObjectManager().getUnit(uniqueID);
+				MovingObject o = main.getObjectManager().getObject(uniqueID);
 				main.getWorld().removeObjectFromWorld(o);
 			}
 
@@ -136,7 +136,7 @@ public class FrontendAdapter {
 		boolean bool = Boolean.parseBoolean(command[2]);
 		int objID = Integer.parseInt(command[1]);
 
-		main.getWorld().getObjectByID(objID).setPaintBool(bool);
+		main.getWorld().getObjectByUID(objID).setPaintBool(bool);
 	}
 
 	public void sendStartMessage() {

@@ -19,6 +19,8 @@ public class Core implements Runnable {
 	private TaskManager taskManager;
 	private ObjectManager objectManager;
 	private LightManager lightManager;
+	private UnitManager unitManager;
+	private ItemManager itemManager;
 
 	private GameWindowAdapter windowAdapter;
 
@@ -36,6 +38,8 @@ public class Core implements Runnable {
 		Element.loadElements();
 		Ground.loadGrounds();
 		MovingObject.loadFromInfoFile();
+		Item.loadFromInfoFile();
+		Unit.loadFromInfoFile();
 
 		gameMenu = new GameMenu(this);
 
@@ -90,6 +94,12 @@ public class Core implements Runnable {
 
 		objectManager = new ObjectManager(this);
 		updatables.add(objectManager);
+
+		unitManager = new UnitManager(this);
+		updatables.add(unitManager);
+
+		itemManager = new ItemManager(this);
+		updatables.add(itemManager);
 	}
 
 	public GameCursor getCursor() {
@@ -206,5 +216,13 @@ public class Core implements Runnable {
 
 	public void tellFrontendToShutdown() {
 		frontendAdapter.sendShutDownMessage();
+	}
+
+	public UnitManager getUnitManager() {
+		return unitManager;
+	}
+
+	public ItemManager getItemManager() {
+		return itemManager;
 	}
 }

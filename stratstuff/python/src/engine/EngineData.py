@@ -7,7 +7,7 @@ import InfoReader
 worldsDir = "/home/h0r5t/code/git/stratstuff/resources/worlds"
 dataDir = "/home/h0r5t/code/git/stratstuff/resources/data"
 
-class WorldData():
+class EngineData():
     def __init__(self, world_name):
         self.worldName = world_name
         self.wp_array = None  # will be initialized via numpy notation
@@ -303,26 +303,73 @@ class MovingObject():
     def setZ(self, z):
         self.z = z
         
+
 class Item():
-    def __init__(self, itemID, itemType, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-        self.itemType = itemType
+    def __init__(self, itemID, itemType, linkedObject, ownerObjID, infoText):
         self.itemID = itemID
+        self.itemType = itemType
+        self.ownerObjID = ownerObjID
+        self.linkedObj = linkedObject  # -1 when no linked object exists
+        self.infoText = infoText
+        self.pickupTaskCreated = False
+        self.droptaskCreated = False
     
     def getItemID(self):
         return self.itemID
     
+    def setOwnerObjID(self, objID):
+        self.ownerObjID = objID
+    
+    def getOwnerObjID(self):
+        return self.ownerObjID
+    
+    def setPickUpTaskCreated(self, value):
+        self.pickupTaskCreated = value
+    
+    def pickUpTaskCreated(self):
+        return self.pickupTaskCreated
+    
+    def setDropTaskCreated(self, value):
+        self.droptaskCreated = value
+    
+    def getDropTaskCreated(self):
+        return self.droptaskCreated
+    
     def getItemType(self):
         return self.itemType
+        
+    def setLinkedObjectUniqueID(self, objID):
+        self.linkedObj = int(objID)
     
-    def getX(self):
-        return self.x
+    def getLinkedObjectUniqueID(self):
+        return self.linkedObj
     
-    def getY(self):
-        return self.y
+    def getInfoText(self):
+        return self.infoText
+        
+class Unit:
+    def __init__(self, m_object):
+        self.m_object = m_object
+        self.inventory = []
+            
+    def getObject(self):
+        return self.m_object
     
-    def getZ(self):
-        return self.z
+    def isIdle(self):
+        return self.ai.isIdle()
+    
+    def getInventory(self):
+        return self.inventory
+    
+    def addItemToInventory(self, item):
+        self.inventory.append(item)
+        item.setOwnerObjID(self.m_object.getObjectID())
+        
+    def removeItemFromInventory(self, item):
+        self.inventory.remove(item)
+        item.setOwnerObjID(-1)
+        
+    def update(self):
+        pass
+
     

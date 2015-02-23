@@ -2,17 +2,13 @@ from random import randint
 import sys
 import time
 
-from Events import LocalEvent, RemoteEvent
+sys.path.append('..')
+
+import EngineData
+from Events import RemoteEvent
 import IPCClient
 import IPCServer
-import InputManager
-from ItemManager import ItemManager
-import ItemManager
-from Tasks import TaskDepot
-import TestScript
-import TestScript2
-from UnitManager import UnitManager
-from WorldData import WorldData
+from src.custom import TestRobot
 
 
 client = IPCClient.IPCClient()
@@ -23,57 +19,29 @@ class EngineAdapterClass:
         self.scripts = []
         self.messages = []
         self.remoteEvents = {}  # events that happen in the engine
-        self.localEvents = {}  # events that will be evaluated in frontend
-        self.world = WorldData("test")
+        self.world = EngineData.EngineData("test")
         self.locked = True
-        self.inputMgr = InputManager.InputManager(self)
-        self.taskdepot = TaskDepot()
         
-        self.setupScripts()
-    
-    def setupScripts(self):
-        self.unitMgr = UnitManager(self)
-        self.addScript(self.unitMgr)
+        self.setupRobots()
         
-        self.itemMgr = ItemManager.ItemManager(self)
-        self.addScript(self.itemMgr)
     
     def messageReceived(self, stringlist):
         for s in stringlist:
             self.parseEngineMessage(s)
-            
-    def registerLocalEvent(self, statementMethod, callbackMethod):
-        eventID = self.getSmallestAvailableyKey(self.localEvents)
-        event = LocalEvent(eventID, statementMethod, callbackMethod)
-        self.localEvents[eventID] = event
         
     def loop(self):
         while 1:
             if self.locked == False:
-                self.updateLocalEvents()
-                self.updateScripts()
                 self.sendMessages()
                 
                 self.lock()
             
             time.sleep(0.01)
-    
-    def updateScripts(self):
-        for script in self.scripts:
-                try:
-                    if script.pleaseUpdate():
-                        script.update()
-                except:
-                    # this will avoid the adapter from crashing if script
-                    # contains any errors
-                    print "Unexpected error:", sys.exc_info()[0]
-                    
-    def updateLocalEvents(self):
-        for item in self.localEvents.items():
-            event = item[1]
-            if event.evaluate():
-                event.callback()
-                del self.localEvents[item[0]]
+            
+    def setupRobots(self):
+        # test
+        r1 = TestRobot.TestRobot(self, 144003)
+        r1.start()
                 
     def lock(self):
         self.locked = True
@@ -97,12 +65,6 @@ class EngineAdapterClass:
     def getWorld(self):
         return self.world
     
-    def getItemManager(self):
-        return self.itemMgr
-    
-    def getUnitManager(self):
-        return self.unitMgr
-    
     def getTaskDepot(self):
         return self.taskdepot
         
@@ -122,7 +84,7 @@ class EngineAdapterClass:
         if messageID.startswith("input::"):
             # it's an actual game feature, the user wants to do smth
             # the whole string should only look like: "input::dosomedefinedtask"
-            self.inputMgr.handleInput(messageString)
+            pass
             
         elif messageID == "SHUTDOWN":
             self.doShutdown()
@@ -150,9 +112,9 @@ class EngineAdapterClass:
             del self.remoteEvents[eventID]
             if len(split) == 3:
                 datastring = str(split[2])
-                event.callback(datastring)
+                event.setCalledBack(datastring)
             else:
-                event.callback(None)
+                event.setCalledBack("")
             
         elif messageID == "3":
             x = split[len(split) - 3]
@@ -184,11 +146,12 @@ class EngineAdapterClass:
         self.messages.append("che " + str(newElement) + " " + str(x) + " " + str(y) + " " + str(z))
         self.world.elementChanged(newElement, x, y, z)
     
-    def registerMoveTask(self, unitID, x, y, z, callbackMethod):
+    def registerMoveTask(self, objectID, x, y, z):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
-        event = RemoteEvent(eventID, callbackMethod)
+        event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
-        self.messages.append("move " + str(unitID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
+        self.messages.append("move " + str(objectID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
+        return event
         
     def registerObjectSpawn(self, unitType, newObjID, x, y, z):
         self.messages.append("spawn " + str(unitType) + " " + str(newObjID) + " " + str(x) + " " + str(y) + " " + str(z))
@@ -201,11 +164,12 @@ class EngineAdapterClass:
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
       
-    def registerIdleTask(self, millis, callbackMethod):
+    def registerIdleTask(self, millis):
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
-        event = RemoteEvent(eventID, callbackMethod)
+        event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
         self.messages.append("idletask " + str(millis) + " " + str(eventID))
+        return event
     
     def registerDisplayInfo(self, infoString):
         self.messages.append("dispInfo " + str(infoString))
@@ -213,8 +177,8 @@ class EngineAdapterClass:
     # ----------------- Commands -----------------------
     
     def doShutdown(self):
-        self.itemMgr.save()
-
+        pass
+    
 if __name__ == '__main__':
     adapter = EngineAdapterClass()
     

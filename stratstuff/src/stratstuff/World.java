@@ -68,6 +68,18 @@ public class World extends Graph implements Saveable {
 				worldPointArray[zto][xto][yto]);
 	}
 
+	public Unit getUnitByID(int uniqueID) {
+		return main.getUnitManager().getUnit(uniqueID);
+	}
+
+	public void addItem(Item item) {
+		main.getItemManager().addItem(item);
+	}
+
+	public void addUnit(Unit unit) {
+		main.getUnitManager().addUnit(unit);
+	}
+
 	public void moveObjectTo(MovingObject o, WorldPoint p) {
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
@@ -236,7 +248,8 @@ public class World extends Graph implements Saveable {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void removeElementFromWP(WorldPoint p, int elementID) {
+	public void removeElementFromWP(WorldPoint p) {
+		int elementID = p.getAttachedElement();
 		boolean collided = p.collides();
 		p.removeElement();
 		if (p.collides() && collided == false) {
@@ -255,6 +268,18 @@ public class World extends Graph implements Saveable {
 					getWP(p.getX(), p.getY(), p.getZ() - 1));
 			getWP(p.getX(), p.getY(), p.getZ() - 1).removeElement(); // ladderdown
 		}
+		dropItem(p, elementID);
+	}
+
+	public void dropItem(WorldPoint p, int elementID) {
+		int droppedItemType = Element.getDroppedItemType(elementID);
+		MovingObject object = new MovingObject(
+				Item.getLinkedObjectType(droppedItemType), this,
+				UniqueIDFactory.getID());
+		spawnObject(object, p);
+		Item droppedItem = new Item(this, UniqueIDFactory.getID(),
+				droppedItemType, object.getUniqueID(), -1, "dropped");
+		addItem(droppedItem);
 	}
 
 	private void updateEdges(WorldPoint p, boolean nowCollides) {
@@ -444,8 +469,11 @@ public class World extends Graph implements Saveable {
 
 	}
 
-	public MovingObject getObjectByID(int objID) {
-		return main.getObjectManager().getUnit(objID);
+	public MovingObject getObjectByUID(int objID) {
+		if (objID == -1) {
+			return null;
+		}
+		return main.getObjectManager().getObject(objID);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class ObjectManager implements Updatable {
 		movingObjects.put(o.getUniqueID(), o);
 	}
 
-	public MovingObject getUnit(int id) {
+	public MovingObject getObject(int id) {
 		return movingObjects.get(id);
 	}
 

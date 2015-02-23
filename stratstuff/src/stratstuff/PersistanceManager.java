@@ -17,6 +17,65 @@ public class PersistanceManager {
 		world = loadGroundIDs(world, worldName);
 		world = loadAndAddElements(world, worldName);
 		world = loadAndAddObjects(world, worldName);
+		world = loadAndAddUnits(world, worldName);
+		world = loadAndAddItems(world, worldName);
+
+		return world;
+	}
+
+	private static World loadAndAddItems(World world, String worldName) {
+		try {
+			Scanner scanner = new Scanner(getItemsFile(worldName));
+
+			String line;
+			String[] splitLine;
+			while (scanner.hasNextLine()) {
+				line = scanner.nextLine().trim();
+				splitLine = line.split(" ");
+				int uniqueID = Integer.parseInt(splitLine[0]);
+				int itemType = Integer.parseInt(splitLine[1]);
+				int linkedObjUID = Integer.parseInt(splitLine[2]);
+				int ownerUnitID = Integer.parseInt(splitLine[3]);
+				String infoText = splitLine[4];
+
+				Item item = new Item(world, uniqueID, itemType, linkedObjUID,
+						ownerUnitID, infoText);
+				world.addItem(item);
+				UniqueIDFactory.increment();
+			}
+
+			scanner.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return world;
+	}
+
+	private static World loadAndAddUnits(World world, String worldName) {
+		try {
+			Scanner scanner = new Scanner(getUnitsFile(worldName));
+
+			String line;
+			String[] splitLine;
+			while (scanner.hasNextLine()) {
+				line = scanner.nextLine().trim();
+				splitLine = line.split(" ");
+				int uniqueID = Integer.parseInt(splitLine[0]);
+				int unitType = Integer.parseInt(splitLine[1]);
+				int objUID = Integer.parseInt(splitLine[2]);
+
+				Unit unit = new Unit(world, uniqueID, unitType, objUID);
+				world.addUnit(unit);
+				UniqueIDFactory.increment();
+			}
+
+			scanner.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return world;
 	}
@@ -105,6 +164,7 @@ public class PersistanceManager {
 
 				MovingObject object = new MovingObject(objectID, w, uniqueID);
 				w.spawnObject(object, w.getWP(x, y, z));
+				UniqueIDFactory.increment();
 			}
 
 			scanner.close();
@@ -120,6 +180,8 @@ public class PersistanceManager {
 		saveGroundIDs(main.getWorld(), worldName);
 		saveElements(main.getWorld(), worldName);
 		saveObjects(main, worldName);
+		saveItems(main, worldName);
+		saveUnits(main, worldName);
 		generateItemsTxt();
 	}
 
@@ -204,6 +266,46 @@ public class PersistanceManager {
 		}
 	}
 
+	private static void saveItems(Core main, String worldName) {
+		try {
+			File f = getItemsFile(worldName);
+
+			PrintWriter writer = new PrintWriter(f);
+
+			ArrayList<Item> itemlist = main.getItemManager().getItemList();
+
+			for (Item item : itemlist) {
+				String out = item.save() + "\n";
+				writer.append(out);
+			}
+
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void saveUnits(Core main, String worldName) {
+		try {
+			File f = getUnitsFile(worldName);
+
+			PrintWriter writer = new PrintWriter(f);
+
+			ArrayList<Unit> unitlist = main.getUnitManager().getUnitList();
+
+			for (Unit unit : unitlist) {
+				String out = unit.save() + "\n";
+				writer.append(out);
+			}
+
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static File getLayerFile(String worldName, int i) {
 		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/" + i
 				+ ".layer");
@@ -217,5 +319,13 @@ public class PersistanceManager {
 	private static File getObjectsFile(String worldName) {
 		return new File(FileSystem.WORLDS_DIR + "/" + worldName
 				+ "/objects.txt");
+	}
+
+	private static File getItemsFile(String worldName) {
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/items.txt");
+	}
+
+	private static File getUnitsFile(String worldName) {
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/units.txt");
 	}
 }

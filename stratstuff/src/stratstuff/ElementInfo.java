@@ -14,9 +14,14 @@ public class ElementInfo {
 	private boolean isLadderDown;
 	private boolean isLadderUp;
 	private boolean isLightSource;
+	private int droppedItemType;
 
 	public String getName() {
 		return name;
+	}
+
+	public int getDroppedItemType() {
+		return droppedItemType;
 	}
 
 	public BufferedImage getImage() {
@@ -39,6 +44,7 @@ public class ElementInfo {
 		this.isLadderDown = info.getValueBool("ladderdown");
 		this.isLadderUp = info.getValueBool("ladderup");
 		this.isLightSource = info.getValueBool("lightsource");
+		this.droppedItemType = info.getValueInt("drops");
 	}
 
 	public boolean isLadderDown() {

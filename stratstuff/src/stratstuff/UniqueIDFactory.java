@@ -10,4 +10,7 @@ public class UniqueIDFactory {
 		return idMaker.incrementAndGet();
 	}
 
+	public static void increment() {
+		idMaker.incrementAndGet();
+	}
 }

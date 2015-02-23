@@ -28,6 +28,10 @@ public class FileSystem {
 
 	public static final String DATA_FILE_OBJECTS = DATA_DIR + "/objects.info";
 
+	public static final String DATA_FILE_ITEMS = DATA_DIR + "/items.info";
+
+	public static final String DATA_FILE_UNITS = DATA_DIR + "/units.info";
+
 	public static final String MENU_DATA_FILE = DATA_DIR + "/menu.info";
 
 }

@@ -71,4 +71,11 @@ public class Element {
 		return elementMap.get(id).isLightSource();
 	}
 
+	public static int getDroppedItemType(int elementID) {
+		if (elementID == -1) {
+			return -1;
+		}
+		return elementMap.get(elementID).getDroppedItemType();
+	}
+
 }
