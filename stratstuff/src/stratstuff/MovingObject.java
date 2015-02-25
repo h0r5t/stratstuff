@@ -17,6 +17,7 @@ public class MovingObject implements Drawable, Saveable {
 	private String name;
 	private boolean collides;
 	private boolean paint = true;
+	private DynamicTexture texture;
 	private static HashMap<String, LoadedInfo> info;
 
 	public MovingObject(int myType, World world, int uniqueID) {
@@ -32,6 +33,19 @@ public class MovingObject implements Drawable, Saveable {
 		this.world = world;
 		this.uniqueID = uniqueID;
 		this.myType = myType;
+		this.texture = new DynamicTexture(image, 10, 2);
+	}
+
+	public void updateRotation(WorldPoint nextWP) {
+		texture.updateRotationDirection(getPosition(), nextWP);
+	}
+
+	public void turnToFaceWorldPoint(int eventID, WorldPoint wpToFace) {
+		texture.turnDirectionVector(getPosition(), wpToFace, eventID);
+	}
+
+	public void update() {
+		texture.update();
 	}
 
 	public WorldPoint getPosition() {
@@ -70,15 +84,23 @@ public class MovingObject implements Drawable, Saveable {
 		return name;
 	}
 
+	public int getCurrentAngleInDegrees() {
+		return texture.getCurrentAngle();
+	}
+
 	public void setPaintBool(boolean bool) {
 		paint = bool;
+	}
+
+	public boolean hasTurned() {
+		return texture.hasTurned();
 	}
 
 	@Override
 	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
 		if (paint) {
-			g.drawImage(image, xinpixels, yinpixels, GameSettings.TILE_SIZE,
-					GameSettings.TILE_SIZE, null);
+			g.drawImage(texture.getImage(), xinpixels, yinpixels,
+					GameSettings.TILE_SIZE, GameSettings.TILE_SIZE, null);
 		}
 	}
 

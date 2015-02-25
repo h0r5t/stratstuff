@@ -7,7 +7,7 @@ public class GameSettings {
 	public static final long TICK_MILLIS = 90;
 	public static final long INITIAL_SLEEP_TIME = 2000;
 
-	public static final int TILE_SIZE = 13;
+	public static final int TILE_SIZE = 20;
 
 	public static final int GAME_FRAME_WIDTH = 1100;
 	public static final int GAME_FRAME_HEIGHT = 700;

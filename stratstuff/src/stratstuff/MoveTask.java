@@ -11,15 +11,19 @@ public class MoveTask extends Task {
 		this.main = main;
 		path = new MovePath(this, main.getTaskManager(), main.getWorld(),
 				o.getPosition(), target);
+		object.updateRotation(path.seeNext());
 	}
 
 	@Override
 	public void update() {
-		WorldPoint next = path.getNext();
-		if (next != null) {
-			main.getWorld().moveObjectTo(object, next);
-		} else {
-			main.getTaskManager().addToDelete(this);
+		if (object.hasTurned()) {
+			WorldPoint next = path.getNext();
+			if (next != null) {
+				main.getWorld().moveObjectTo(object, next);
+				object.updateRotation(path.seeNext());
+			} else {
+				main.getTaskManager().addToDelete(this);
+			}
 		}
 	}
 

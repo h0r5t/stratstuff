@@ -181,6 +181,16 @@ class EngineAdapterClass:
         self.messages.append("getScope " + str(objID) + " " + str(eventID))
         return event
     
+    def registerObjectTurn(self, objectID, x, y, z):
+        eventID = self.getSmallestAvailableyKey(self.remoteEvents)
+        event = RemoteEvent(eventID)
+        self.remoteEvents[eventID] = event
+        self.messages.append("turn " + str(objectID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
+        return event
+    
+    def registerFire(self, objectID):
+        self.messages.append("fire " + str(objectID))
+    
     # ----------------- Commands -----------------------
     
     def doShutdown(self):

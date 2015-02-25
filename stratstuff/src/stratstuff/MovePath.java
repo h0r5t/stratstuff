@@ -65,4 +65,14 @@ public class MovePath {
 		return null;
 
 	}
+
+	public WorldPoint seeNext() {
+		if (index >= route.size()) {
+			return null;
+		}
+		GraphNode next = route.get(index);
+		WorldPoint p = world.getWP((int) next.x(), (int) next.y(),
+				(int) next.z());
+		return p;
+	}
 }

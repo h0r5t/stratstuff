@@ -34,6 +34,14 @@ public class World extends Graph implements Saveable {
 		return objectMap;
 	}
 
+	public void addMicroObject(MicroObject object) {
+		main.getObjectManager().addMicroObject(object);
+	}
+
+	public void removeMicroObject(MicroObject o) {
+		main.getObjectManager().removeMicroObject(o);
+	}
+
 	private void addZEdgeInBothDirections(WorldPoint a, WorldPoint b) {
 		addZEdge(a, b);
 		addZEdge(b, a);
@@ -104,7 +112,7 @@ public class World extends Graph implements Saveable {
 		WorldPoint point = objectMap.get(o);
 		point.removeObjectAttachment(o);
 		objectMap.remove(o);
-		main.getObjectManager().removeUnit(o.getUniqueID());
+		main.getObjectManager().removeObject(o.getUniqueID());
 	}
 
 	public WorldPoint getObjectPosition(MovingObject o) {

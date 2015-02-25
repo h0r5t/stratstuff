@@ -31,6 +31,17 @@ public class Unit implements Saveable {
 		return myObject.getUniqueID();
 	}
 
+	public void fireBullet(Core core) {
+		Bullet b = new Bullet(core, 0, myObject.getPosition(),
+				myObject.getCurrentAngleInDegrees());
+		core.getWorld().addMicroObject(b);
+	}
+
+	public void fireBullet(Core core, WorldPoint target) {
+		Bullet b = new Bullet(core, 0, myObject.getPosition(), target);
+		core.getWorld().addMicroObject(b);
+	}
+
 	public VisionScope getVisionScope(Core core) {
 		return new VisionScope(core, this);
 	}

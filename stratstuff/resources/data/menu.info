@@ -1,21 +1,4 @@
-m:move
+c:commander
 {
     >m:move area
-}
-t:work
-{
-    >t:trees area
-    >m:mine area
-    >c:collect_items area
-}
-b:build
-{
-    >l:build_ladderdown single
-    >t:build_torch single
-    >z:build_testlight single
-    >u:build_nothingtest single
-}
-v:view
-{
-    >i:display_inventory single
 }

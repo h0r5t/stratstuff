@@ -10,6 +10,7 @@ public class WorldPoint extends GraphNode implements Drawable {
 	private int attachedGround;
 	private int attachedElement;
 	private ArrayList<MovingObject> attachedMovingObjects;
+	private ArrayList<MicroObject> attachedMicroObjects;
 	private GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
 
 	public WorldPoint(int x, int y, int z, int ground) {
@@ -17,6 +18,7 @@ public class WorldPoint extends GraphNode implements Drawable {
 		attachedGround = ground;
 		attachedElement = -1;
 		attachedMovingObjects = new ArrayList<MovingObject>();
+		attachedMicroObjects = new ArrayList<MicroObject>();
 	}
 
 	// use method addElement() in World (bridges get registered there)
@@ -56,6 +58,12 @@ public class WorldPoint extends GraphNode implements Drawable {
 		}
 
 		for (MovingObject o : attachedMovingObjects) {
+			o.draw(g, x, y);
+		}
+	}
+
+	public void drawMicroObjects(Graphics2D g, int x, int y) {
+		for (MicroObject o : attachedMicroObjects) {
 			o.draw(g, x, y);
 		}
 	}
@@ -105,6 +113,14 @@ public class WorldPoint extends GraphNode implements Drawable {
 
 	public ArrayList<MovingObject> getAttachedMovingObjects() {
 		return attachedMovingObjects;
+	}
+
+	public void removeMicroObject(MicroObject o) {
+		attachedMicroObjects.remove(o);
+	}
+
+	public void addMicroObject(MicroObject o) {
+		attachedMicroObjects.add(o);
 	}
 
 	public GraphEdgeInfo getMyEdges() {

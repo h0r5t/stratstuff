@@ -43,6 +43,7 @@ public class GameCanvas extends Canvas {
 		Graphics2D g2 = (Graphics2D) g;
 
 		drawWPs(g2);
+		drawMicroObjects(g2);
 		drawGameMenu(g2);
 		drawCursor(g2);
 		drawSelectionArea(g2);
@@ -99,6 +100,17 @@ public class GameCanvas extends Canvas {
 						* GameSettings.TILE_SIZE, (y - cam.getStartY())
 						* GameSettings.TILE_SIZE, GameSettings.TILE_SIZE,
 						GameSettings.TILE_SIZE, null);
+			}
+		}
+	}
+
+	private void drawMicroObjects(Graphics2D g2) {
+		int layer = cam.getLayer();
+		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
+			for (int y = cam.getStartY(); y < cam.getEndY(); y++) {
+				world.getWP(x, y, layer).drawMicroObjects(g2,
+						(x - cam.getStartX()) * GameSettings.TILE_SIZE,
+						(y - cam.getStartY()) * GameSettings.TILE_SIZE);
 			}
 		}
 	}

@@ -50,4 +50,21 @@ class Robot(Thread):
         scope = Scope(msg)
         return scope
     
+    def turn(self, x, y, z):
+        # turns the roboter until he faces the target point, returns true if successful
+        event = self.adapter.registerObjectTurn(self.objectID, x, y, z)
+        msg = self.watchEvent(event)
+        return bool(msg)
+    
+    def fire(self):
+        # robot fires in front
+        self.adapter.registerFire(self.objectID)
+        self.wait(200)
+        
+    def wait(self, millis):
+        # waits the amount of millis and calls back after
+        event = self.adapter.registerIdleTask(millis)
+        msg = self.watchEvent(event)
+        return msg
+    
     

@@ -1,12 +1,17 @@
 package stratstuff;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObjectManager implements Updatable {
 	private HashMap<Integer, MovingObject> movingObjects;
+	private ArrayList<MicroObject> microObjects;
+	private ArrayList<MicroObject> toDelete;
 
 	public ObjectManager(Core main) {
 		movingObjects = new HashMap<Integer, MovingObject>();
+		microObjects = new ArrayList<MicroObject>();
+		toDelete = new ArrayList<MicroObject>();
 	}
 
 	public void addUnit(MovingObject o) {
@@ -21,14 +26,29 @@ public class ObjectManager implements Updatable {
 		return movingObjects;
 	}
 
-	public void removeUnit(int uniqueID) {
+	public void removeObject(int uniqueID) {
 		movingObjects.remove(uniqueID);
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		for (MovingObject o : movingObjects.values()) {
+			o.update();
+		}
+		for (MicroObject o : microObjects) {
+			o.update();
+		}
+		for (MicroObject o : toDelete) {
+			microObjects.remove(o);
+		}
+		toDelete.clear();
 	}
 
+	public void addMicroObject(MicroObject object) {
+		microObjects.add(object);
+	}
+
+	public void removeMicroObject(MicroObject o) {
+		toDelete.add(o);
+	}
 }

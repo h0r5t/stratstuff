@@ -1,6 +1,6 @@
 0:{
-    name = worker
-    image = worker.png
+    name = commander
+    image = commander.png
     collides = false
 }
 1:{
@@ -26,5 +26,10 @@
 5:{
     name = item_torch
     image = item_sample.png
+    collides = false
+}
+6:{
+    name = robot
+    image = robot.png
     collides = false
 }

@@ -136,6 +136,22 @@ public class FrontendAdapter {
 				addToQueue(frontendMsg);
 			}
 
+			else if (name.equals("turn")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int x = Integer.parseInt(command.split(" ")[2]);
+				int y = Integer.parseInt(command.split(" ")[3]);
+				int z = Integer.parseInt(command.split(" ")[4]);
+				int eventID = Integer.parseInt(command.split(" ")[5]);
+				WorldPoint wp = main.getWorld().getWP(x, y, z);
+				main.getWorld().getObjectByUID(objUID)
+						.turnToFaceWorldPoint(eventID, wp);
+			}
+
+			else if (name.equals("fire")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				main.getWorld().getUnitByObjectID(objUID).fireBullet(main);
+			}
+
 			else {
 				main.getConsole().commandEntered(true, command);
 			}
