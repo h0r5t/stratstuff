@@ -1,5 +1,6 @@
 package stratstuff;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,6 +67,12 @@ public class Unit implements Saveable {
 	public void fireBullet(Core core, WorldPoint target) {
 		Bullet b = new Bullet(core, 0, myObject.getPosition(), target);
 		core.getWorld().addMicroObject(b);
+	}
+
+	public void mineWorldPoint(Core core, int eventID, WorldPoint wp) {
+		Laser laser = new Laser(core, Color.BLUE, 5000, myObject.getPosition(),
+				wp, eventID);
+		core.getWorld().addMicroObject(laser);
 	}
 
 	public VisionScope getVisionScope(Core core) {

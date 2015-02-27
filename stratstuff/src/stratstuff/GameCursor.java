@@ -31,7 +31,8 @@ public class GameCursor implements Drawable {
 	}
 
 	public void moveRight() {
-		x++;
+		if (x < GameSettings.WORLD_WIDTH - 1)
+			x++;
 	}
 
 	public void moveLeft() {
@@ -40,7 +41,8 @@ public class GameCursor implements Drawable {
 	}
 
 	public void moveDown() {
-		y++;
+		if (y < GameSettings.WORLD_HEIGHT - 1)
+			y++;
 	}
 
 	public void moveUp() {

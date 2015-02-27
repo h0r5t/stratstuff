@@ -49,8 +49,12 @@ public class Core implements Runnable {
 		updatables.add(debugConsole);
 
 		gameCamera = new GameCamera(this);
+		updatables.add(gameCamera);
 		gameCursor = new GameCursor(gameCamera);
 		timer = new SimpleTimer();
+
+		lightManager = new LightManager(this);
+		updatables.add(lightManager);
 
 		createUpdatables();
 
@@ -60,10 +64,9 @@ public class Core implements Runnable {
 				inputManager, gameCursor, windowAdapter, gameMenu);
 		updatables.add(visualManager);
 
-		world.initialCreationOfEdges();
+		lightManager.initLights();
 
-		lightManager = new LightManager(this);
-		updatables.add(lightManager);
+		world.initialCreationOfEdges();
 
 		frontendAdapter.startPythonFrontend();
 

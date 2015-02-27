@@ -1,5 +1,8 @@
 package stratstuff;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
@@ -11,8 +14,8 @@ public class GameFrame extends JFrame {
 	public GameFrame(InputManager inputHandler, GameWindowAdapter windowAdapter) {
 		super(title);
 		this.inputHandler = inputHandler;
-		setSize(GameSettings.GAME_FRAME_WIDTH + 10,
-				GameSettings.GAME_FRAME_HEIGHT + 20);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize((int) screen.getWidth(), (int) screen.getHeight());
 		setLocation(GameSettings.GAME_FRAME_XPOS, GameSettings.GAME_FRAME_YPOS);
 		addWindowListener(windowAdapter);
 	}

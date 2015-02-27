@@ -1,5 +1,6 @@
 package stratstuff;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ public class WorldPoint extends GraphNode implements Drawable {
 	private ArrayList<MovingObject> attachedMovingObjects;
 	private ArrayList<MicroObject> attachedMicroObjects;
 	private GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
+	private GeneratedTexture groundTexture;
 
 	public WorldPoint(int x, int y, int z, int ground) {
 		super(UniqueIDFactory.getID(), x, y, z);
@@ -19,6 +21,16 @@ public class WorldPoint extends GraphNode implements Drawable {
 		attachedElement = -1;
 		attachedMovingObjects = new ArrayList<MovingObject>();
 		attachedMicroObjects = new ArrayList<MicroObject>();
+
+		int r = 5;
+		int g = 74;
+		int b = 14;
+		int a = 255;
+		int col = (a << 24) | (r << 16) | (g << 8) | b;
+		Color color = new Color(col);
+
+		groundTexture = new GeneratedTexture(new GeneratedTextureData(color, 7,
+				0));
 	}
 
 	// use method addElement() in World (bridges get registered there)
@@ -51,7 +63,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 
 	@Override
 	public void draw(Graphics2D g, int x, int y) {
-		Ground.draw(g, attachedGround, x, y);
+		// Ground.draw(g, attachedGround, x, y);
+		groundTexture.draw(g, x, y);
 
 		if (attachedElement != -1) {
 			Element.draw(g, attachedElement, x, y);

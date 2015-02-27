@@ -19,7 +19,7 @@ public class MoveTask extends Task {
 		if (object.hasTurned()) {
 			WorldPoint next = path.getNext();
 			if (next != null) {
-				main.getWorld().moveObjectTo(object, next);
+				object.moveTo(next);
 				object.updateRotation(path.seeNext());
 			} else {
 				main.getTaskManager().addToDelete(this);

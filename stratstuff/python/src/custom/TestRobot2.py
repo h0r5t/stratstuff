@@ -3,7 +3,7 @@ from src.API.Robot import Robot
 from src.API.State import State
 
 
-class TestRobot(Robot):
+class TestRobot2(Robot):
     def __init__(self, adapter, m_objectID):
         Robot.__init__(self, adapter, m_objectID)
         
@@ -23,7 +23,7 @@ class MoveState1(State):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.moveTo(23, 20, 0)
+        self.robot.moveTo(10, 10, 0)
         self.robot.mine(25, 22, 0)
         
 class MoveState2(State):
@@ -31,5 +31,5 @@ class MoveState2(State):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.moveTo(23, 25, 0)
+        self.robot.moveTo(10, 25, 0)
         self.robot.mine(21, 23, 0)

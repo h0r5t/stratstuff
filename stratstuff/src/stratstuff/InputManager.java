@@ -26,37 +26,31 @@ public class InputManager implements Updatable {
 
 	@Override
 	public void update() {
-		if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
-			camera.moveUp();
+		if (keyMap.getDefault(KeyEvent.VK_W, false)) {
+			camera.up();
 		}
-		if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
-			camera.moveDown();
+		if (keyMap.getDefault(KeyEvent.VK_S, false)) {
+			camera.down();
 		}
-		if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
-			camera.moveRight();
+		if (keyMap.getDefault(KeyEvent.VK_D, false)) {
+			camera.right();
 		}
-		if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
-			camera.moveLeft();
+		if (keyMap.getDefault(KeyEvent.VK_A, false)) {
+			camera.left();
 		}
 
 		if (!selectionAreaIsOn) {
-			if (keyMap.getDefault(KeyEvent.VK_W, false)) {
+			if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
 				cursor.moveUp();
 			}
-			if (keyMap.getDefault(KeyEvent.VK_S, false)) {
+			if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
 				cursor.moveDown();
 			}
-			if (keyMap.getDefault(KeyEvent.VK_D, false)) {
+			if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
 				cursor.moveRight();
 			}
-			if (keyMap.getDefault(KeyEvent.VK_A, false)) {
+			if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
 				cursor.moveLeft();
-			}
-			if (keyMap.getDefault(KeyEvent.VK_X, false)) {
-				camera.goDeeper();
-			}
-			if (keyMap.getDefault(KeyEvent.VK_Y, false)) {
-				camera.goHigher();
 			}
 		}
 
@@ -64,16 +58,16 @@ public class InputManager implements Updatable {
 			selectionArea.x = cursor.getX();
 			selectionArea.y = cursor.getY();
 			if (selectionAreaState == 0) {
-				if (keyMap.getDefault(KeyEvent.VK_W, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
 					cursor.moveUp();
 				}
-				if (keyMap.getDefault(KeyEvent.VK_S, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
 					cursor.moveDown();
 				}
-				if (keyMap.getDefault(KeyEvent.VK_D, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
 					cursor.moveRight();
 				}
-				if (keyMap.getDefault(KeyEvent.VK_A, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
 					cursor.moveLeft();
 				}
 				if (keyMap.getDefault(KeyEvent.VK_X, false)) {
@@ -84,16 +78,16 @@ public class InputManager implements Updatable {
 				}
 			}
 			if (selectionAreaState == 1) {
-				if (keyMap.getDefault(KeyEvent.VK_W, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
 					selectionArea.h = selectionArea.h - 1;
 				}
-				if (keyMap.getDefault(KeyEvent.VK_S, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
 					selectionArea.h = selectionArea.h + 1;
 				}
-				if (keyMap.getDefault(KeyEvent.VK_D, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
 					selectionArea.w = selectionArea.w + 1;
 				}
-				if (keyMap.getDefault(KeyEvent.VK_A, false)) {
+				if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
 					selectionArea.w = selectionArea.w - 1;
 				}
 				if (keyMap.getDefault(KeyEvent.VK_X, false)) {
@@ -145,6 +139,13 @@ public class InputManager implements Updatable {
 		else if (e.getKeyCode() == KeyEvent.VK_P) {
 			core.togglePause();
 		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_X) {
+			camera.goDeeper();
+		} else if (e.getKeyCode() == KeyEvent.VK_Y) {
+			camera.goHigher();
+		}
+
 	}
 
 	public void startSelectionArea() {

@@ -43,12 +43,16 @@ class Robot(Thread):
     def moveTo(self, x, y, z):
         # returns true if unit could successfully move to target, false if not
         event = self.adapter.registerMoveTask(self.objectID, x, y, z)
+        if event == None:
+            return
         msg = self.watchEvent(event)
         return bool(msg)
     
     def getScope(self):
         # returns everything the robot can see as a Scope object
         event = self.adapter.registerGetScope(self.objectID)
+        if event == None:
+            return
         msg = self.watchEvent(event)
         scope = Scope(msg)
         return scope
@@ -56,6 +60,8 @@ class Robot(Thread):
     def turn(self, x, y, z):
         # turns the roboter until he faces the target point, returns true if successful
         event = self.adapter.registerObjectTurn(self.objectID, x, y, z)
+        if event == None:
+            return
         msg = self.watchEvent(event)
         return bool(msg)
     
@@ -66,8 +72,19 @@ class Robot(Thread):
         
     def wait(self, millis):
         # waits the amount of millis and calls back after
-        event = self.adapter.registerIdleTask(millis)
+        event = self.adapter.registerIdleTask(self.objectID, millis)
+        if event == None:
+            return
         msg = self.watchEvent(event)
         return msg
+    
+    def mine(self, x, y, z):
+        # mines the wp
+        self.turn(x, y, z)
+        event = self.adapter.registerMine(self.objectID, x, y, z)
+        if event == None:
+            return
+        msg = self.watchEvent(event)
+        return bool(msg)
     
     

@@ -152,6 +152,17 @@ public class FrontendAdapter {
 				main.getWorld().getUnitByObjectID(objUID).fireBullet(main);
 			}
 
+			else if (name.equals("mine")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int x = Integer.parseInt(command.split(" ")[2]);
+				int y = Integer.parseInt(command.split(" ")[3]);
+				int z = Integer.parseInt(command.split(" ")[4]);
+				int eventID = Integer.parseInt(command.split(" ")[5]);
+				WorldPoint wp = main.getWorld().getWP(x, y, z);
+				main.getWorld().getUnitByObjectID(objUID)
+						.mineWorldPoint(main, eventID, wp);
+			}
+
 			else {
 				main.getConsole().commandEntered(true, command);
 			}

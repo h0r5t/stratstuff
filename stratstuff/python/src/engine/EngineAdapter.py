@@ -155,15 +155,9 @@ class EngineAdapterClass:
         
     # ----------------- Commands -----------------------
     
-    def registerGroundChange(self, newGround, x, y, z):
-        self.messages.append("chg " + str(newGround) + " " + str(x) + " " + str(y) + " " + str(z))
-        self.world.groundChanged(newGround, x, y, z)
-    
-    def registerElementChange(self, newElement, x, y, z):
-        self.messages.append("che " + str(newElement) + " " + str(x) + " " + str(y) + " " + str(z))
-        self.world.elementChanged(newElement, x, y, z)
-    
     def registerMoveTask(self, objectID, x, y, z):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
@@ -181,7 +175,9 @@ class EngineAdapterClass:
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
       
-    def registerIdleTask(self, millis):
+    def registerIdleTask(self, objectID, millis):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
@@ -192,6 +188,8 @@ class EngineAdapterClass:
         self.messages.append("dispInfo " + str(infoString))
         
     def registerGetScope(self, objID):
+        if self.robotsMap.has_key(str(objID)) == False:
+            return
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
@@ -199,6 +197,8 @@ class EngineAdapterClass:
         return event
     
     def registerObjectTurn(self, objectID, x, y, z):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
         eventID = self.getSmallestAvailableyKey(self.remoteEvents)
         event = RemoteEvent(eventID)
         self.remoteEvents[eventID] = event
@@ -206,7 +206,18 @@ class EngineAdapterClass:
         return event
     
     def registerFire(self, objectID):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
         self.messages.append("fire " + str(objectID))
+        
+    def registerMine(self, objectID, x, y, z):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
+        eventID = self.getSmallestAvailableyKey(self.remoteEvents)
+        event = RemoteEvent(eventID)
+        self.remoteEvents[eventID] = event
+        self.messages.append("mine " + str(objectID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
+        return event
     
     # ----------------- Commands -----------------------
     

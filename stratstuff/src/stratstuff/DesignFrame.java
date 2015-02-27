@@ -1,6 +1,5 @@
 package stratstuff;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -57,7 +56,6 @@ public class DesignFrame implements Updatable {
 	private void initPanels() {
 		designsPanel = new JPanel();
 		designsPanel.setLayout(null);
-		designsPanel.setBackground(Color.LIGHT_GRAY);
 
 		applyButton = new JButton("Apply Changes");
 		applyButton.setBounds(150, 150, 200, 50);
@@ -66,7 +64,6 @@ public class DesignFrame implements Updatable {
 
 		filesPanel = new JPanel();
 		filesPanel.setLayout(null);
-		filesPanel.setBackground(Color.LIGHT_GRAY);
 		loadDesigns();
 		makeUnitComboBox();
 		makeDesignComboBox();
@@ -74,23 +71,17 @@ public class DesignFrame implements Updatable {
 		loadAndAddAvailableFiles();
 
 		refreshButton = new JButton("Refresh");
-		refreshButton.setBounds(280, 250, 75, 50);
-		refreshButton.setBackground(Color.DARK_GRAY);
-		refreshButton.setForeground(Color.WHITE);
+		refreshButton.setBounds(255, 250, 125, 50);
 		refreshButton.addActionListener(new MyActionListener());
 		filesPanel.add(refreshButton);
 
 		shiftFilesButton1 = new JButton(">>");
 		shiftFilesButton1.setBounds(280, 50, 75, 50);
-		shiftFilesButton1.setBackground(Color.DARK_GRAY);
-		shiftFilesButton1.setForeground(Color.WHITE);
 		shiftFilesButton1.addActionListener(new MyActionListener());
 		filesPanel.add(shiftFilesButton1);
 
 		shiftFilesButton2 = new JButton("<<");
 		shiftFilesButton2.setBounds(280, 150, 75, 50);
-		shiftFilesButton2.setBackground(Color.DARK_GRAY);
-		shiftFilesButton2.setForeground(Color.WHITE);
 		shiftFilesButton2.addActionListener(new MyActionListener());
 		filesPanel.add(shiftFilesButton2);
 	}
@@ -104,8 +95,6 @@ public class DesignFrame implements Updatable {
 
 		designsComboBox = new JComboBox<String>(modelDesigns2);
 		designsComboBox.setBounds(310, 30, 200, 30);
-		designsComboBox.setBackground(Color.DARK_GRAY);
-		designsComboBox.setForeground(Color.WHITE);
 		designsPanel.add(designsComboBox);
 	}
 
@@ -118,8 +107,6 @@ public class DesignFrame implements Updatable {
 		}
 		unitsComboBox = new JComboBox<String>(modelUnits);
 		unitsComboBox.setBounds(10, 30, 200, 30);
-		unitsComboBox.setBackground(Color.DARK_GRAY);
-		unitsComboBox.setForeground(Color.WHITE);
 		unitsComboBox.addActionListener(new ChangeListener());
 		designsPanel.add(unitsComboBox);
 
@@ -141,7 +128,7 @@ public class DesignFrame implements Updatable {
 		frame = new JFrame("designs");
 		frame.setVisible(false);
 		frame.setLocation(100, 100);
-		frame.setSize(700, 350);
+		frame.setSize(700, 400);
 		frame.addKeyListener(new MyKeyListener());
 		frame.addWindowListener(new MyWindowAdapter());
 	}
@@ -160,8 +147,6 @@ public class DesignFrame implements Updatable {
 
 		filesJList1 = new JList<String>(modelFiles);
 		filesJList1.setBounds(10, 10, 230, 230);
-		filesJList1.setBackground(Color.DARK_GRAY);
-		filesJList1.setForeground(Color.WHITE);
 		filesPanel.add(filesJList1);
 	}
 
@@ -197,8 +182,6 @@ public class DesignFrame implements Updatable {
 
 			filesJList2 = new JList<String>(modelDesigns);
 			filesJList2.setBounds(400, 10, 230, 230);
-			filesJList2.setBackground(Color.DARK_GRAY);
-			filesJList2.setForeground(Color.WHITE);
 			filesPanel.add(filesJList2);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -281,19 +264,17 @@ public class DesignFrame implements Updatable {
 					return;
 				modelDesigns.addElement(designName);
 				modelFiles.removeElement(designName);
+				modelDesigns2.addElement(designName);
 				loadedDesigns.add(new Design(designName, new File(
 						FileSystem.CUSTOM_DESIGNS_DIR + designName + ".py")));
-				makeDesignComboBox();
-				makeUnitComboBox();
 			} else if (e.getSource() == shiftFilesButton2) {
 				String designName = filesJList2.getSelectedValue();
 				if (designName == null)
 					return;
 				modelDesigns.removeElement(designName);
 				modelFiles.addElement(designName);
+				modelDesigns2.removeElement(designName);
 				deleteDesign(designName);
-				makeDesignComboBox();
-				makeUnitComboBox();
 			} else if (e.getSource() == applyButton) {
 				String unitID = (String) unitsComboBox.getSelectedItem();
 				String design = (String) designsComboBox.getSelectedItem();

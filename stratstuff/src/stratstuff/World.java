@@ -93,14 +93,18 @@ public class World extends Graph implements Saveable {
 	}
 
 	public void moveObjectTo(MovingObject o, WorldPoint p) {
+		WorldPoint old = o.getPosition();
+		main.getLightManager().unregisterLightSource(old);
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
 		objectMap.put(o, p);
 		Core.tellFrontend(FrontendMessaging.objectMovedUpdate(o.getUniqueID(),
 				p.getX(), p.getY(), p.getZ()));
+		main.getLightManager().registerLightSource(p);
 	}
 
 	public void spawnObject(MovingObject o, WorldPoint p) {
+		main.getLightManager().registerLightSource(p);
 		objectMap.put(o, p);
 		p.attachMovingObject(o);
 		main.getObjectManager().addUnit(o);

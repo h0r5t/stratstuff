@@ -21,7 +21,6 @@ public class LightManager implements Updatable {
 		this.core = core;
 		lightArray = new int[GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT][GameSettings.WORLD_DEPTH];
 		lightSources = new ArrayList<WorldPoint>();
-		initLights();
 		try {
 			initImages();
 		} catch (IOException e) {
@@ -45,14 +44,15 @@ public class LightManager implements Updatable {
 		imageMap.put(10, ImageIO.read(new File(texDir + "10.png")));
 	}
 
-	private void initLights() {
-		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+	public void initLights() {
+
+		for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
+			for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+				for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
 					if (z > 0) {
 						lightArray[x][y][z] = 0;
 					} else {
-						lightArray[x][y][z] = 10;
+						lightArray[x][y][z] = 5;
 					}
 				}
 			}
@@ -76,6 +76,11 @@ public class LightManager implements Updatable {
 		WorldPoint p = core.getWorld().getWP(x, y, z);
 		lightSources.add(p);
 		updateLightLevel(p);
+	}
+
+	public void registerLightSource(WorldPoint point) {
+		lightSources.add(point);
+		updateLightLevel(point);
 	}
 
 	private void updateLightLevel(WorldPoint p) {
@@ -144,8 +149,12 @@ public class LightManager implements Updatable {
 	private void updateLight() {
 		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
 			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-				for (int y = 1; y < GameSettings.WORLD_HEIGHT; y++) {
-					lightArray[x][y][z] = 0;
+				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+					if (z > 0) {
+						lightArray[x][y][z] = 0;
+					} else {
+						lightArray[x][y][z] = 5;
+					}
 				}
 			}
 		}
@@ -167,7 +176,11 @@ public class LightManager implements Updatable {
 
 	@Override
 	public void update() {
+	}
 
+	public void unregisterLightSource(WorldPoint old) {
+		lightSources.remove(old);
+		updateLight();
 	}
 
 }
