@@ -28,6 +28,14 @@ public class FrontendMessaging {
 		return "4 " + objectID + " " + objectType + " " + x + " " + y + " " + z;
 	}
 
+	public static String startRobotWithDesign(int objectID, String designName) {
+		return "5 " + designName + " " + objectID;
+	}
+
+	public static String removeRobotDesign(int objectID) {
+		return "6 " + objectID;
+	}
+
 	public static String menuInputMessage(String name, String type,
 			String areaData) {
 		return "input::" + name + " " + type + " " + areaData;

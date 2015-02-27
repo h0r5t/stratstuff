@@ -1,14 +1,16 @@
+from pydoc import locate
 from random import randint
 import sys
 import time
-
-sys.path.append('..')
 
 import EngineData
 from Events import RemoteEvent
 import IPCClient
 import IPCServer
-from src.custom import TestRobot
+
+
+sys.path.append('..')
+
 
 
 client = IPCClient.IPCClient()
@@ -20,10 +22,8 @@ class EngineAdapterClass:
         self.messages = []
         self.remoteEvents = {}  # events that happen in the engine
         self.world = EngineData.EngineData("test")
-        self.locked = True
-        
-        self.setupRobots()
-        
+        self.locked = True        
+        self.robotsMap = {}  # objID:robot
     
     def messageReceived(self, stringlist):
         for s in stringlist:
@@ -37,11 +37,17 @@ class EngineAdapterClass:
                 self.lock()
             
             time.sleep(SLEEP_TIME)
-            
-    def setupRobots(self):
-        # test
-        r1 = TestRobot.TestRobot(self, 144003)
-        r1.start()
+    
+    def instantiateRobot(self, designName, objUID):
+        # returns an instance!
+        robot = locate("src.custom." + designName + "." + designName)(self, int(objUID))
+        robot.start()
+        self.robotsMap[str(objUID)] = robot
+        
+    def stopRobot(self, objUID):
+        robot = self.robotsMap[str(objUID)]
+        robot.destroy()
+        del self.robotsMap[str(objUID)]
                 
     def lock(self):
         self.locked = True
@@ -130,6 +136,17 @@ class EngineAdapterClass:
             objID = split[1]
             objType = split[2]
             self.world.addMovingObject(objID, objType, x, y, z)
+            
+        elif messageID == "5":
+            # set design for robot
+            designName = split[1]
+            objUID = int(split[2])
+            self.instantiateRobot(designName, objUID)
+            
+        elif messageID == "6":
+            # stop robot
+            objUID = int(split[1])
+            self.stopRobot(objUID)
     
     # ----------------- Engine Messages ----------------
     

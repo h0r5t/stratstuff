@@ -15,6 +15,9 @@ class Robot(Thread):
         
     def run(self):
         self.execute()
+        
+    def destroy(self):
+        self.modes[self.currentModeIndex].destroyMode()
     
     def update(self):
         pass
@@ -59,7 +62,7 @@ class Robot(Thread):
     def fire(self):
         # robot fires in front
         self.adapter.registerFire(self.objectID)
-        self.wait(200)
+        self.wait(50)
         
     def wait(self, millis):
         # waits the amount of millis and calls back after

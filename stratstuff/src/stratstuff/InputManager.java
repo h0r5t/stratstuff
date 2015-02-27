@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 public class InputManager implements Updatable {
 
+	private Core core;
 	private GameCamera camera;
 	private GameCursor cursor;
 	private GameMenu menu;
@@ -13,7 +14,9 @@ public class InputManager implements Updatable {
 
 	private DefaultHashMap<Integer, Boolean> keyMap;
 
-	public InputManager(GameCamera cam, GameCursor cursor, GameMenu menu) {
+	public InputManager(Core core, GameCamera cam, GameCursor cursor,
+			GameMenu menu) {
+		this.core = core;
 		this.camera = cam;
 		this.cursor = cursor;
 		this.menu = menu;
@@ -131,6 +134,16 @@ public class InputManager implements Updatable {
 					selectionAreaState = 0;
 				}
 			}
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_F12) {
+			core.getDeveloperFrame().show();
+			if (!core.gameIsPaused())
+				core.togglePause();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_P) {
+			core.togglePause();
 		}
 	}
 

@@ -39,4 +39,10 @@ public class UnitManager implements Updatable {
 		return null;
 	}
 
+	public void registerRobots() {
+		for (Unit u : unitMap.values()) {
+			u.registerRobot();
+		}
+	}
+
 }

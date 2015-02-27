@@ -120,9 +120,10 @@ public class DynamicTexture {
 		if (!hasTurned && Math.abs(imageRotation - rotationGoal) < turnRate) {
 			currentTurnRate = 1;
 		}
-		if (!hasTurned && Math.abs(imageRotation - rotationGoal) < 1) {
+		if (!hasTurned && Math.abs(imageRotation - rotationGoal) <= 2) {
 			hasTurned = true;
 			currentTurnRate = turnRate;
+			imageRotation = rotationGoal;
 		}
 		if (!hasTurned) {
 			if (turnDirection == turnDirectionClockWise) {

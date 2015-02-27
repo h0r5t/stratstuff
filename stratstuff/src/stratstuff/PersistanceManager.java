@@ -17,7 +17,7 @@ public class PersistanceManager {
 		world = loadGroundIDs(world, worldName);
 		world = loadAndAddElements(world, worldName);
 		world = loadAndAddObjects(world, worldName);
-		world = loadAndAddUnits(world, worldName);
+		world = loadAndAddUnits(main, world, worldName);
 		world = loadAndAddItems(world, worldName);
 
 		return world;
@@ -53,7 +53,8 @@ public class PersistanceManager {
 		return world;
 	}
 
-	private static World loadAndAddUnits(World world, String worldName) {
+	private static World loadAndAddUnits(Core core, World world,
+			String worldName) {
 		try {
 			Scanner scanner = new Scanner(getUnitsFile(worldName));
 
@@ -65,8 +66,10 @@ public class PersistanceManager {
 				int uniqueID = Integer.parseInt(splitLine[0]);
 				int unitType = Integer.parseInt(splitLine[1]);
 				int objUID = Integer.parseInt(splitLine[2]);
+				String designName = splitLine[3];
 
-				Unit unit = new Unit(world, uniqueID, unitType, objUID);
+				Unit unit = new Unit(core, world, uniqueID, unitType, objUID,
+						designName);
 				world.addUnit(unit);
 				UniqueIDFactory.increment();
 			}

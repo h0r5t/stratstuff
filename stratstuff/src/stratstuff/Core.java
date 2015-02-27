@@ -23,10 +23,12 @@ public class Core implements Runnable {
 	private ItemManager itemManager;
 
 	private GameWindowAdapter windowAdapter;
+	private DesignFrame developerFrame;
 
 	private SimpleTimer timer;
 
 	private boolean locked = false;
+	private boolean gameIsPaused = false;
 
 	private static FrontendAdapter frontendAdapter;
 
@@ -65,9 +67,9 @@ public class Core implements Runnable {
 
 		frontendAdapter.startPythonFrontend();
 
-		visualManager.activate();
+		developerFrame.makeUnitComboBox();
 
-		debugConsole.runDefaultScript();
+		visualManager.activate();
 	}
 
 	private void loadOrGenerateWorld() {
@@ -83,8 +85,8 @@ public class Core implements Runnable {
 		frontendAdapter = new FrontendAdapter(this);
 		frontendAdapter.start();
 
-		inputManager = new InputManager(gameCamera, gameCursor, gameMenu);
-		updatables.add(inputManager);
+		developerFrame = new DesignFrame(this);
+		updatables.add(developerFrame);
 
 		worldManager = new WorldManager(world);
 		updatables.add(worldManager);
@@ -100,10 +102,17 @@ public class Core implements Runnable {
 
 		itemManager = new ItemManager(this);
 		updatables.add(itemManager);
+
+		inputManager = new InputManager(this, gameCamera, gameCursor, gameMenu);
+		updatables.add(inputManager);
 	}
 
 	public GameCursor getCursor() {
 		return gameCursor;
+	}
+
+	public void togglePause() {
+		gameIsPaused = !gameIsPaused;
 	}
 
 	@Override
@@ -119,25 +128,39 @@ public class Core implements Runnable {
 
 		initialSleep();
 		timer.start();
+
+		unitManager.registerRobots();
+
 		while (true) {
 			if (!locked) {
 				long sleepTime = GameSettings.TICK_MILLIS - timer.stop();
 				if (sleepTime > 0)
 					Thread.sleep(sleepTime);
 
-				updateUpdatables();
+				if (!gameIsPaused) {
+					updateUpdatables();
 
-				frontendAdapter.sendStartMessage();
-				timer.start();
+					frontendAdapter.sendStartMessage();
+					timer.start();
 
-				lock();
+					lock();
+				} else {
+					visualManager.update();
+					inputManager.update();
+					Thread.sleep(GameSettings.TICK_MILLIS);
+				}
 			}
 
 			frontendAdapter.waitForFrontendFIN();
 
 			Thread.sleep(5);
+
 		}
 
+	}
+
+	public boolean gameIsPaused() {
+		return gameIsPaused;
 	}
 
 	private void lock() {
@@ -178,7 +201,7 @@ public class Core implements Runnable {
 		return world;
 	}
 
-	public GameCanvas getCanvas() {
+	public GamePanel getCanvas() {
 		return visualManager.getCanvas();
 	}
 
@@ -206,12 +229,17 @@ public class Core implements Runnable {
 		frontendAdapter.addToQueue(message);
 	}
 
-	public void saveWorldState() {
+	public void save() {
 		PersistanceManager.save(this, "test");
+		developerFrame.save();
 	}
 
 	public InputManager getInputManager() {
 		return inputManager;
+	}
+
+	public DesignFrame getDeveloperFrame() {
+		return developerFrame;
 	}
 
 	public void tellFrontendToShutdown() {

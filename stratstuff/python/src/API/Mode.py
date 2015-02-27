@@ -4,12 +4,16 @@ class Mode():
         self.robot = robot
         self.states = {}
         self.currentStateIndex = 0
+        self.destroy = False
         
     def getRobot(self):
         return self.robot
     
+    def destroyMode(self):
+        self.destroy = True
+    
     def execute(self):
-        while 1:
+        while self.destroy == False:
             self.states[self.currentStateIndex].execute()
             
             self.currentStateIndex += 1

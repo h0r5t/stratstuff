@@ -11,7 +11,7 @@ public class GameWindowAdapter extends WindowAdapter {
 	}
 
 	public void windowClosing(WindowEvent windowEvent) {
-		main.saveWorldState();
+		main.save();
 		main.tellFrontendToShutdown();
 		System.exit(0);
 	}

@@ -9,14 +9,40 @@ public class Unit implements Saveable {
 	private int myUniqueID;
 	private MovingObject myObject;
 	private ArrayList<Item> inventory;
+	private Design design;
 	private static HashMap<String, LoadedInfo> info;
 
-	public Unit(World world, int uniqueID, int unitType, int objectUID) {
+	public Unit(Core core, World w, int uniqueID, int unitType, int objectUID,
+			String designName) {
 		LoadedInfo myInfo = info.get(unitType + "");
 		myUniqueID = uniqueID;
 		myType = unitType;
-		myObject = world.getObjectByUID(objectUID);
+		myObject = w.getObjectByUID(objectUID);
 		inventory = new ArrayList<Item>();
+		if (!designName.equals("null")) {
+			design = core.getDeveloperFrame().getDesignByName(designName);
+		}
+	}
+
+	public Design getDesign() {
+		return design;
+	}
+
+	@SuppressWarnings("deprecation")
+	// ugly, only used once after load
+	public void registerRobot() {
+		if (design == null)
+			return;
+		Core.tellFrontend(FrontendMessaging.startRobotWithDesign(
+				myObject.getUniqueID(), design.getName()));
+	}
+
+	public void setDesign(Design d) {
+		design = d;
+	}
+
+	public void removeDesign() {
+		design = null;
 	}
 
 	public int getUniqueID() {
@@ -48,7 +74,12 @@ public class Unit implements Saveable {
 
 	@Override
 	public String save() {
-		return myUniqueID + " " + myType + " " + myObject.getUniqueID();
+		String designName = "null";
+		if (design != null) {
+			designName = design.getName();
+		}
+		return myUniqueID + " " + myType + " " + myObject.getUniqueID() + " "
+				+ designName;
 	}
 
 	@Override

@@ -23,9 +23,9 @@ class MoveState1(State):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.moveTo(30, 10, 0)
+        self.robot.moveTo(27, 10, 0)
         self.robot.turn(21, 14, 0)
-        for x in range(0, 5):
+        for x in range(0, 10):
             self.robot.fire()
         
 class MoveState2(State):
@@ -33,7 +33,7 @@ class MoveState2(State):
         State.__init__(self, adapter, robot, mode)
         
     def execute(self):
-        self.robot.moveTo(30, 30, 0)
+        self.robot.moveTo(23, 30, 0)
         self.robot.turn(21, 14, 0)
-        for x in range(0, 5):
+        for x in range(0, 10):
             self.robot.fire()

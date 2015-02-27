@@ -1,14 +1,16 @@
 package stratstuff;
 
-import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GameCanvas extends Canvas {
+import javax.swing.JPanel;
+
+public class GamePanel extends JPanel {
 
 	private Image bufImage;
 	private Graphics bufG;
@@ -22,7 +24,7 @@ public class GameCanvas extends Canvas {
 	private GameMenu gameMenu;
 	private InfoScreen currentInfoScreen;
 
-	public GameCanvas(Core core, World world, VisualManager visualManager,
+	public GamePanel(Core core, World world, VisualManager visualManager,
 			InputManager handler, GameCamera cam, GameCursor cursor,
 			GameMenu gameMenu) {
 		this.core = core;
@@ -33,6 +35,7 @@ public class GameCanvas extends Canvas {
 		this.cam = cam;
 		this.cursor = cursor;
 		addKeyListener(new AL());
+		setLayout(null);
 	}
 
 	@Override
@@ -49,6 +52,19 @@ public class GameCanvas extends Canvas {
 		drawSelectionArea(g2);
 
 		drawInfoScreen(g2);
+		drawGameIsPaused(g2);
+	}
+
+	private void drawGameIsPaused(Graphics2D g2) {
+		if (core.gameIsPaused()) {
+			g2.setColor(Color.YELLOW);
+			Font f = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+			g2.setFont(f);
+			g2.drawString(
+					"PAUSED",
+					(GameSettings.GAME_FRAME_WIDTH - GameSettings.MENU_WIDTH) / 2,
+					GameSettings.GAME_FRAME_HEIGHT / 2);
+		}
 	}
 
 	private void drawInfoScreen(Graphics2D g2) {

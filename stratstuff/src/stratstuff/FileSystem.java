@@ -34,4 +34,6 @@ public class FileSystem {
 
 	public static final String MENU_DATA_FILE = DATA_DIR + "/menu.info";
 
+	public static final String CUSTOM_DESIGNS_DIR = PYTHON_DIR + "/custom/";
+
 }

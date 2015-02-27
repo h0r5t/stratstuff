@@ -12,7 +12,7 @@ public class Bullet extends MicroObject {
 	private WorldPoint currentWP;
 	private double speedX;
 	private double speedY;
-	private int bulletSpeed = 100;
+	private int bulletSpeed = 250;
 
 	public static final int TYPE_SMALL_BULLET = 0;
 
@@ -65,106 +65,50 @@ public class Bullet extends MicroObject {
 		microPosX += speedX;
 		microPosY += speedY;
 
-		int counter = 0;
+		int xmoved = 0;
+		int ymoved = 0;
 		while (true) {
 			if (microPosX > 100) {
-				microPosX = microPosX - 100;
-				counter++;
-				currentWP.removeMicroObject(this);
-				int newXPos = currentWP.getX() + counter;
-				if (newXPos >= GameSettings.WORLD_WIDTH) {
-					currentWP = null;
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				WorldPoint newWP = core.getWorld().getWP(
-						currentWP.getX() + counter, currentWP.getY(),
-						currentWP.getZ());
-				if (newWP.collides()) {
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				newWP.addMicroObject(this);
-				currentWP = newWP;
-			} else {
-				break;
+				microPosX -= 100;
+				xmoved = 1;
+			} else if (microPosX < 0) {
+				microPosX += 100;
+				xmoved = -1;
 			}
-		}
-
-		counter = 0;
-		while (true) {
-			if (microPosX < 0) {
-				microPosX = microPosX + 100;
-				counter++;
-				currentWP.removeMicroObject(this);
-				int newXPos = currentWP.getX() - counter;
-				if (newXPos < 0) {
-					currentWP = null;
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				WorldPoint newWP = core.getWorld().getWP(
-						currentWP.getX() - counter, currentWP.getY(),
-						currentWP.getZ());
-				if (newWP.collides()) {
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				newWP.addMicroObject(this);
-				currentWP = newWP;
-			} else {
-				break;
-			}
-		}
-
-		counter = 0;
-		while (true) {
 			if (microPosY > 100) {
-				microPosY = microPosY - 100;
-				counter++;
+				microPosY -= 100;
+				ymoved = 1;
+			} else if (microPosY < 0) {
+				microPosY += 100;
+				ymoved = -1;
+			}
+
+			if (xmoved != 0 || ymoved != 0) {
 				currentWP.removeMicroObject(this);
-				int newYPos = currentWP.getY() + counter;
-				if (newYPos >= GameSettings.WORLD_HEIGHT) {
+				int newXPos = currentWP.getX() + xmoved;
+				int newYPos = currentWP.getY() + ymoved;
+				if (newXPos >= GameSettings.WORLD_WIDTH || newXPos < 0
+						|| newYPos >= GameSettings.WORLD_HEIGHT || newYPos < 0) {
+					// out of world bounds
 					currentWP = null;
 					core.getWorld().removeMicroObject(this);
 					return;
 				}
-				WorldPoint newWP = core.getWorld().getWP(currentWP.getX(),
-						currentWP.getY() + counter, currentWP.getZ());
+				WorldPoint newWP = core.getWorld().getWP(newXPos, newYPos,
+						currentWP.getZ());
 				if (newWP.collides()) {
+					currentWP.removeMicroObject(this);
 					core.getWorld().removeMicroObject(this);
 					return;
 				}
 				newWP.addMicroObject(this);
 				currentWP = newWP;
+				xmoved = 0;
+				ymoved = 0;
 			} else {
 				break;
 			}
 		}
 
-		counter = 0;
-		while (true) {
-			if (microPosY < 0) {
-				microPosY = microPosY + 100;
-				counter++;
-				currentWP.removeMicroObject(this);
-				int newYPos = currentWP.getY() - counter;
-				if (newYPos < 0) {
-					currentWP = null;
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				WorldPoint newWP = core.getWorld().getWP(currentWP.getX(),
-						currentWP.getY() - counter, currentWP.getZ());
-				if (newWP.collides()) {
-					core.getWorld().removeMicroObject(this);
-					return;
-				}
-				newWP.addMicroObject(this);
-				currentWP = newWP;
-			} else {
-				break;
-			}
-		}
 	}
 }

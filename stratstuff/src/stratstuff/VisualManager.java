@@ -3,21 +3,21 @@ package stratstuff;
 public class VisualManager implements Updatable {
 
 	private GameFrame gameFrame;
-	private GameCanvas gameCanvas;
+	private GamePanel gamePanel;
 	private boolean canDraw = false;
 
 	public VisualManager(Core core, World world, GameCamera cam,
 			InputManager inputHandler, GameCursor cursor,
 			GameWindowAdapter windowAdapter, GameMenu menu) {
 		initFrame(inputHandler, windowAdapter);
-		initCanvas(core, world, inputHandler, cam, cursor, menu);
+		initPanel(core, world, inputHandler, cam, cursor, menu);
 	}
 
-	private void initCanvas(Core core, World world, InputManager handler,
+	private void initPanel(Core core, World world, InputManager handler,
 			GameCamera cam, GameCursor cursor, GameMenu menu) {
-		gameCanvas = new GameCanvas(core, world, this, handler, cam, cursor,
+		gamePanel = new GamePanel(core, world, this, handler, cam, cursor,
 				menu);
-		gameFrame.add(gameCanvas);
+		gameFrame.add(gamePanel);
 	}
 
 	private void initFrame(InputManager inputHandler,
@@ -27,12 +27,12 @@ public class VisualManager implements Updatable {
 
 	public void activate() {
 		gameFrame.setVisible(true);
-		gameCanvas.requestFocus();
+		gamePanel.requestFocus();
 		canDraw = true;
 	}
 
-	public GameCanvas getCanvas() {
-		return gameCanvas;
+	public GamePanel getCanvas() {
+		return gamePanel;
 	}
 
 	public boolean drawNow() {
@@ -41,7 +41,7 @@ public class VisualManager implements Updatable {
 
 	@Override
 	public void update() {
-		gameCanvas.repaint();
+		gamePanel.repaint();
 	}
 
 }
