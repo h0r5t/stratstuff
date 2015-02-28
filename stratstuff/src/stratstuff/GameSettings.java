@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 public class GameSettings {
 
 	public static final boolean GENERATE_NEW_WORLD = false;
+	public static final boolean KEEP_STUFF = true;
 
 	public static final long TICK_MILLIS = 50;
 	public static final long INITIAL_SLEEP_TIME = 2000;
@@ -30,4 +31,7 @@ public class GameSettings {
 	public static final int WORLD_WIDTH = 120;
 	public static final int WORLD_HEIGHT = 120;
 	public static final int WORLD_DEPTH = 10;
+
+	public static final int COLOR_VARIATION = 5;
+	public static final int TEXTURE_AMOUNT = 30;
 }

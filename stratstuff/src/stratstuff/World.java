@@ -287,8 +287,8 @@ public class World extends Graph implements Saveable {
 		dropItem(p, elementID);
 	}
 
-	public void dropItem(WorldPoint p, int elementID) {
-		int droppedItemType = Element.getDroppedItemType(elementID);
+	public void dropItem(WorldPoint p, int destroyedElementID) {
+		int droppedItemType = Element.getDroppedItemType(destroyedElementID);
 		MovingObject object = new MovingObject(
 				Item.getLinkedObjectType(droppedItemType), this,
 				UniqueIDFactory.getID());

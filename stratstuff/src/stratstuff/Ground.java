@@ -34,9 +34,10 @@ public class Ground {
 		}
 	}
 
-	public static void draw(Graphics2D g, int id, int x, int y) {
-		g.drawImage(groundMap.get(id).getImage(), x, y, GameSettings.TILE_SIZE,
-				GameSettings.TILE_SIZE, null);
+	public static void draw(Graphics2D g, int groundID, int imageID, int x,
+			int y) {
+		g.drawImage(groundMap.get(groundID).getImage(imageID), x, y,
+				GameSettings.TILE_SIZE, GameSettings.TILE_SIZE, null);
 	}
 
 	public static boolean collides(int id) {

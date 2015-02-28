@@ -1,16 +1,13 @@
 package stratstuff;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class GroundInfo {
 
 	private String name;
-	private BufferedImage image;
 	private boolean collides;
+	private BufferedImage[] images;
 
 	public String getName() {
 		return name;
@@ -20,18 +17,28 @@ public class GroundInfo {
 		return collides;
 	}
 
-	public BufferedImage getImage() {
-		return image;
+	public BufferedImage getImage(int imageID) {
+		return images[imageID];
 	}
 
 	public GroundInfo(LoadedInfo info) {
 		this.name = info.getValueString("name");
-		try {
-			image = ImageIO.read(new File(FileSystem.TEXTURES_GROUNDS_DIR
-					+ info.getValueString("image")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		this.collides = info.getValueBool("collides");
+		images = new BufferedImage[GameSettings.TEXTURE_AMOUNT];
+		int red = info.getValueInt("tex_red");
+		int blue = info.getValueInt("tex_blue");
+		int green = info.getValueInt("tex_green");
+		int alpha = info.getValueInt("tex_alpha");
+
+		// int r = 5;
+		// int g = 74;
+		// int b = 14;
+		// int a = 255;
+		int col = (alpha << 24) | (red << 16) | (green << 8) | blue;
+		Color color = new Color(col);
+		for (int i = 0; i < images.length; i++) {
+			images[i] = TextureGenerator.generateImage(new ColorData(color,
+					GameSettings.COLOR_VARIATION, 0));
+		}
 	}
 }

@@ -45,7 +45,6 @@ public class LightManager implements Updatable {
 	}
 
 	public void initLights() {
-
 		for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
 			for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
 				for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
@@ -69,7 +68,7 @@ public class LightManager implements Updatable {
 				}
 			}
 		}
-
+		updateLight();
 	}
 
 	public void registerLightSource(int x, int y, int z) {

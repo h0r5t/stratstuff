@@ -77,7 +77,11 @@ public class Core implements Runnable {
 
 	private void loadOrGenerateWorld() {
 		if (GameSettings.GENERATE_NEW_WORLD) {
-			world = WorldGenerator.generateWorld(this);
+			if (GameSettings.KEEP_STUFF)
+				world = PersistanceManager.load(this, "test");
+			else
+				world = new World(this);
+			world = WorldGenerator.generateWorld(this, world);
 			PersistanceManager.save(this, "test");
 		} else {
 			world = PersistanceManager.load(this, "test");

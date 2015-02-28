@@ -2,8 +2,8 @@ package stratstuff;
 
 public class WorldGenerator {
 
-	public static World generateWorld(Core main) {
-		World world = new World(main);
+	public static World generateWorld(Core main, World onTopOf) {
+		World world = onTopOf;
 
 		Area3D wholeWorld = new Area3D(0, 0, 0, GameSettings.WORLD_WIDTH,
 				GameSettings.WORLD_HEIGHT, GameSettings.WORLD_DEPTH);
