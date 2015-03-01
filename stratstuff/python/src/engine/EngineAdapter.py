@@ -230,4 +230,5 @@ if __name__ == '__main__':
     print(">>> starting...")
     IPCServer.start(adapter.messageReceived)
     print(">>> server started.")
+    print(">>> stratstuff Frontend v1.0")
     adapter.loop()

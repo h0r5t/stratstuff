@@ -12,7 +12,7 @@ public class WorldPoint extends GraphNode implements Drawable {
 	private ArrayList<MovingObject> attachedMovingObjects;
 	private ArrayList<MicroObject> attachedMicroObjects;
 	private GraphEdgeInfo myEdges = new GraphEdgeInfo(this);
-	private int textureID;
+	private int groundTextureID, elementTextureID;
 
 	public WorldPoint(int x, int y, int z, int ground) {
 		super(UniqueIDFactory.getID(), x, y, z);
@@ -20,7 +20,8 @@ public class WorldPoint extends GraphNode implements Drawable {
 		attachedElement = -1;
 		attachedMovingObjects = new ArrayList<MovingObject>();
 		attachedMicroObjects = new ArrayList<MicroObject>();
-		this.textureID = (int) (Math.random() * GameSettings.TEXTURE_AMOUNT);
+		this.groundTextureID = (int) (Math.random() * GameSettings.TEXTURE_AMOUNT);
+		this.elementTextureID = (int) (Math.random() * GameSettings.TEXTURE_AMOUNT);
 	}
 
 	// use method addElement() in World (bridges get registered there)
@@ -54,10 +55,10 @@ public class WorldPoint extends GraphNode implements Drawable {
 	@Override
 	public void draw(Graphics2D g, int x, int y) {
 		// Ground.draw(g, attachedGround, x, y);
-		Ground.draw(g, attachedGround, textureID, x, y);
+		Ground.draw(g, attachedGround, groundTextureID, x, y);
 
 		if (attachedElement != -1) {
-			Element.draw(g, attachedElement, x, y);
+			Element.draw(g, attachedElement, elementTextureID, x, y);
 		}
 
 		for (MovingObject o : attachedMovingObjects) {

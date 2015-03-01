@@ -70,8 +70,9 @@ public class Unit implements Saveable {
 	}
 
 	public void mineWorldPoint(Core core, int eventID, WorldPoint wp) {
-		Laser laser = new Laser(core, Color.BLUE, 5000, myObject.getPosition(),
-				wp, eventID);
+		Color color = new Color(0x33, 0xCC, 0xFF);
+		Laser laser = new Laser(core, color, 5000, myObject.getPosition(), wp,
+				eventID);
 		core.getWorld().addMicroObject(laser);
 	}
 

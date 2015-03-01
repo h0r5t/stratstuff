@@ -1,20 +1,28 @@
 0:{
     name = tree
-    image = /0/0.png
     collides = true
     ladderdown = false
     ladderup = false
     lightsource = false
     drops = 0
+    tex_shape = circle
+    tex_red = 14
+    tex_green = 48
+    tex_blue = 11
+    tex_alpha = 255
 }
 1:{
     name = bush
-    image = /1/0.png
     collides = false
     ladderdown = false
     ladderup = false
     lightsource = false
     drops = 1
+    tex_shape = circle
+    tex_red = 38
+    tex_green = 125
+    tex_blue = 29
+    tex_alpha = 255
 }
 2:{
     name = ladderdown
@@ -24,6 +32,11 @@
     ladderup = false
     lightsource = false
     drops = 2
+    tex_shape = circle
+    tex_red = 34
+    tex_green = 48
+    tex_blue = 32
+    tex_alpha = 255
 }
 3:{
     name = ladderup
@@ -33,6 +46,11 @@
     ladderup = true
     lightsource = false
     drops = 2
+    tex_shape = circle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }
 4:{
     name = brickwall
@@ -42,6 +60,11 @@
     ladderup = false
     lightsource = false
     drops = 2
+    tex_shape = rectangle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }
 5:{
     name = coal
@@ -50,6 +73,11 @@
     ladderdown = false
     ladderup = false
     drops = 2
+    tex_shape = rectangle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }
 6:{
     name = iron
@@ -59,6 +87,11 @@
     ladderup = false
     lightsource = false
     drops = 2
+    tex_shape = rectangle
+    tex_red = 34
+    tex_green = 48
+    tex_blue = 32
+    tex_alpha = 255
 }
 7:{
     name = diamond
@@ -68,6 +101,11 @@
     ladderup = false
     lightsource = false
     drops = 2
+    tex_shape = rectangle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }
 8:{
     name = light
@@ -77,6 +115,11 @@
     ladderup = false
     lightsource = true
     drops = 2
+    tex_shape = circle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }
 9:{
     name = raw_stone
@@ -86,4 +129,9 @@
     ladderup = false
     lightsource = false
     drops = 2
+    tex_shape = rectangle
+    tex_red = 5
+    tex_green = 74
+    tex_blue = 14
+    tex_alpha = 255
 }

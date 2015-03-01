@@ -12,7 +12,7 @@ public class Bullet extends MicroObject {
 	private WorldPoint currentWP;
 	private double speedX;
 	private double speedY;
-	private int bulletSpeed = 250;
+	private int bulletSpeed = GameSettings.BULLET_SPEED;
 
 	public static final int TYPE_SMALL_BULLET = 0;
 
@@ -57,7 +57,7 @@ public class Bullet extends MicroObject {
 		int posY = (int) ((GameSettings.TILE_SIZE * microPosY) / 100);
 
 		g.setColor(Color.BLACK);
-		g.fillOval(xinpixels + posX, yinpixels + posY, 5, 5);
+		g.fillOval(xinpixels + posX, yinpixels + posY, 3, 3);
 	}
 
 	@Override

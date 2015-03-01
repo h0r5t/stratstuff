@@ -1,3 +1,5 @@
+from random import randint
+
 from src.API.Mode import Mode
 from src.API.Robot import Robot
 from src.API.State import State
@@ -24,7 +26,11 @@ class MoveState1(State):
         
     def execute(self):
         self.robot.moveTo(10, 10, 0)
-        self.robot.mine(25, 22, 0)
+        x = randint(0, 20)
+        y = randint(0, 20)
+        self.robot.turn(x, y, 0)
+        for x in range(0, 5):
+            self.robot.fire()
         
 class MoveState2(State):
     def __init__(self, adapter, robot, mode):
@@ -32,4 +38,8 @@ class MoveState2(State):
         
     def execute(self):
         self.robot.moveTo(10, 25, 0)
-        self.robot.mine(21, 23, 0)
+        x = randint(0, 30)
+        y = randint(0, 30)
+        self.robot.turn(x, y, 0)
+        for x in range(0, 5):
+            self.robot.fire()

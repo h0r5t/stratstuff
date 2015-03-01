@@ -30,8 +30,9 @@ public class Element {
 		}
 	}
 
-	public static void draw(Graphics2D g, int id, int x, int y) {
-		g.drawImage(elementMap.get(id).getImage(), x, y,
+	public static void draw(Graphics2D g, int elementID, int imageID, int x,
+			int y) {
+		g.drawImage(elementMap.get(elementID).getImage(imageID), x, y,
 				GameSettings.TILE_SIZE, GameSettings.TILE_SIZE, null);
 	}
 

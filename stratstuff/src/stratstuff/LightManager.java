@@ -49,7 +49,7 @@ public class LightManager implements Updatable {
 			for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
 				for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
 					if (z > 0) {
-						lightArray[x][y][z] = 0;
+						lightArray[x][y][z] = 5;
 					} else {
 						lightArray[x][y][z] = 5;
 					}
@@ -150,7 +150,7 @@ public class LightManager implements Updatable {
 			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
 				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
 					if (z > 0) {
-						lightArray[x][y][z] = 0;
+						lightArray[x][y][z] = 5;
 					} else {
 						lightArray[x][y][z] = 5;
 					}

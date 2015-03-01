@@ -49,6 +49,8 @@ public class Laser extends MicroObject {
 		int yend = ystart + vectorY;
 		g.drawLine(xstart, ystart, xend, yend);
 		g.setStroke(s);
+
+		g.fillOval(xend - 2, yend - 2, 4, 4);
 	}
 
 }

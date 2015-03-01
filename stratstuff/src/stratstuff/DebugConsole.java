@@ -7,13 +7,11 @@ import java.util.HashMap;
 public class DebugConsole implements Updatable {
 
 	private Core main;
-	private DebugConsoleFrame frame;
 	private HashMap<String, DebugCommand> commandMap;
 	private HashMap<String, String> variablesMap;
 
 	public DebugConsole(Core main, GameWindowAdapter windowAdapter) {
 		this.main = main;
-		frame = new DebugConsoleFrame(this, windowAdapter);
 		// frame.setVisible(true);
 		initCommands();
 		variablesMap = new HashMap<String, String>();
@@ -22,13 +20,11 @@ public class DebugConsole implements Updatable {
 	public void runDefaultScript() {
 		runScript("default");
 		print(">");
-		frame.setCaretToLast();
 	}
 
 	private void runScript(String name) {
 		DebugScript s = new DebugScript(this, name);
 		s.execute();
-		frame.setCaretToLast();
 	}
 
 	private void initCommands() {
@@ -51,7 +47,6 @@ public class DebugConsole implements Updatable {
 		doCommand(fromScript, s[0], args);
 
 		if (!fromScript) {
-			frame.print(">");
 		}
 	}
 
@@ -62,7 +57,6 @@ public class DebugConsole implements Updatable {
 		}
 
 		if (command.equals("cls")) {
-			frame.resetText();
 			return;
 		}
 
@@ -112,7 +106,6 @@ public class DebugConsole implements Updatable {
 	}
 
 	public void print(String s) {
-		frame.print(s);
 	}
 
 	public Core getMain() {
@@ -120,7 +113,6 @@ public class DebugConsole implements Updatable {
 	}
 
 	public void requestFocus() {
-		frame.requestFocus();
 	}
 
 	@Override

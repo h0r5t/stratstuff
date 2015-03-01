@@ -154,6 +154,7 @@ public class Core implements Runnable {
 				} else {
 					visualManager.update();
 					inputManager.update();
+					gameCamera.update();
 					Thread.sleep(GameSettings.TICK_MILLIS);
 				}
 			}

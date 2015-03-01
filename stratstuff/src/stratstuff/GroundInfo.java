@@ -38,7 +38,8 @@ public class GroundInfo {
 		Color color = new Color(col);
 		for (int i = 0; i < images.length; i++) {
 			images[i] = TextureGenerator.generateImage(new ColorData(color,
-					GameSettings.COLOR_VARIATION, 0));
+					GameSettings.COLOR_VARIATION, 0), 10, false,
+					TextureShape.rectangle);
 		}
 	}
 }
