@@ -4,8 +4,8 @@ from random import randint
 import InfoReader
 
 
-worldsDir = "/home/h0r5t/code/git/stratstuff/resources/worlds"
-dataDir = "/home/h0r5t/code/git/stratstuff/resources/data"
+worldsDir = "../../resources/worlds"
+dataDir = "../../resources/data"
 
 class EngineData():
     def __init__(self, world_name):

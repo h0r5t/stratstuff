@@ -48,16 +48,46 @@ public class FrontendAdapter {
 	}
 
 	public void startPythonFrontend() {
+		String OS = System.getProperty("os.name").toLowerCase();
 		String adapterStarterLocation = FileSystem.ADAPTER_STARTER_LOCATION;
+		String adapterLocation = System.getProperty("user.dir") + "\\python\\";
 		String argument = " " + FileSystem.STRATSTUFF_DIR;
-		String[] command = { "gnome-terminal", "--command",
-				adapterStarterLocation + argument };
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (isWindows(OS)) {
+			String[] command = { "cmd", "/k", "start", "",
+					adapterLocation + "start_adapter.bat" };
+
+			try {
+				Process p = Runtime.getRuntime().exec(command);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else if (isUnix(OS))
+
+		{
+			String[] command = { "gnome-terminal", "--command",
+					adapterStarterLocation + "start_adapter.sh" + argument };
+			try {
+				Process p = Runtime.getRuntime().exec(command);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 		queueToSend.clear();
+	}
+
+	private static boolean isWindows(String OS) {
+
+		return (OS.indexOf("win") >= 0);
+
+	}
+
+	private static boolean isUnix(String OS) {
+
+		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS
+				.indexOf("aix") > 0);
+
 	}
 
 	public void taskEnded(int taskID) {

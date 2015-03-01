@@ -21,9 +21,12 @@ class EngineAdapterClass:
         self.scripts = []
         self.messages = []
         self.remoteEvents = {}  # events that happen in the engine
-        self.world = EngineData.EngineData("test")
         self.locked = True        
         self.robotsMap = {}  # objID:robot
+        self.world = EngineData.EngineData("test")
+
+        
+        robot = locate("src.custom." + "TestRobot" + "." + "TestRobot")(self, int(144003))
     
     def messageReceived(self, stringlist):
         for s in stringlist:
