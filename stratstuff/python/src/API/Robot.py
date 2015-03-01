@@ -87,4 +87,10 @@ class Robot(Thread):
         msg = self.watchEvent(event)
         return bool(msg)
     
+    def sendRadialSignal(self, message):
+        # sends a signal in all directions with the given message
+        self.wait(500)
+        self.adapter.registerRadialSignal(self.objectID, message)
+        self.wait(500)
+    
     

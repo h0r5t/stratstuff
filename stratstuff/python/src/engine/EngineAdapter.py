@@ -219,6 +219,11 @@ class EngineAdapterClass:
         self.messages.append("mine " + str(objectID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
         return event
     
+    def registerRadialSignal(self, objectID, message):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
+        self.messages.append("radialsignal " + str(objectID) + " " + str(message))
+    
     # ----------------- Commands -----------------------
     
     def doShutdown(self):

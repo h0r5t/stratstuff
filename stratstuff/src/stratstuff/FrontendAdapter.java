@@ -193,6 +193,15 @@ public class FrontendAdapter {
 						.mineWorldPoint(main, eventID, wp);
 			}
 
+			else if (name.equals("radialsignal")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				String message = command.split(" ")[2];
+				WorldPoint wp = main.getWorld().getObjectByUID(objUID)
+						.getPosition();
+				RadialSignal signal = new RadialSignal(main, wp, message);
+				main.getWorld().addMicroObject(signal);
+			}
+
 			else {
 				main.getConsole().commandEntered(true, command);
 			}

@@ -25,6 +25,8 @@ class MoveState1(State):
     def execute(self):
         self.robot.moveTo(23, 20, 0)
         self.robot.mine(25, 22, 0)
+        for i in range(0, 3):
+            self.robot.sendRadialSignal("hi1")
         
 class MoveState2(State):
     def __init__(self, adapter, robot, mode):
@@ -33,3 +35,5 @@ class MoveState2(State):
     def execute(self):
         self.robot.moveTo(23, 25, 0)
         self.robot.mine(21, 23, 0)
+        for i in range(0, 3):
+            self.robot.sendRadialSignal("hi2")

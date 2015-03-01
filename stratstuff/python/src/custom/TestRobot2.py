@@ -32,6 +32,7 @@ class MoveState1(State):
         for x in range(0, 5):
             self.robot.fire()
         
+        
 class MoveState2(State):
     def __init__(self, adapter, robot, mode):
         State.__init__(self, adapter, robot, mode)
@@ -43,3 +44,4 @@ class MoveState2(State):
         self.robot.turn(x, y, 0)
         for x in range(0, 5):
             self.robot.fire()
+        
