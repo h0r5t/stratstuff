@@ -1,6 +1,7 @@
 /bin/
 *.project
 *.classpath
+*.checkstyle
 /.settings/
 /target/
 /build/
