@@ -4,13 +4,13 @@ public class MoveTask extends Task {
 
 	private MovingObject object;
 	private MovePath path;
-	private Core main;
+	private TaskManager taskManager;
 
-	public MoveTask(Core main, MovingObject o, WorldPoint target) {
+	public MoveTask(World world, TaskManager taskManager, MovingObject o,
+			WorldPoint target) {
 		this.object = o;
-		this.main = main;
-		path = new MovePath(this, main.getTaskManager(), main.getWorld(),
-				o.getPosition(), target);
+		this.taskManager = taskManager;
+		path = new MovePath(this, taskManager, world, o.getPosition(), target);
 		object.updateRotation(path.seeNext());
 	}
 
@@ -22,7 +22,7 @@ public class MoveTask extends Task {
 				object.moveTo(next);
 				object.updateRotation(path.seeNext());
 			} else {
-				main.getTaskManager().addToDelete(this);
+				taskManager.addToDelete(this);
 			}
 		}
 	}

@@ -4,18 +4,16 @@ import java.util.ArrayList;
 
 public class VisionScope {
 
-	private Core core;
 	private Unit unit;
 
-	public VisionScope(Core core, Unit unit) {
-		this.core = core;
+	public VisionScope(Unit unit) {
 		this.unit = unit;
 	}
 
 	public String getParsedFrontendDataString() {
-		World w = core.getWorld();
-		LightManager lightMgr = core.getLightManager();
-		MovingObject obj = w.getObjectByUID(unit.getMovingObjUID());
+		World world = unit.getWorld();
+		LightManager lightMgr = unit.getWorld().getLightManager();
+		MovingObject obj = world.getObjectByUID(unit.getMovingObjUID());
 		String frontendData = "";
 
 		ArrayList<WorldPoint> wpList = new ArrayList<WorldPoint>();
@@ -25,7 +23,7 @@ public class VisionScope {
 				.getX() + 5; x++) {
 			for (int y = obj.getPosition().getY() - 5; y <= obj.getPosition()
 					.getY() + 5; y++) {
-				WorldPoint wp = w.getWP(x, y, obj.getPosition().getZ());
+				WorldPoint wp = world.getWP(x, y, obj.getPosition().getZ());
 				if (!lightMgr.isDarkAt(wp)) {
 					wpList.add(wp);
 					objList.addAll(wp.getAttachedMovingObjects());
@@ -33,7 +31,7 @@ public class VisionScope {
 			}
 		}
 
-		objList.remove(core.getWorld().getObjectByUID(unit.getMovingObjUID()));
+		objList.remove(world.getObjectByUID(unit.getMovingObjUID()));
 
 		for (WorldPoint wp : wpList) {
 			frontendData += "&wp:" + wp.getX() + ":" + wp.getY() + ":"

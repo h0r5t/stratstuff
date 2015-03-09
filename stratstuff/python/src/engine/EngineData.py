@@ -15,6 +15,7 @@ class EngineData():
         self.groundData = {}  # ground data, will be loaded
         self.elementData = {}  # element data, will be loaded
         self.objectData = {}  # object data, will be loaded
+        
         self.loadFromFilesystem()
         
     # ------------------ World changes ---------------------
@@ -164,9 +165,9 @@ class EngineData():
         return self.objectData
     
     def loadFromFilesystem(self):
-        self.loadGroundIDs()
-        self.loadElements()
-        self.loadObjects()
+        # self.loadGroundIDs()
+        # self.loadElements()
+        # self.loadObjects()
         self.loadGroundData()
         self.loadElementData()
         self.loadObjectData()

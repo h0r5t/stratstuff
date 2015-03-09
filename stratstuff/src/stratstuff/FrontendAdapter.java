@@ -135,21 +135,6 @@ public class FrontendAdapter {
 				main.getTaskManager().runTask(task, ID);
 			}
 
-			else if (name.equals("che")) {
-				int elementID = Integer.parseInt(command.split(" ")[1]);
-				int x = Integer.parseInt(command.split(" ")[2]);
-				int y = Integer.parseInt(command.split(" ")[3]);
-				int z = Integer.parseInt(command.split(" ")[4]);
-				WorldPoint wp = main.getWorld().getWP(x, y, z);
-				main.getWorld().setElementForWP(false, wp, elementID);
-			}
-
-			else if (name.equals("remObj")) {
-				int uniqueID = Integer.parseInt(command.split(" ")[1]);
-				MovingObject o = main.getObjectManager().getObject(uniqueID);
-				main.getWorld().removeObjectFromWorld(o);
-			}
-
 			else if (name.equals("dispInfo")) {
 				String infoString = command.split(" ")[1];
 				main.getCanvas().setInfoScreen(
@@ -159,7 +144,7 @@ public class FrontendAdapter {
 			else if (name.equals("getScope")) {
 				int objUID = Integer.parseInt(command.split(" ")[1]);
 				int eventID = Integer.parseInt(command.split(" ")[2]);
-				Unit unit = main.getWorld().getUnitByObjectID(objUID);
+				Unit unit = main.getUnitManager().getUnitByObjectID(objUID);
 				String frontendMsg = FrontendMessaging
 						.eventOccurred(eventID, unit.getVisionScope(main)
 								.getParsedFrontendDataString());
@@ -172,14 +157,17 @@ public class FrontendAdapter {
 				int y = Integer.parseInt(command.split(" ")[3]);
 				int z = Integer.parseInt(command.split(" ")[4]);
 				int eventID = Integer.parseInt(command.split(" ")[5]);
-				WorldPoint wp = main.getWorld().getWP(x, y, z);
-				main.getWorld().getObjectByUID(objUID)
-						.turnToFaceWorldPoint(eventID, wp);
+				World world = main.getObjectManager().getObject(objUID)
+						.getWorld();
+				WorldPoint wp = world.getWP(x, y, z);
+				world.getObjectByUID(objUID).turnToFaceWorldPoint(eventID, wp);
 			}
 
 			else if (name.equals("fire")) {
 				int objUID = Integer.parseInt(command.split(" ")[1]);
-				main.getWorld().getUnitByObjectID(objUID).fireBullet(main);
+				World world = main.getObjectManager().getObject(objUID)
+						.getWorld();
+				world.getUnitByObjectID(objUID).fireBullet(world);
 			}
 
 			else if (name.equals("mine")) {
@@ -188,22 +176,38 @@ public class FrontendAdapter {
 				int y = Integer.parseInt(command.split(" ")[3]);
 				int z = Integer.parseInt(command.split(" ")[4]);
 				int eventID = Integer.parseInt(command.split(" ")[5]);
-				WorldPoint wp = main.getWorld().getWP(x, y, z);
-				main.getWorld().getUnitByObjectID(objUID)
-						.mineWorldPoint(main, eventID, wp);
+				World world = main.getObjectManager().getObject(objUID)
+						.getWorld();
+				WorldPoint wp = world.getWP(x, y, z);
+				world.getUnitByObjectID(objUID).mineWorldPoint(world, eventID,
+						wp);
 			}
 
 			else if (name.equals("radialsignal")) {
 				int objUID = Integer.parseInt(command.split(" ")[1]);
 				String message = command.split(" ")[2];
-				WorldPoint wp = main.getWorld().getObjectByUID(objUID)
-						.getPosition();
-				RadialSignal signal = new RadialSignal(main, wp, message);
-				main.getWorld().addMicroObject(signal);
+				World world = main.getObjectManager().getObject(objUID)
+						.getWorld();
+				WorldPoint wp = world.getObjectByUID(objUID).getPosition();
+				RadialSignal signal = new RadialSignal(world, wp, message);
+				world.addMicroObject(signal);
 			}
 
-			else {
-				main.getConsole().commandEntered(true, command);
+			else if (name.equals("move")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int x = Integer.parseInt(command.split(" ")[2]);
+				int y = Integer.parseInt(command.split(" ")[3]);
+				int z = Integer.parseInt(command.split(" ")[4]);
+				int eventID = Integer.parseInt(command.split(" ")[5]);
+
+				World world = main.getObjectManager().getObject(objUID)
+						.getWorld();
+
+				MovingObject o = main.getObjectManager().getObject(objUID);
+				MoveTask task = new MoveTask(world, main.getTaskManager(), main
+						.getObjectManager().getObject(objUID), world.getWP(x,
+						y, z));
+				main.getTaskManager().runTask(task, eventID);
 			}
 		}
 	}
@@ -212,7 +216,9 @@ public class FrontendAdapter {
 		boolean bool = Boolean.parseBoolean(command[2]);
 		int objID = Integer.parseInt(command[1]);
 
-		main.getWorld().getObjectByUID(objID).setPaintBool(bool);
+		World world = main.getObjectManager().getObject(objID).getWorld();
+
+		world.getObjectByUID(objID).setPaintBool(bool);
 	}
 
 	public void sendStartMessage() {

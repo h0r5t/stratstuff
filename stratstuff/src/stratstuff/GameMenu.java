@@ -122,7 +122,7 @@ public class GameMenu implements Drawable {
 		core.getFrontendAdapter().addToQueue(frontendMessage);
 		// needs to be changed TEST ONLY
 
-		World w = core.getWorld();
+		World w = core.getVisualManager().getRenderedWorld();
 		WorldPoint p = w.getWP(area.getX(), area.getY(), area.getZ());
 		w.removeElementFromWP(p);
 	}
@@ -171,11 +171,14 @@ public class GameMenu implements Drawable {
 
 	private void drawCursorPositionInfo(Graphics2D g) {
 		GameCursor cursor = core.getCursor();
+		if (cursor == null)
+			return;
 		int x = cursor.getX();
 		int y = cursor.getY();
 		int z = core.getCamera().getLayer();
 
-		WorldPoint cursorWP = core.getWorld().getWP(x, y, z);
+		WorldPoint cursorWP = core.getVisualManager().getRenderedWorld()
+				.getWP(x, y, z);
 		int groundID = cursorWP.getGround();
 		int elementID = cursorWP.getAttachedElement();
 		ArrayList<MovingObject> objects = cursorWP.getAttachedMovingObjects();

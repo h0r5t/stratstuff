@@ -1,20 +1,50 @@
 package stratstuff;
 
+import java.awt.Image;
 import java.util.HashMap;
 
 import pathfinder.Graph;
 import pathfinder.GraphEdge;
 
-public class World extends Graph implements Saveable {
+public class World extends Graph implements Saveable, Updatable {
 
 	private Integer[][][] worldPointArray;
 	private HashMap<MovingObject, WorldPoint> objectMap;
 	private Core main;
+	private String myName;
+	private LightManager myLightManager;
+	private GameCamera myGameCamera;
+	private GameCursor myGameCursor;
 
-	public World(Core main) {
-		worldPointArray = new Integer[GameSettings.WORLD_DEPTH][GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT];
+	private int width;
+	private int height;
+	private int depth;
+
+	public World(Core main, String name, int width, int height, int depth) {
+		worldPointArray = new Integer[depth][width][height];
+		this.width = width;
+		this.height = height;
+		this.depth = depth;
 		objectMap = new HashMap<MovingObject, WorldPoint>();
 		this.main = main;
+		this.myName = name;
+		myLightManager = new LightManager(this);
+	}
+
+	public GameCamera getGameCamera() {
+		return myGameCamera;
+	}
+
+	public void setGameCamera(GameCamera myGameCamera) {
+		this.myGameCamera = myGameCamera;
+	}
+
+	public GameCursor getGameCursor() {
+		return myGameCursor;
+	}
+
+	public void setGameCursor(GameCursor myGameCursor) {
+		this.myGameCursor = myGameCursor;
 	}
 
 	public void addWorldPoint(WorldPoint p) {
@@ -94,22 +124,18 @@ public class World extends Graph implements Saveable {
 
 	public void moveObjectTo(MovingObject o, WorldPoint p) {
 		WorldPoint old = o.getPosition();
-		main.getLightManager().unregisterLightSource(old);
+		myLightManager.unregisterLightSource(old);
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
 		objectMap.put(o, p);
-		Core.tellFrontend(FrontendMessaging.objectMovedUpdate(o.getUniqueID(),
-				p.getX(), p.getY(), p.getZ()));
-		main.getLightManager().registerLightSource(p);
+		myLightManager.registerLightSource(p);
 	}
 
 	public void spawnObject(MovingObject o, WorldPoint p) {
-		main.getLightManager().registerLightSource(p);
+		myLightManager.registerLightSource(p);
 		objectMap.put(o, p);
 		p.attachMovingObject(o);
 		main.getObjectManager().addUnit(o);
-		Core.tellFrontend(FrontendMessaging.objectSpawnedUpdate(
-				o.getUniqueID(), o.getTypeInt(), p.getX(), p.getY(), p.getZ()));
 	}
 
 	public void removeObjectFromWorld(MovingObject o) {
@@ -144,28 +170,28 @@ public class World extends Graph implements Saveable {
 			}
 		}
 
-		if (p.getMyEdges().canRight() == false && x < GameSettings.WORLD_WIDTH) {
+		if (p.getMyEdges().canRight() == false && x < width) {
 			if (a.canRight()) {
 				addEdge(worldPointArray[z][x][y], worldPointArray[z][x + 1][y],
 						0);
 			}
 		}
 
-		else if (p.getMyEdges().canRight() && x < GameSettings.WORLD_WIDTH) {
+		else if (p.getMyEdges().canRight() && x < width) {
 			if (a.canRight() == false) {
 				removeEdge(worldPointArray[z][x][y],
 						worldPointArray[z][x + 1][y]);
 			}
 		}
 
-		if (p.getMyEdges().canDown() == false && y < GameSettings.WORLD_HEIGHT) {
+		if (p.getMyEdges().canDown() == false && y < height) {
 			if (a.canDown()) {
 				addEdge(worldPointArray[z][x][y], worldPointArray[z][x][y + 1],
 						0);
 			}
 		}
 
-		else if (p.getMyEdges().canDown() && y < GameSettings.WORLD_HEIGHT) {
+		else if (p.getMyEdges().canDown() && y < height) {
 			if (a.canDown() == false) {
 				removeEdge(worldPointArray[z][x][y],
 						worldPointArray[z][x][y + 1]);
@@ -252,12 +278,12 @@ public class World extends Graph implements Saveable {
 						Element.getByName("ladderdown"));
 			}
 			if (!wasLightSource && p.isLightSource()) {
-				main.getLightManager().registerLightSource(p.getX(), p.getY(),
-						p.getZ());
+				myLightManager
+						.registerLightSource(p.getX(), p.getY(), p.getZ());
 
 			} else if (wasLightSource && !p.isLightSource()) {
-				main.getLightManager().unregisterLightSource(p.getX(),
-						p.getY(), p.getZ());
+				myLightManager.unregisterLightSource(p.getX(), p.getY(),
+						p.getZ());
 			}
 		}
 
@@ -314,10 +340,10 @@ public class World extends Graph implements Saveable {
 			if (x - 1 > 0) {
 				left = getWP(x - 1, y, z);
 			}
-			if (x + 1 < GameSettings.WORLD_WIDTH) {
+			if (x + 1 < width) {
 				right = getWP(x + 1, y, z);
 			}
-			if (y + 1 < GameSettings.WORLD_HEIGHT) {
+			if (y + 1 < height) {
 				down = getWP(x, y + 1, z);
 			}
 			if (y - 1 > 0) {
@@ -357,10 +383,10 @@ public class World extends Graph implements Saveable {
 			if (x - 1 > 0) {
 				left = getWP(x - 1, y, z);
 			}
-			if (x + 1 < GameSettings.WORLD_WIDTH) {
+			if (x + 1 < width) {
 				right = getWP(x + 1, y, z);
 			}
-			if (y + 1 < GameSettings.WORLD_HEIGHT) {
+			if (y + 1 < height) {
 				down = getWP(x, y + 1, z);
 			}
 			if (y - 1 > 0) {
@@ -422,9 +448,9 @@ public class World extends Graph implements Saveable {
 	}
 
 	public void initialCreationOfEdges() {
-		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+		for (int z = 0; z < depth; z++) {
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
 					WorldPoint current = getWP(x, y, z);
 
 					GraphEdgeInfo a = new GraphEdgeInfo(current);
@@ -439,7 +465,7 @@ public class World extends Graph implements Saveable {
 							}
 						}
 
-						if (x < GameSettings.WORLD_WIDTH - 1) {
+						if (x < width - 1) {
 							WorldPoint right = getWP(x + 1, y, z);
 							if (right.collides() == false) {
 								a.setRight(true);
@@ -453,7 +479,7 @@ public class World extends Graph implements Saveable {
 							}
 						}
 
-						if (y < GameSettings.WORLD_HEIGHT - 1) {
+						if (y < height - 1) {
 							WorldPoint down = getWP(x, y + 1, z);
 							if (down.collides() == false) {
 								a.setDown(true);
@@ -466,7 +492,7 @@ public class World extends Graph implements Saveable {
 					int elementID = current.getAttachedElement();
 
 					if (elementID != -1) {
-						if (z < GameSettings.WORLD_DEPTH - 1) {
+						if (z < depth - 1) {
 							if (Element.isLadderDown(elementID)) {
 								addZEdge(current, getWP(x, y, z + 1));
 							}
@@ -492,6 +518,18 @@ public class World extends Graph implements Saveable {
 		return main.getObjectManager().getObject(objID);
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
+
 	@Override
 	public String save() {
 		return null;
@@ -501,5 +539,21 @@ public class World extends Graph implements Saveable {
 	public Saveable load(String fromString) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void update() {
+	}
+
+	public String getName() {
+		return myName;
+	}
+
+	public Image getShadowImage(WorldPoint wp) {
+		return myLightManager.getShadowImage(wp);
+	}
+
+	public LightManager getLightManager() {
+		return myLightManager;
 	}
 }

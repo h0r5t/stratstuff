@@ -1,24 +1,19 @@
 package stratstuff;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Core implements Runnable {
 
-	private World world;
-	private GameCamera gameCamera;
-	private GameCursor gameCursor;
 	private GameMenu gameMenu;
-
-	private static DebugConsole debugConsole;
 
 	private ArrayList<Updatable> updatables;
 
 	private VisualManager visualManager;
-	private WorldManager worldManager;
+	private SimulationManager simulationManager;
 	private InputManager inputManager;
 	private TaskManager taskManager;
 	private ObjectManager objectManager;
-	private LightManager lightManager;
 	private UnitManager unitManager;
 	private ItemManager itemManager;
 
@@ -45,46 +40,38 @@ public class Core implements Runnable {
 
 		gameMenu = new GameMenu(this);
 
-		debugConsole = new DebugConsole(this, windowAdapter);
-		updatables.add(debugConsole);
-
-		gameCamera = new GameCamera(this);
-		updatables.add(gameCamera);
-		gameCursor = new GameCursor(gameCamera);
 		timer = new SimpleTimer();
-
-		lightManager = new LightManager(this);
-		updatables.add(lightManager);
 
 		createUpdatables();
 
-		loadOrGenerateWorld();
+		loadWorlds();
 
-		visualManager = new VisualManager(this, world, gameCamera,
-				inputManager, gameCursor, windowAdapter, gameMenu);
+		visualManager = new VisualManager(this, inputManager, windowAdapter,
+				gameMenu);
 		updatables.add(visualManager);
 
-		lightManager.initLights();
-
-		world.initialCreationOfEdges();
+		simulationManager.initLights();
+		simulationManager.initialCreationOfEdges();
 
 		frontendAdapter.startPythonFrontend();
 
 		developerFrame.makeUnitComboBox();
 
+		visualManager.setRenderedWorld(simulationManager
+				.getWorldWithName("world0"));
+
 		visualManager.activate();
 	}
 
-	private void loadOrGenerateWorld() {
-		if (GameSettings.GENERATE_NEW_WORLD) {
-			if (GameSettings.KEEP_STUFF)
-				world = PersistanceManager.load(this, "test");
-			else
-				world = new World(this);
-			world = WorldGenerator.generateWorld(this, world);
-			PersistanceManager.save(this, "test");
-		} else {
-			world = PersistanceManager.load(this, "test");
+	private void loadWorlds() {
+		World world;
+		File worldsDir = new File(FileSystem.WORLDS_DIR);
+
+		for (File f : worldsDir.listFiles()) {
+			if (f.getName().startsWith("world")) {
+				world = PersistanceManager.load(this, f.getName());
+				simulationManager.addSimulator(new WorldSimulator(this, world));
+			}
 		}
 	}
 
@@ -95,8 +82,8 @@ public class Core implements Runnable {
 		developerFrame = new DesignFrame(this);
 		updatables.add(developerFrame);
 
-		worldManager = new WorldManager(world);
-		updatables.add(worldManager);
+		simulationManager = new SimulationManager();
+		updatables.add(simulationManager);
 
 		taskManager = new TaskManager(this);
 		updatables.add(taskManager);
@@ -110,12 +97,12 @@ public class Core implements Runnable {
 		itemManager = new ItemManager(this);
 		updatables.add(itemManager);
 
-		inputManager = new InputManager(this, gameCamera, gameCursor, gameMenu);
+		inputManager = new InputManager(this, gameMenu);
 		updatables.add(inputManager);
 	}
 
 	public GameCursor getCursor() {
-		return gameCursor;
+		return visualManager.getRenderedWorld().getGameCursor();
 	}
 
 	public void togglePause() {
@@ -154,7 +141,6 @@ public class Core implements Runnable {
 				} else {
 					visualManager.update();
 					inputManager.update();
-					gameCamera.update();
 					Thread.sleep(GameSettings.TICK_MILLIS);
 				}
 			}
@@ -193,20 +179,12 @@ public class Core implements Runnable {
 		}
 	}
 
-	public static void printDebug(String message) {
-		debugConsole.print(message);
-	}
-
 	public static void main(String[] args) {
 		new Thread(new Core()).start();
 	}
 
 	public GameCamera getCamera() {
-		return gameCamera;
-	}
-
-	public World getWorld() {
-		return world;
+		return visualManager.getRenderedWorld().getGameCamera();
 	}
 
 	public GamePanel getCanvas() {
@@ -225,25 +203,21 @@ public class Core implements Runnable {
 		return frontendAdapter;
 	}
 
-	public DebugConsole getConsole() {
-		return debugConsole;
-	}
-
-	public LightManager getLightManager() {
-		return lightManager;
-	}
-
 	public static void tellFrontend(String message) {
 		frontendAdapter.addToQueue(message);
 	}
 
 	public void save() {
-		PersistanceManager.save(this, "test");
+		simulationManager.saveWorlds(this);
 		developerFrame.save();
 	}
 
 	public InputManager getInputManager() {
 		return inputManager;
+	}
+
+	public VisualManager getVisualManager() {
+		return visualManager;
 	}
 
 	public DesignFrame getDeveloperFrame() {
@@ -260,5 +234,15 @@ public class Core implements Runnable {
 
 	public ItemManager getItemManager() {
 		return itemManager;
+	}
+
+	public void test0() {
+		visualManager.setRenderedWorld(simulationManager
+				.getWorldWithName("world0"));
+	}
+
+	public void test1() {
+		visualManager.setRenderedWorld(simulationManager
+				.getWorldWithName("world1"));
 	}
 }

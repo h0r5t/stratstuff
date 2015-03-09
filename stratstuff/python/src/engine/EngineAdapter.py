@@ -43,6 +43,7 @@ class EngineAdapterClass:
         robot = locate("src.custom." + designName + "." + designName)(self, int(objUID))
         robot.start()
         self.robotsMap[str(objUID)] = robot
+        print "robot instance created"
         
     def stopRobot(self, objUID):
         robot = self.robotsMap[str(objUID)]
@@ -163,15 +164,7 @@ class EngineAdapterClass:
         self.remoteEvents[eventID] = event
         self.messages.append("move " + str(objectID) + " " + str(x) + " " + str(y) + " " + str(z) + " " + str(eventID))
         return event
-        
-    def registerObjectSpawn(self, unitType, newObjID, x, y, z):
-        self.messages.append("spawn " + str(unitType) + " " + str(newObjID) + " " + str(x) + " " + str(y) + " " + str(z))
-        self.world.addMovingObject(newObjID, unitType, x, y, z)
-        
-    def registerObjectRemoval(self, uniqueObjID):
-        self.messages.append("remObj " + str(uniqueObjID))
-        self.world.removeMovingObject(uniqueObjID)
-     
+             
     def registerSetPaintObject(self, unitID, boolVal):
         self.messages.append("paintObj " + str(unitID) + " " + str(boolVal))
       

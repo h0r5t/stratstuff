@@ -12,14 +12,15 @@ public class LightManager implements Updatable {
 
 	// light levels 0-5, 0 = darkest
 
-	private Core core;
+	private World world;
 	private int[][][] lightArray;
 	private ArrayList<WorldPoint> lightSources;
 	private HashMap<Integer, Image> imageMap;
 
-	public LightManager(Core core) {
-		this.core = core;
-		lightArray = new int[GameSettings.WORLD_WIDTH][GameSettings.WORLD_HEIGHT][GameSettings.WORLD_DEPTH];
+	public LightManager(World world) {
+		this.world = world;
+		lightArray = new int[world.getWidth()][world.getHeight()][world
+				.getDepth()];
 		lightSources = new ArrayList<WorldPoint>();
 		try {
 			initImages();
@@ -45,9 +46,9 @@ public class LightManager implements Updatable {
 	}
 
 	public void initLights() {
-		for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-			for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
-				for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
+		for (int x = 0; x < world.getWidth(); x++) {
+			for (int y = 0; y < world.getHeight(); y++) {
+				for (int z = 0; z < world.getDepth(); z++) {
 					if (z > 0) {
 						lightArray[x][y][z] = 5;
 					} else {
@@ -57,11 +58,10 @@ public class LightManager implements Updatable {
 			}
 		}
 
-		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
-					int elementID = core.getWorld().getWP(x, y, z)
-							.getAttachedElement();
+		for (int z = 0; z < world.getDepth(); z++) {
+			for (int x = 0; x < world.getWidth(); x++) {
+				for (int y = 0; y < world.getHeight(); y++) {
+					int elementID = world.getWP(x, y, z).getAttachedElement();
 					if (Element.isLightSource(elementID)) {
 						registerLightSource(x, y, z);
 					}
@@ -72,7 +72,7 @@ public class LightManager implements Updatable {
 	}
 
 	public void registerLightSource(int x, int y, int z) {
-		WorldPoint p = core.getWorld().getWP(x, y, z);
+		WorldPoint p = world.getWP(x, y, z);
 		lightSources.add(p);
 		updateLightLevel(p);
 	}
@@ -93,8 +93,8 @@ public class LightManager implements Updatable {
 
 		for (int yy = y - 10; yy <= y + 10; yy++) {
 			for (int xx = x - 10; xx <= x + 10; xx++) {
-				if (xx >= 0 && xx < GameSettings.WORLD_WIDTH && yy >= 0
-						&& yy < GameSettings.WORLD_HEIGHT) {
+				if (xx >= 0 && xx < world.getWidth() && yy >= 0
+						&& yy < world.getHeight()) {
 					makeBright(xx - x, yy - y, xx, yy, z);
 				}
 			}
@@ -140,15 +140,15 @@ public class LightManager implements Updatable {
 	}
 
 	public void unregisterLightSource(int x, int y, int z) {
-		WorldPoint p = core.getWorld().getWP(x, y, z);
+		WorldPoint p = world.getWP(x, y, z);
 		lightSources.remove(p);
 		updateLight();
 	}
 
 	private void updateLight() {
-		for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-			for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
+		for (int z = 0; z < world.getDepth(); z++) {
+			for (int x = 0; x < world.getWidth(); x++) {
+				for (int y = 0; y < world.getHeight(); y++) {
 					if (z > 0) {
 						lightArray[x][y][z] = 5;
 					} else {

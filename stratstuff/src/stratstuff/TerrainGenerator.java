@@ -23,7 +23,7 @@ public class TerrainGenerator extends WorldPartModificator {
 				/ WorldGeneratorSettings.DIAMOND_DIVISOR;
 
 		Area3D underGroundBounds = new Area3D(0, 0, 1, bounds.getW(),
-				bounds.getH(), GameSettings.WORLD_DEPTH);
+				bounds.getH(), world.getDepth());
 
 		for (int i = 0; i < amountOfCoal; i++) {
 			int id = Element.getByName("coal");

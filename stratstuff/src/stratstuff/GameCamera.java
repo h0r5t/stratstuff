@@ -11,10 +11,11 @@ public class GameCamera implements Updatable {
 	private int cameraSpeedY;
 	private int xInactiveCounter = 5;
 	private int yInactiveCounter = 5;
-	private Core main;
+	private World world;
+	private GameCursor cursor;
 
-	public GameCamera(Core main) {
-		this.main = main;
+	public GameCamera(World world) {
+		this.world = world;
 		cameraXWP = 0;
 		cameraYWP = 0;
 		cameraMicroX = 0;
@@ -24,8 +25,16 @@ public class GameCamera implements Updatable {
 		cameraLayer = 0;
 	}
 
+	public void setCursor(GameCursor c) {
+		this.cursor = c;
+	}
+
+	public World getWorld() {
+		return world;
+	}
+
 	public void goDeeper() {
-		if (cameraLayer < GameSettings.WORLD_DEPTH - 1) {
+		if (cameraLayer < world.getDepth() - 1) {
 			cameraLayer++;
 		}
 	}
@@ -79,7 +88,7 @@ public class GameCamera implements Updatable {
 
 	public void right() {
 		xInactiveCounter = 5;
-		if (getEndX() > GameSettings.WORLD_WIDTH) {
+		if (getEndX() > world.getWidth()) {
 			return;
 		}
 		cameraSpeedX += 5;
@@ -101,7 +110,7 @@ public class GameCamera implements Updatable {
 
 	public void down() {
 		yInactiveCounter = 5;
-		if (getEndY() > GameSettings.WORLD_HEIGHT) {
+		if (getEndY() > world.getHeight()) {
 			return;
 		}
 		cameraSpeedY += 5;
@@ -112,27 +121,26 @@ public class GameCamera implements Updatable {
 
 	private void moveUp() {
 		cameraYWP--;
-		main.getCursor().moveUp();
+		cursor.moveUp();
 	}
 
 	private void moveDown() {
 		cameraYWP++;
-		main.getCursor().moveDown();
+		cursor.moveDown();
 	}
 
 	private void moveRight() {
 		cameraXWP++;
-		main.getCursor().moveRight();
+		cursor.moveRight();
 	}
 
 	private void moveLeft() {
 		cameraXWP--;
-		main.getCursor().moveLeft();
+		cursor.moveLeft();
 	}
 
 	@Override
 	public void update() {
-
 		xInactiveCounter--;
 		yInactiveCounter--;
 		if (xInactiveCounter < 0)
@@ -158,14 +166,14 @@ public class GameCamera implements Updatable {
 		if (cameraXWP < 0) {
 			xInactiveCounter = 2;
 			cameraSpeedX += 2;
-		} else if (getEndX() > GameSettings.WORLD_WIDTH) {
+		} else if (getEndX() > world.getWidth()) {
 			xInactiveCounter = 2;
 			cameraSpeedX -= 2;
 		}
 		if (cameraYWP < 0) {
 			yInactiveCounter = 2;
 			cameraSpeedY += 2;
-		} else if (getEndY() > GameSettings.WORLD_HEIGHT) {
+		} else if (getEndY() > world.getHeight()) {
 			yInactiveCounter = 2;
 			cameraSpeedY -= 2;
 		}
@@ -183,7 +191,7 @@ public class GameCamera implements Updatable {
 				moveRight();
 				cameraMicroX -= t;
 			} else if (cameraMicroX < 0) {
-				if (getEndX() == GameSettings.WORLD_WIDTH) {
+				if (getEndX() == world.getWidth()) {
 					cameraSpeedX = 0;
 				}
 				moveLeft();
@@ -201,7 +209,7 @@ public class GameCamera implements Updatable {
 				moveDown();
 				cameraMicroY -= t;
 			} else if (cameraMicroY < 0) {
-				if (getEndY() == GameSettings.WORLD_HEIGHT) {
+				if (getEndY() == world.getHeight()) {
 					cameraSpeedY = 0;
 				}
 				moveUp();

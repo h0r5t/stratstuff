@@ -11,9 +11,11 @@ public class Item implements Saveable {
 	private String infoText;
 	private static HashMap<String, LoadedInfo> info;
 	private static LoadedInfo myInfo;
+	private World world;
 
 	public Item(World w, int uniqueID, int itemType, int linkedObjUID,
 			int ownerUnitUID, String infoText) {
+		this.world = w;
 		myInfo = info.get(itemType + "");
 		this.uniqueID = uniqueID;
 		this.itemType = itemType;
@@ -57,5 +59,9 @@ public class Item implements Saveable {
 
 	public static int getLinkedObjectType(int itemType) {
 		return info.get("" + itemType).getValueInt("object");
+	}
+
+	public World getWorld() {
+		return world;
 	}
 }

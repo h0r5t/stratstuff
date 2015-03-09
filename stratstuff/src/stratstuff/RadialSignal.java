@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public class RadialSignal extends Signal {
 
-	private Core core;
+	private World world;
 	private WorldPoint source;
 	private String message;
 	private Color color = Color.RED;
@@ -13,9 +13,9 @@ public class RadialSignal extends Signal {
 	private int radiusIncrease = 5;
 	private final int maxRadius = 255;
 
-	public RadialSignal(Core core, WorldPoint source, String message) {
+	public RadialSignal(World world, WorldPoint source, String message) {
 		super(source);
-		this.core = core;
+		this.world = world;
 		this.source = source;
 		this.message = message;
 		source.addMicroObject(this);
@@ -31,7 +31,7 @@ public class RadialSignal extends Signal {
 		currentRadius += radiusIncrease;
 		if (currentRadius > maxRadius) {
 			source.removeMicroObject(this);
-			core.getWorld().removeMicroObject(this);
+			world.removeMicroObject(this);
 			return;
 		}
 		color = lowerAlpha(color);
@@ -40,7 +40,8 @@ public class RadialSignal extends Signal {
 	@Override
 	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
 		g.setColor(color);
-		g.drawOval(xinpixels - currentRadius, yinpixels - currentRadius,
+		g.drawOval(xinpixels - currentRadius + GameSettings.TILE_SIZE / 2,
+				yinpixels - currentRadius + GameSettings.TILE_SIZE / 2,
 				currentRadius * 2, currentRadius * 2);
 	}
 

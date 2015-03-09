@@ -20,6 +20,7 @@ public class GameCursor implements Drawable {
 
 	public GameCursor(GameCamera camera) {
 		this.camera = camera;
+		camera.setCursor(this);
 		x = 10;
 		y = 10;
 		try {
@@ -31,7 +32,7 @@ public class GameCursor implements Drawable {
 	}
 
 	public void moveRight() {
-		if (x < GameSettings.WORLD_WIDTH - 1)
+		if (x < camera.getWorld().getWidth() - 1)
 			x++;
 	}
 
@@ -41,7 +42,7 @@ public class GameCursor implements Drawable {
 	}
 
 	public void moveDown() {
-		if (y < GameSettings.WORLD_HEIGHT - 1)
+		if (y < camera.getWorld().getHeight() - 1)
 			y++;
 	}
 

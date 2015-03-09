@@ -1,6 +1,7 @@
 package stratstuff;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,7 +13,12 @@ public class PersistanceManager {
 	// Rest is for now saved in a list form with: data x y z
 
 	public static World load(Core main, String worldName) {
-		World world = new World(main);
+		int[] worldSize = loadWorldSize(worldName);
+		int width = worldSize[0];
+		int height = worldSize[1];
+		int depth = worldSize[2];
+
+		World world = new World(main, worldName, width, height, depth);
 
 		world = loadGroundIDs(world, worldName);
 		world = loadAndAddElements(world, worldName);
@@ -21,6 +27,25 @@ public class PersistanceManager {
 		world = loadAndAddItems(world, worldName);
 
 		return world;
+	}
+
+	private static int[] loadWorldSize(String worldName) {
+		int[] size = new int[3];
+		try {
+			Scanner scanner = new Scanner(getSizeFile(worldName));
+
+			String temp;
+			int i = 0;
+			while (scanner.hasNextLine()) {
+				temp = scanner.nextLine();
+				size[i] = Integer.parseInt(temp);
+				i++;
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return size;
 	}
 
 	private static World loadAndAddItems(World world, String worldName) {
@@ -85,7 +110,7 @@ public class PersistanceManager {
 
 	private static World loadGroundIDs(World w, String worldName) {
 		try {
-			for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
+			for (int z = 0; z < w.getDepth(); z++) {
 				File f = getLayerFile(worldName, z);
 
 				Scanner scanner = new Scanner(f);
@@ -105,8 +130,7 @@ public class PersistanceManager {
 					int groundID = Integer.parseInt(temp);
 					w.addWorldPoint(new WorldPoint(x, y, z, groundID));
 
-					if (x == GameSettings.WORLD_WIDTH - 1
-							&& y == GameSettings.WORLD_HEIGHT - 1) {
+					if (x == w.getWidth() - 1 && y == w.getHeight() - 1) {
 						break loop;
 					}
 
@@ -179,17 +203,36 @@ public class PersistanceManager {
 		return w;
 	}
 
-	public static void save(Core main, String worldName) {
-		saveGroundIDs(main.getWorld(), worldName);
-		saveElements(main.getWorld(), worldName);
-		saveObjects(main, worldName);
-		saveItems(main, worldName);
-		saveUnits(main, worldName);
-		generateItemsTxt();
+	public static void save(Core main, World world, String worldName) {
+		saveWorldSize(world, worldName);
+		saveGroundIDs(world, worldName);
+		saveElements(world, worldName);
+		saveObjects(main, world, worldName);
+		saveItems(main, world, worldName);
+		saveUnits(main, world, worldName);
+		generateItemsTxt(worldName);
 	}
 
-	private static void generateItemsTxt() {
-		File itemsTxt = new File(FileSystem.WORLDS_DIR + "/test/items.txt");
+	private static void saveWorldSize(World world, String worldName) {
+		try {
+			File f = getSizeFile(worldName);
+
+			PrintWriter writer = new PrintWriter(f);
+
+			writer.append(world.getWidth() + "\n");
+			writer.append(world.getHeight() + "\n");
+			writer.append(world.getDepth() + "");
+
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void generateItemsTxt(String name) {
+		File itemsTxt = new File(FileSystem.WORLDS_DIR + "/" + name
+				+ "/items.txt");
 		if (!itemsTxt.exists()) {
 			try {
 				itemsTxt.createNewFile();
@@ -201,13 +244,13 @@ public class PersistanceManager {
 
 	private static void saveGroundIDs(World w, String worldName) {
 		try {
-			for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
+			for (int z = 0; z < w.getDepth(); z++) {
 				File f = getLayerFile(worldName, z);
 
 				PrintWriter writer = new PrintWriter(f);
 
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
-					for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
+				for (int y = 0; y < w.getHeight(); y++) {
+					for (int x = 0; x < w.getWidth(); x++) {
 						String out = w.getWP(x, y, z).getGround() + " ";
 						writer.append(out);
 					}
@@ -227,9 +270,9 @@ public class PersistanceManager {
 			File f = getElementsFile(worldName);
 			PrintWriter writer = new PrintWriter(f);
 
-			for (int z = 0; z < GameSettings.WORLD_DEPTH; z++) {
-				for (int y = 0; y < GameSettings.WORLD_HEIGHT; y++) {
-					for (int x = 0; x < GameSettings.WORLD_WIDTH; x++) {
+			for (int z = 0; z < w.getDepth(); z++) {
+				for (int y = 0; y < w.getHeight(); y++) {
+					for (int x = 0; x < w.getWidth(); x++) {
 						int elementID = w.getWP(x, y, z).getAttachedElement();
 						if (elementID != -1) {
 							// defined
@@ -248,7 +291,7 @@ public class PersistanceManager {
 		}
 	}
 
-	private static void saveObjects(Core main, String worldName) {
+	private static void saveObjects(Core main, World world, String worldName) {
 		try {
 			File f = getObjectsFile(worldName);
 
@@ -258,6 +301,8 @@ public class PersistanceManager {
 					.getObjectManager().getUnits().values());
 
 			for (MovingObject object : objects) {
+				if (object.getWorld() != world)
+					continue;
 				String out = object.save() + "\n";
 				writer.append(out);
 			}
@@ -269,7 +314,7 @@ public class PersistanceManager {
 		}
 	}
 
-	private static void saveItems(Core main, String worldName) {
+	private static void saveItems(Core main, World world, String worldName) {
 		try {
 			File f = getItemsFile(worldName);
 
@@ -278,6 +323,8 @@ public class PersistanceManager {
 			ArrayList<Item> itemlist = main.getItemManager().getItemList();
 
 			for (Item item : itemlist) {
+				if (item.getWorld() != world)
+					continue;
 				String out = item.save() + "\n";
 				writer.append(out);
 			}
@@ -289,7 +336,7 @@ public class PersistanceManager {
 		}
 	}
 
-	private static void saveUnits(Core main, String worldName) {
+	private static void saveUnits(Core main, World world, String worldName) {
 		try {
 			File f = getUnitsFile(worldName);
 
@@ -298,6 +345,8 @@ public class PersistanceManager {
 			ArrayList<Unit> unitlist = main.getUnitManager().getUnitList();
 
 			for (Unit unit : unitlist) {
+				if (unit.getWorld() != world)
+					continue;
 				String out = unit.save() + "\n";
 				writer.append(out);
 			}
@@ -330,5 +379,9 @@ public class PersistanceManager {
 
 	private static File getUnitsFile(String worldName) {
 		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/units.txt");
+	}
+
+	private static File getSizeFile(String worldName) {
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/size.info");
 	}
 }

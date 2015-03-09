@@ -16,25 +16,20 @@ public class GamePanel extends JPanel {
 	private Image bufImage;
 	private Graphics bufG;
 
-	private Core core;
-	private World world;
 	private GameCamera cam;
 	private GameCursor cursor;
+	private Core core;
 	private InputManager inputHandler;
 	private VisualManager visualManager;
 	private GameMenu gameMenu;
 	private InfoScreen currentInfoScreen;
 
-	public GamePanel(Core core, World world, VisualManager visualManager,
-			InputManager handler, GameCamera cam, GameCursor cursor,
-			GameMenu gameMenu) {
+	public GamePanel(Core core, VisualManager visualManager,
+			InputManager handler, GameMenu gameMenu) {
 		this.core = core;
-		this.world = world;
 		this.visualManager = visualManager;
 		this.inputHandler = handler;
 		this.gameMenu = gameMenu;
-		this.cam = cam;
-		this.cursor = cursor;
 		addKeyListener(new AL());
 		setLayout(null);
 	}
@@ -48,6 +43,9 @@ public class GamePanel extends JPanel {
 
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		cam = visualManager.getRenderedWorld().getGameCamera();
+		cursor = visualManager.getRenderedWorld().getGameCursor();
 
 		drawWPs(g2);
 		drawMicroObjects(g2);
@@ -107,11 +105,14 @@ public class GamePanel extends JPanel {
 	}
 
 	private void drawWPs(Graphics2D g) {
+		World world = visualManager.getRenderedWorld();
+		if (cam == null)
+			return;
 		int layer = cam.getLayer();
 		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
 			for (int y = cam.getStartY(); y < cam.getEndY(); y++) {
-				if (x < 0 || y < 0 || x > GameSettings.WORLD_WIDTH - 1
-						|| y > GameSettings.WORLD_HEIGHT - 1) {
+				if (x < 0 || y < 0 || x > world.getWidth() - 1
+						|| y > world.getHeight() - 1) {
 					g.setColor(Color.BLACK);
 					g.fillRect((x - cam.getStartX()) * GameSettings.TILE_SIZE
 							- cam.getMicroX(), (y - cam.getStartY())
@@ -125,8 +126,8 @@ public class GamePanel extends JPanel {
 							(y - cam.getStartY()) * GameSettings.TILE_SIZE
 									- cam.getMicroY());
 
-					Image image = core.getLightManager().getShadowImage(
-							world.getWP(x, y, layer));
+					Image image = world
+							.getShadowImage(world.getWP(x, y, layer));
 					g.drawImage(image, (x - cam.getStartX())
 							* GameSettings.TILE_SIZE - cam.getMicroX(),
 							(y - cam.getStartY()) * GameSettings.TILE_SIZE
@@ -139,11 +140,14 @@ public class GamePanel extends JPanel {
 	}
 
 	private void drawMicroObjects(Graphics2D g2) {
+		World world = visualManager.getRenderedWorld();
+		if (cam == null)
+			return;
 		int layer = cam.getLayer();
 		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
 			for (int y = cam.getStartY(); y < cam.getEndY(); y++) {
-				if (x < 0 || y < 0 || x > GameSettings.WORLD_WIDTH - 1
-						|| y > GameSettings.WORLD_HEIGHT - 1)
+				if (x < 0 || y < 0 || x > world.getWidth() - 1
+						|| y > world.getHeight() - 1)
 					return;
 				world.getWP(x, y, layer).drawMicroObjects(
 						g2,
@@ -156,6 +160,8 @@ public class GamePanel extends JPanel {
 	}
 
 	private void drawCursor(Graphics2D g) {
+		if (cursor == null)
+			return;
 		cursor.draw(g, (cursor.getX() - cam.getStartX())
 				* GameSettings.TILE_SIZE - cam.getMicroX(),
 				(cursor.getY() - cam.getStartY()) * GameSettings.TILE_SIZE

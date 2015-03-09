@@ -84,6 +84,10 @@ public class MovingObject implements Drawable, Saveable {
 		return name;
 	}
 
+	public World getWorld() {
+		return world;
+	}
+
 	public int getCurrentAngleInDegrees() {
 		return texture.getCurrentAngle();
 	}

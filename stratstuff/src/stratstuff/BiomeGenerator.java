@@ -17,10 +17,10 @@ public class BiomeGenerator {
 	}
 
 	private void generateBiomes(World world) {
-		Area3D wholeWorld = new Area3D(0, 0, 0, GameSettings.WORLD_WIDTH,
-				GameSettings.WORLD_HEIGHT, GameSettings.WORLD_DEPTH);
-		Area3D surface = new Area3D(0, 0, 0, GameSettings.WORLD_WIDTH,
-				GameSettings.WORLD_HEIGHT, 1);
+		Area3D wholeWorld = new Area3D(0, 0, 0, world.getWidth(),
+				world.getHeight(), world.getDepth());
+		Area3D surface = new Area3D(0, 0, 0, world.getWidth(),
+				world.getHeight(), 1);
 
 		biomes.add(new BiomeWoods(surface));
 	}

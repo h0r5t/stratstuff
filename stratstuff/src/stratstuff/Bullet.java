@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public class Bullet extends MicroObject {
 
-	private Core core;
+	private World world;
 	private int myType;
 	private double microPosX = 50; // position on wp in percent
 	private double microPosY = 50;
@@ -16,17 +16,17 @@ public class Bullet extends MicroObject {
 
 	public static final int TYPE_SMALL_BULLET = 0;
 
-	public Bullet(Core core, int type, WorldPoint startWP,
+	public Bullet(World world, int type, WorldPoint startWP,
 			WorldPoint directionWP) {
-		this.core = core;
+		this.world = world;
 		this.myType = type;
 		currentWP = startWP;
 		calculateVector(startWP, directionWP);
 		currentWP.addMicroObject(this);
 	}
 
-	public Bullet(Core core, int type, WorldPoint startWP, int degree) {
-		this.core = core;
+	public Bullet(World world, int type, WorldPoint startWP, int degree) {
+		this.world = world;
 		this.myType = type;
 		currentWP = startWP;
 		calculateVector(startWP, degree);
@@ -87,18 +87,18 @@ public class Bullet extends MicroObject {
 				currentWP.removeMicroObject(this);
 				int newXPos = currentWP.getX() + xmoved;
 				int newYPos = currentWP.getY() + ymoved;
-				if (newXPos >= GameSettings.WORLD_WIDTH || newXPos < 0
-						|| newYPos >= GameSettings.WORLD_HEIGHT || newYPos < 0) {
+				if (newXPos >= world.getWidth() || newXPos < 0
+						|| newYPos >= world.getHeight() || newYPos < 0) {
 					// out of world bounds
 					currentWP = null;
-					core.getWorld().removeMicroObject(this);
+					world.removeMicroObject(this);
 					return;
 				}
-				WorldPoint newWP = core.getWorld().getWP(newXPos, newYPos,
+				WorldPoint newWP = world.getWP(newXPos, newYPos,
 						currentWP.getZ());
 				if (newWP.collides()) {
 					currentWP.removeMicroObject(this);
-					core.getWorld().removeMicroObject(this);
+					world.removeMicroObject(this);
 					return;
 				}
 				newWP.addMicroObject(this);

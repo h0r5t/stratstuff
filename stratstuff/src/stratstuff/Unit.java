@@ -12,10 +12,12 @@ public class Unit implements Saveable {
 	private ArrayList<Item> inventory;
 	private Design design;
 	private static HashMap<String, LoadedInfo> info;
+	private World world;
 
 	public Unit(Core core, World w, int uniqueID, int unitType, int objectUID,
 			String designName) {
 		LoadedInfo myInfo = info.get(unitType + "");
+		this.world = w;
 		myUniqueID = uniqueID;
 		myType = unitType;
 		myObject = w.getObjectByUID(objectUID);
@@ -58,26 +60,26 @@ public class Unit implements Saveable {
 		return myObject.getUniqueID();
 	}
 
-	public void fireBullet(Core core) {
-		Bullet b = new Bullet(core, 0, myObject.getPosition(),
+	public void fireBullet(World world) {
+		Bullet b = new Bullet(world, 0, myObject.getPosition(),
 				myObject.getCurrentAngleInDegrees());
-		core.getWorld().addMicroObject(b);
+		world.addMicroObject(b);
 	}
 
-	public void fireBullet(Core core, WorldPoint target) {
-		Bullet b = new Bullet(core, 0, myObject.getPosition(), target);
-		core.getWorld().addMicroObject(b);
+	public void fireBullet(World world, WorldPoint target) {
+		Bullet b = new Bullet(world, 0, myObject.getPosition(), target);
+		world.addMicroObject(b);
 	}
 
-	public void mineWorldPoint(Core core, int eventID, WorldPoint wp) {
+	public void mineWorldPoint(World world, int eventID, WorldPoint wp) {
 		Color color = new Color(0x33, 0xCC, 0xFF);
-		Laser laser = new Laser(core, color, 5000, myObject.getPosition(), wp,
+		Laser laser = new Laser(world, color, 5000, myObject.getPosition(), wp,
 				eventID);
-		core.getWorld().addMicroObject(laser);
+		world.addMicroObject(laser);
 	}
 
 	public VisionScope getVisionScope(Core core) {
-		return new VisionScope(core, this);
+		return new VisionScope(this);
 	}
 
 	@Override
@@ -97,5 +99,9 @@ public class Unit implements Saveable {
 
 	public static void loadFromInfoFile() {
 		info = InfoFileReader.readFile(FileSystem.DATA_FILE_UNITS);
+	}
+
+	public World getWorld() {
+		return world;
 	}
 }

@@ -14,11 +14,8 @@ public class InputManager implements Updatable {
 
 	private DefaultHashMap<Integer, Boolean> keyMap;
 
-	public InputManager(Core core, GameCamera cam, GameCursor cursor,
-			GameMenu menu) {
+	public InputManager(Core core, GameMenu menu) {
 		this.core = core;
-		this.camera = cam;
-		this.cursor = cursor;
 		this.menu = menu;
 
 		keyMap = new DefaultHashMap<Integer, Boolean>();
@@ -26,6 +23,9 @@ public class InputManager implements Updatable {
 
 	@Override
 	public void update() {
+		camera = core.getVisualManager().getRenderedWorld().getGameCamera();
+		cursor = core.getVisualManager().getRenderedWorld().getGameCursor();
+
 		if (keyMap.getDefault(KeyEvent.VK_W, false)) {
 			camera.up();
 		}
@@ -91,7 +91,8 @@ public class InputManager implements Updatable {
 					selectionArea.w = selectionArea.w - 1;
 				}
 				if (keyMap.getDefault(KeyEvent.VK_X, false)) {
-					if (selectionArea.d < GameSettings.WORLD_DEPTH - 1)
+					if (selectionArea.d < core.getVisualManager()
+							.getRenderedWorld().getDepth() - 1)
 						selectionArea.d = selectionArea.d + 1;
 					camera.goDeeper();
 				}
@@ -144,6 +145,14 @@ public class InputManager implements Updatable {
 			camera.goDeeper();
 		} else if (e.getKeyCode() == KeyEvent.VK_Y) {
 			camera.goHigher();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_G) {
+			core.test0();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_H) {
+			core.test1();
 		}
 
 	}

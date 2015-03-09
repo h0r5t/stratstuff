@@ -7,16 +7,16 @@ import java.awt.Stroke;
 
 public class Laser extends MicroObject {
 
-	private Core core;
+	private World world;
 	private Color laserColor;
 	private WorldPoint startWP;
 	private int vectorX, vectorY;
 	private int eventID;
 	private int durationMillis;
 
-	public Laser(Core core, Color color, int durationMillis,
+	public Laser(World world, Color color, int durationMillis,
 			WorldPoint startWP, WorldPoint targetWP, int eventID) {
-		this.core = core;
+		this.world = world;
 		laserColor = color;
 		this.startWP = startWP;
 		this.vectorX = (targetWP.getX() - startWP.getX())
@@ -32,7 +32,7 @@ public class Laser extends MicroObject {
 	public void update() {
 		durationMillis -= GameSettings.TICK_MILLIS;
 		if (durationMillis < 0) {
-			core.getWorld().removeMicroObject(this);
+			world.removeMicroObject(this);
 			startWP.removeMicroObject(this);
 			Core.tellFrontend(FrontendMessaging.eventOccurred(eventID, "true"));
 		}
