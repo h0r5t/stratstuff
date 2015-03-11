@@ -13,8 +13,8 @@ public class World extends Graph implements Saveable, Updatable {
 	private Core main;
 	private String myName;
 	private LightManager myLightManager;
-	private GameCamera myGameCamera;
-	private GameCursor myGameCursor;
+	private WorldCamera myGameCamera;
+	private WorldCursor myGameCursor;
 
 	private int width;
 	private int height;
@@ -31,19 +31,19 @@ public class World extends Graph implements Saveable, Updatable {
 		myLightManager = new LightManager(this);
 	}
 
-	public GameCamera getGameCamera() {
+	public WorldCamera getGameCamera() {
 		return myGameCamera;
 	}
 
-	public void setGameCamera(GameCamera myGameCamera) {
+	public void setGameCamera(WorldCamera myGameCamera) {
 		this.myGameCamera = myGameCamera;
 	}
 
-	public GameCursor getGameCursor() {
+	public WorldCursor getGameCursor() {
 		return myGameCursor;
 	}
 
-	public void setGameCursor(GameCursor myGameCursor) {
+	public void setGameCursor(WorldCursor myGameCursor) {
 		this.myGameCursor = myGameCursor;
 	}
 

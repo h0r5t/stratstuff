@@ -9,10 +9,70 @@ import java.util.Scanner;
 
 public class PersistanceManager {
 
-	// Ground save format: 1 1 1 ... 2 3 4 \n 2 3....
-	// Rest is for now saved in a list form with: data x y z
+	public static Galaxy loadGalaxy(Core core, String galaxyName) {
+		int[] galaxySize = loadGalaxySize(galaxyName);
+		int width = galaxySize[0];
+		int height = galaxySize[1];
 
-	public static World load(Core main, String worldName) {
+		Galaxy galaxy = new Galaxy(galaxyName, width, height);
+
+		galaxy = loadSectors(galaxy, galaxyName);
+
+		return galaxy;
+	}
+
+	private static Galaxy loadSectors(Galaxy galaxy, String galaxyName) {
+		try {
+			for (File f : getSectorFiles(galaxyName)) {
+				String posData = f.getName().replace(".sector", "");
+				int x = Integer.parseInt(posData.split("_")[0]);
+				int y = Integer.parseInt(posData.split("_")[1]);
+
+				Sector sector = new Sector(galaxy, x, y);
+				galaxy.setSector(sector);
+
+				Scanner scanner = new Scanner(f);
+
+				String temp;
+				while (scanner.hasNextLine()) {
+					temp = scanner.nextLine();
+
+					FloatingObject obj = FloatingObject.createFromSave(temp,
+							sector);
+
+					sector.addObject(obj);
+				}
+
+				scanner.close();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return galaxy;
+	}
+
+	private static int[] loadGalaxySize(String galaxyName) {
+		int[] size = new int[2];
+		try {
+			Scanner scanner = new Scanner(getGalaxySizeFile(galaxyName));
+
+			String temp;
+			int i = 0;
+			while (scanner.hasNextLine()) {
+				temp = scanner.nextLine();
+				size[i] = Integer.parseInt(temp);
+				i++;
+			}
+
+			scanner.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return size;
+	}
+
+	public static World loadWorld(Core main, String worldName) {
 		int[] worldSize = loadWorldSize(worldName);
 		int width = worldSize[0];
 		int height = worldSize[1];
@@ -41,6 +101,8 @@ public class PersistanceManager {
 				size[i] = Integer.parseInt(temp);
 				i++;
 			}
+
+			scanner.close();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -203,7 +265,51 @@ public class PersistanceManager {
 		return w;
 	}
 
-	public static void save(Core main, World world, String worldName) {
+	public static void saveGalaxy(Galaxy g) {
+		saveGalaxySize(g, g.getName());
+		saveGalaxySectors(g);
+	}
+
+	private static void saveGalaxySectors(Galaxy g) {
+		try {
+			for (Sector sector : g.getAllSectors()) {
+				if (sector == null)
+					continue;
+				File f = getSectorFile(g.getName(), sector.getXPos(),
+						sector.getYPos());
+
+				PrintWriter writer = new PrintWriter(f);
+
+				for (FloatingObject obj : sector.getFloatingObjects()) {
+					writer.append(obj.save());
+					writer.append("\n");
+				}
+
+				writer.close();
+
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void saveGalaxySize(Galaxy galaxy, String galaxyName) {
+		try {
+			File f = getGalaxySizeFile(galaxyName);
+
+			PrintWriter writer = new PrintWriter(f);
+
+			writer.append(galaxy.getGalaxyWidth() + "\n");
+			writer.append(galaxy.getGalaxyHeight() + "");
+
+			writer.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveWorld(Core main, World world, String worldName) {
 		saveWorldSize(world, worldName);
 		saveGroundIDs(world, worldName);
 		saveElements(world, worldName);
@@ -383,5 +489,20 @@ public class PersistanceManager {
 
 	private static File getSizeFile(String worldName) {
 		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/size.info");
+	}
+
+	private static File getGalaxySizeFile(String galaxyName) {
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName
+				+ "/size.info");
+	}
+
+	private static File[] getSectorFiles(String galaxyName) {
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/")
+				.listFiles(new SectorFileFilter());
+	}
+
+	private static File getSectorFile(String galaxyName, int x, int y) {
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/" + x
+				+ "_" + y + ".sector");
 	}
 }

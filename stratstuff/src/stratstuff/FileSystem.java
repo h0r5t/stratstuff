@@ -6,7 +6,9 @@ public class FileSystem {
 
 	public static final String STRATSTUFF_DIR = "./";
 
-	public static final String WORLDS_DIR = "./resources/worlds";
+	public static final String WORLDS_DIR = "./resources/saves/worlds";
+
+	public static final String GALAXIES_DIR = "./resources/saves/galaxies";
 
 	public static final String DATA_DIR = "./resources/data";
 

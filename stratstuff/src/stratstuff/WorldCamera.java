@@ -1,6 +1,6 @@
 package stratstuff;
 
-public class GameCamera implements Updatable {
+public class WorldCamera implements Updatable {
 
 	private int cameraLayer;
 	private int cameraXWP;
@@ -12,9 +12,9 @@ public class GameCamera implements Updatable {
 	private int xInactiveCounter = 5;
 	private int yInactiveCounter = 5;
 	private World world;
-	private GameCursor cursor;
+	private WorldCursor cursor;
 
-	public GameCamera(World world) {
+	public WorldCamera(World world) {
 		this.world = world;
 		cameraXWP = 0;
 		cameraYWP = 0;
@@ -25,7 +25,7 @@ public class GameCamera implements Updatable {
 		cameraLayer = 0;
 	}
 
-	public void setCursor(GameCursor c) {
+	public void setCursor(WorldCursor c) {
 		this.cursor = c;
 	}
 

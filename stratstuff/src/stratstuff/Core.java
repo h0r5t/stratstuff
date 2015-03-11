@@ -44,6 +44,7 @@ public class Core implements Runnable {
 
 		createUpdatables();
 
+		loadGalaxies();
 		loadWorlds();
 
 		visualManager = new VisualManager(this, inputManager, windowAdapter,
@@ -57,10 +58,25 @@ public class Core implements Runnable {
 
 		developerFrame.makeUnitComboBox();
 
-		visualManager.setRenderedWorld(simulationManager
-				.getWorldWithName("world0"));
+		visualManager.setRenderedView(new WorldView(this, simulationManager
+				.getWorldWithName("world1")));
 
 		visualManager.activate();
+	}
+
+	private void loadGalaxies() {
+		// Galaxy galaxy;
+		// File galaxiesDir = new File(FileSystem.GALAXIES_DIR);
+		//
+		// for (File f : galaxiesDir.listFiles()) {
+		// if (f.getName().startsWith("galaxy")) {
+		// galaxy = PersistanceManager.loadGalaxy(this, f.getName());
+		// simulationManager.addSimulator(new GalaxySimulator(galaxy));
+		// }
+		// }
+
+		Galaxy galaxy = GalaxyGenerator.generateGalaxy("galaxy0");
+		simulationManager.addSimulator(new GalaxySimulator(galaxy));
 	}
 
 	private void loadWorlds() {
@@ -69,7 +85,7 @@ public class Core implements Runnable {
 
 		for (File f : worldsDir.listFiles()) {
 			if (f.getName().startsWith("world")) {
-				world = PersistanceManager.load(this, f.getName());
+				world = PersistanceManager.loadWorld(this, f.getName());
 				simulationManager.addSimulator(new WorldSimulator(this, world));
 			}
 		}
@@ -101,7 +117,9 @@ public class Core implements Runnable {
 		updatables.add(inputManager);
 	}
 
-	public GameCursor getCursor() {
+	public WorldCursor getCursor() {
+		if (!(visualManager.getRenderedView() instanceof WorldView))
+			return null;
 		return visualManager.getRenderedWorld().getGameCursor();
 	}
 
@@ -183,7 +201,7 @@ public class Core implements Runnable {
 		new Thread(new Core()).start();
 	}
 
-	public GameCamera getCamera() {
+	public WorldCamera getCamera() {
 		return visualManager.getRenderedWorld().getGameCamera();
 	}
 
@@ -209,6 +227,7 @@ public class Core implements Runnable {
 
 	public void save() {
 		simulationManager.saveWorlds(this);
+		simulationManager.saveGalaxies();
 		developerFrame.save();
 	}
 
@@ -237,12 +256,17 @@ public class Core implements Runnable {
 	}
 
 	public void test0() {
-		visualManager.setRenderedWorld(simulationManager
-				.getWorldWithName("world0"));
+		visualManager.setRenderedView(new WorldView(this, simulationManager
+				.getWorldWithName("world0")));
 	}
 
 	public void test1() {
-		visualManager.setRenderedWorld(simulationManager
-				.getWorldWithName("world1"));
+		visualManager.setRenderedView(new WorldView(this, simulationManager
+				.getWorldWithName("world1")));
+	}
+
+	public void test2() {
+		visualManager.setRenderedView(new GalaxyView(this, simulationManager
+				.getGalaxyWithName("galaxy0")));
 	}
 }

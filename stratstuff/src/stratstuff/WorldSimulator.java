@@ -4,14 +4,14 @@ public class WorldSimulator implements Updatable {
 
 	private World world;
 	private LightManager lightManager;
-	private GameCamera camera;
-	private GameCursor cursor;
+	private WorldCamera camera;
+	private WorldCursor cursor;
 
 	public WorldSimulator(Core core, World w) {
 		this.world = w;
 		lightManager = world.getLightManager();
-		camera = new GameCamera(w);
-		cursor = new GameCursor(camera);
+		camera = new WorldCamera(w);
+		cursor = new WorldCursor(camera);
 		world.setGameCamera(camera);
 		world.setGameCursor(cursor);
 	}
@@ -31,11 +31,11 @@ public class WorldSimulator implements Updatable {
 		return lightManager;
 	}
 
-	public GameCamera getGameCamera() {
+	public WorldCamera getGameCamera() {
 		return camera;
 	}
 
-	public GameCursor getGameCursor() {
+	public WorldCursor getGameCursor() {
 		return cursor;
 	}
 

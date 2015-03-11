@@ -170,7 +170,7 @@ public class GameMenu implements Drawable {
 	}
 
 	private void drawCursorPositionInfo(Graphics2D g) {
-		GameCursor cursor = core.getCursor();
+		WorldCursor cursor = core.getCursor();
 		if (cursor == null)
 			return;
 		int x = cursor.getX();

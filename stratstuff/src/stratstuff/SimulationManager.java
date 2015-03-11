@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class SimulationManager implements Updatable {
 
-	ArrayList<WorldSimulator> worldSimulators;
+	private ArrayList<WorldSimulator> worldSimulators;
+	private ArrayList<GalaxySimulator> galaxySimulators;
 
 	public SimulationManager() {
 		worldSimulators = new ArrayList<WorldSimulator>();
+		galaxySimulators = new ArrayList<GalaxySimulator>();
 	}
 
 	public World getWorldWithName(String name) {
@@ -21,13 +23,31 @@ public class SimulationManager implements Updatable {
 		return null;
 	}
 
-	public void addSimulator(WorldSimulator w) {
-		worldSimulators.add(w);
+	public Galaxy getGalaxyWithName(String name) {
+		for (GalaxySimulator simulator : galaxySimulators) {
+			if (simulator.getGalaxy().getName().equals(name)) {
+				return simulator.getGalaxy();
+			}
+		}
+
+		System.out.println("galaxy not found: " + name);
+		return null;
+	}
+
+	public void addSimulator(Updatable simulator) {
+		if (simulator instanceof WorldSimulator)
+			worldSimulators.add((WorldSimulator) simulator);
+
+		if (simulator instanceof GalaxySimulator)
+			galaxySimulators.add((GalaxySimulator) simulator);
 	}
 
 	@Override
 	public void update() {
 		for (WorldSimulator sim : worldSimulators) {
+			sim.update();
+		}
+		for (GalaxySimulator sim : galaxySimulators) {
 			sim.update();
 		}
 	}
@@ -40,7 +60,8 @@ public class SimulationManager implements Updatable {
 
 	public void saveWorlds(Core core) {
 		for (WorldSimulator s : worldSimulators) {
-			PersistanceManager.save(core, s.getWorld(), s.getWorld().getName());
+			PersistanceManager.saveWorld(core, s.getWorld(), s.getWorld()
+					.getName());
 		}
 	}
 
@@ -49,5 +70,11 @@ public class SimulationManager implements Updatable {
 			s.getLightManager().initLights();
 		}
 
+	}
+
+	public void saveGalaxies() {
+		for (GalaxySimulator sim : galaxySimulators) {
+			PersistanceManager.saveGalaxy(sim.getGalaxy());
+		}
 	}
 }

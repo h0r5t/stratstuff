@@ -5,7 +5,7 @@ public class VisualManager implements Updatable {
 	private GameFrame gameFrame;
 	private GamePanel gamePanel;
 	private boolean canDraw = false;
-	private World renderedWorld;
+	private View renderedView;
 
 	public VisualManager(Core core, InputManager inputHandler,
 			GameWindowAdapter windowAdapter, GameMenu menu) {
@@ -23,12 +23,20 @@ public class VisualManager implements Updatable {
 		gameFrame = new GameFrame(inputHandler, windowAdapter);
 	}
 
-	public void setRenderedWorld(World w) {
-		this.renderedWorld = w;
+	public World getRenderedWorld() {
+		if (renderedView instanceof WorldView) {
+			return ((WorldView) renderedView).getWorld();
+		}
+
+		return null;
 	}
 
-	public World getRenderedWorld() {
-		return renderedWorld;
+	public View getRenderedView() {
+		return renderedView;
+	}
+
+	public void setRenderedView(View renderedView) {
+		this.renderedView = renderedView;
 	}
 
 	public void activate() {

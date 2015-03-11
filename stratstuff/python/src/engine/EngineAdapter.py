@@ -115,6 +115,8 @@ class EngineAdapterClass:
         
         elif messageID == "2":
             eventID = int(split[1])
+            if not self.remoteEvents.has_key(eventID):
+                return
             event = self.remoteEvents[eventID]
             del self.remoteEvents[eventID]
             if len(split) == 3:

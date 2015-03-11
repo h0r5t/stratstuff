@@ -1,15 +1,15 @@
 package stratstuff;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 public class InputManager implements Updatable {
 
 	private Core core;
-	private GameCamera camera;
-	private GameCursor cursor;
+	private WorldCamera camera;
+	private WorldCursor cursor;
 	private GameMenu menu;
 	private boolean selectionAreaIsOn = false;
-	private int selectionAreaState = 0;
 	private Area3D selectionArea;
 
 	private DefaultHashMap<Integer, Boolean> keyMap;
@@ -23,87 +23,7 @@ public class InputManager implements Updatable {
 
 	@Override
 	public void update() {
-		camera = core.getVisualManager().getRenderedWorld().getGameCamera();
-		cursor = core.getVisualManager().getRenderedWorld().getGameCursor();
-
-		if (keyMap.getDefault(KeyEvent.VK_W, false)) {
-			camera.up();
-		}
-		if (keyMap.getDefault(KeyEvent.VK_S, false)) {
-			camera.down();
-		}
-		if (keyMap.getDefault(KeyEvent.VK_D, false)) {
-			camera.right();
-		}
-		if (keyMap.getDefault(KeyEvent.VK_A, false)) {
-			camera.left();
-		}
-
-		if (!selectionAreaIsOn) {
-			if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
-				cursor.moveUp();
-			}
-			if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
-				cursor.moveDown();
-			}
-			if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
-				cursor.moveRight();
-			}
-			if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
-				cursor.moveLeft();
-			}
-		}
-
-		if (selectionAreaIsOn) {
-			selectionArea.x = cursor.getX();
-			selectionArea.y = cursor.getY();
-			if (selectionAreaState == 0) {
-				if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
-					cursor.moveUp();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
-					cursor.moveDown();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
-					cursor.moveRight();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
-					cursor.moveLeft();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_X, false)) {
-					camera.goDeeper();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_Y, false)) {
-					camera.goHigher();
-				}
-			}
-			if (selectionAreaState == 1) {
-				if (keyMap.getDefault(KeyEvent.VK_UP, false)) {
-					selectionArea.h = selectionArea.h - 1;
-				}
-				if (keyMap.getDefault(KeyEvent.VK_DOWN, false)) {
-					selectionArea.h = selectionArea.h + 1;
-				}
-				if (keyMap.getDefault(KeyEvent.VK_RIGHT, false)) {
-					selectionArea.w = selectionArea.w + 1;
-				}
-				if (keyMap.getDefault(KeyEvent.VK_LEFT, false)) {
-					selectionArea.w = selectionArea.w - 1;
-				}
-				if (keyMap.getDefault(KeyEvent.VK_X, false)) {
-					if (selectionArea.d < core.getVisualManager()
-							.getRenderedWorld().getDepth() - 1)
-						selectionArea.d = selectionArea.d + 1;
-					camera.goDeeper();
-				}
-				if (keyMap.getDefault(KeyEvent.VK_Y, false)) {
-					if (selectionArea.d > 0)
-						selectionArea.d = selectionArea.d - 1;
-					camera.goHigher();
-				}
-			}
-
-		}
+		core.getVisualManager().getRenderedView().keysArePressed(keyMap);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -114,47 +34,31 @@ public class InputManager implements Updatable {
 		keyMap.put(e.getKeyCode(), false);
 		menu.evaluateInput(e.getKeyCode());
 
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (selectionAreaIsOn) {
-				if (selectionAreaState == 0) {
-					selectionAreaState = 1;
-					selectionArea.x = cursor.getX();
-					selectionArea.y = cursor.getY();
-					selectionArea.z = camera.getLayer();
-				} else if (selectionAreaState == 1) {
-					selectionAreaIsOn = false;
-					selectionArea.d = Math.abs(camera.getLayer()
-							- selectionArea.z) + 1;
-					menu.areaWasSelected(selectionArea);
-					selectionAreaState = 0;
-				}
-			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F12) {
+		if (e.getKeyCode() == KeyEvent.VK_F12) {
 			core.getDeveloperFrame().show();
 			if (!core.gameIsPaused())
 				core.togglePause();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_0) {
+			core.test0();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_1) {
+			core.test1();
+		}
+
+		else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			core.test2();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_P) {
 			core.togglePause();
 		}
 
-		else if (e.getKeyCode() == KeyEvent.VK_X) {
-			camera.goDeeper();
-		} else if (e.getKeyCode() == KeyEvent.VK_Y) {
-			camera.goHigher();
+		else {
+			core.getVisualManager().getRenderedView().keyReleased(e);
 		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_G) {
-			core.test0();
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_H) {
-			core.test1();
-		}
-
 	}
 
 	public void startSelectionArea() {
@@ -169,10 +73,17 @@ public class InputManager implements Updatable {
 
 	public void endSelectionArea() {
 		selectionAreaIsOn = false;
-		selectionAreaState = 0;
 	}
 
 	public Area3D getSelectionArea() {
 		return selectionArea;
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		core.getVisualManager().getRenderedView().mouseClicked(e);
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		core.getVisualManager().getRenderedView().mouseMoved(e);
 	}
 }

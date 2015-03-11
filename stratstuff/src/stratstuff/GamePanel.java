@@ -8,6 +8,9 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
@@ -16,8 +19,6 @@ public class GamePanel extends JPanel {
 	private Image bufImage;
 	private Graphics bufG;
 
-	private GameCamera cam;
-	private GameCursor cursor;
 	private Core core;
 	private InputManager inputHandler;
 	private VisualManager visualManager;
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel {
 		this.inputHandler = handler;
 		this.gameMenu = gameMenu;
 		addKeyListener(new AL());
+		addMouseListener(new ML());
+		addMouseMotionListener(new MML());
 		setLayout(null);
 	}
 
@@ -44,16 +47,11 @@ public class GamePanel extends JPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		cam = visualManager.getRenderedWorld().getGameCamera();
-		cursor = visualManager.getRenderedWorld().getGameCursor();
+		View view = visualManager.getRenderedView();
+		view.draw(g2);
 
-		drawWPs(g2);
-		drawMicroObjects(g2);
 		drawGameMenu(g2);
-		drawCursor(g2);
-		drawSelectionArea(g2);
-
-		drawInfoScreen(g2);
+		// drawInfoScreen(g2);
 		drawGameIsPaused(g2);
 	}
 
@@ -83,89 +81,12 @@ public class GamePanel extends JPanel {
 		currentInfoScreen = null;
 	}
 
-	private void drawSelectionArea(Graphics2D g) {
-		if (inputHandler.selectionAreaIsOn()) {
-			g.setColor(new Color(0f, 1f, 0f, .5f));
-
-			Area3D r = inputHandler.getSelectionArea();
-
-			g.fillRect((r.x - cam.getStartX()) * GameSettings.TILE_SIZE,
-					(r.y - cam.getStartY()) * GameSettings.TILE_SIZE, r.w
-							* GameSettings.TILE_SIZE, r.h
-							* GameSettings.TILE_SIZE);
-		}
-	}
-
 	private void drawGameMenu(Graphics2D g2) {
 		gameMenu.draw(g2, -1, -1);
 	}
 
 	public boolean infoScreenIsShown() {
 		return currentInfoScreen != null;
-	}
-
-	private void drawWPs(Graphics2D g) {
-		World world = visualManager.getRenderedWorld();
-		if (cam == null)
-			return;
-		int layer = cam.getLayer();
-		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
-			for (int y = cam.getStartY(); y < cam.getEndY(); y++) {
-				if (x < 0 || y < 0 || x > world.getWidth() - 1
-						|| y > world.getHeight() - 1) {
-					g.setColor(Color.BLACK);
-					g.fillRect((x - cam.getStartX()) * GameSettings.TILE_SIZE
-							- cam.getMicroX(), (y - cam.getStartY())
-							* GameSettings.TILE_SIZE - cam.getMicroY(),
-							GameSettings.TILE_SIZE, GameSettings.TILE_SIZE);
-				} else {
-					world.getWP(x, y, layer).draw(
-							g,
-							(x - cam.getStartX()) * GameSettings.TILE_SIZE
-									- cam.getMicroX(),
-							(y - cam.getStartY()) * GameSettings.TILE_SIZE
-									- cam.getMicroY());
-
-					Image image = world
-							.getShadowImage(world.getWP(x, y, layer));
-					g.drawImage(image, (x - cam.getStartX())
-							* GameSettings.TILE_SIZE - cam.getMicroX(),
-							(y - cam.getStartY()) * GameSettings.TILE_SIZE
-									- cam.getMicroY(), GameSettings.TILE_SIZE,
-							GameSettings.TILE_SIZE, null);
-				}
-
-			}
-		}
-	}
-
-	private void drawMicroObjects(Graphics2D g2) {
-		World world = visualManager.getRenderedWorld();
-		if (cam == null)
-			return;
-		int layer = cam.getLayer();
-		for (int x = cam.getStartX(); x < cam.getEndX(); x++) {
-			for (int y = cam.getStartY(); y < cam.getEndY(); y++) {
-				if (x < 0 || y < 0 || x > world.getWidth() - 1
-						|| y > world.getHeight() - 1)
-					return;
-				world.getWP(x, y, layer).drawMicroObjects(
-						g2,
-						(x - cam.getStartX()) * GameSettings.TILE_SIZE
-								- cam.getMicroX(),
-						(y - cam.getStartY()) * GameSettings.TILE_SIZE
-								- cam.getMicroY());
-			}
-		}
-	}
-
-	private void drawCursor(Graphics2D g) {
-		if (cursor == null)
-			return;
-		cursor.draw(g, (cursor.getX() - cam.getStartX())
-				* GameSettings.TILE_SIZE - cam.getMicroX(),
-				(cursor.getY() - cam.getStartY()) * GameSettings.TILE_SIZE
-						- cam.getMicroY());
 	}
 
 	@Override
@@ -204,5 +125,52 @@ public class GamePanel extends JPanel {
 		public void keyTyped(KeyEvent arg0) {
 			// needed?
 		}
+	}
+
+	private class ML implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			inputHandler.mouseClicked(e);
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	private class MML implements MouseMotionListener {
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			inputHandler.mouseMoved(e);
+		}
+
 	}
 }

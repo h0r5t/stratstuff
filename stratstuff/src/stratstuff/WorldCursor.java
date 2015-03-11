@@ -8,17 +8,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class GameCursor implements Drawable {
+public class WorldCursor implements Drawable {
 
 	private int x;
 	private int y;
 	private BufferedImage image;
 
-	private GameCamera camera;
+	private WorldCamera camera;
 	private static final int box_length = 150;
 	private static final int box_height = 30;
 
-	public GameCursor(GameCamera camera) {
+	public WorldCursor(WorldCamera camera) {
 		this.camera = camera;
 		camera.setCursor(this);
 		x = 10;

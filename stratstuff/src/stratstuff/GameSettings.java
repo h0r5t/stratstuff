@@ -7,6 +7,8 @@ public class GameSettings {
 	public static final boolean GENERATE_NEW_WORLD = false;
 	public static final boolean KEEP_STUFF = true;
 
+	public static final boolean GENERATE_NEW_GALAXY = true;
+
 	public static final long TICK_MILLIS = 50;
 	public static final long INITIAL_SLEEP_TIME = 2000;
 
