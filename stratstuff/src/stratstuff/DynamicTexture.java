@@ -72,6 +72,42 @@ public class DynamicTexture {
 		}
 	}
 
+	public void turnDirectionVectorSpace(SpacePosition currentPos,
+			SpacePosition posToFace) {
+		if (currentPos == null || posToFace == null) {
+			return;
+		}
+
+		turningToFaceWP = false;
+
+		rotationGoal = getAngle2D(currentPos, posToFace);
+		hasTurned = false;
+
+		if (rotationGoal > imageRotation) {
+			if (Math.abs(rotationGoal - imageRotation) > 180) {
+				turnDirection = turnDirectionCounterClockWise;
+			} else {
+				turnDirection = turnDirectionClockWise;
+			}
+		} else {
+			if (Math.abs(rotationGoal - imageRotation) > 180) {
+				turnDirection = turnDirectionClockWise;
+			} else {
+				turnDirection = turnDirectionCounterClockWise;
+			}
+		}
+	}
+
+	private int getAngle2D(SpacePosition p1, SpacePosition p2) {
+		double angle = Math.toDegrees(Math.atan2(p2.getMacX() - p1.getMacX(),
+				p1.getMacY() - p2.getMacY()));
+
+		if (angle < 0)
+			angle += 360;
+
+		return (int) angle;
+	}
+
 	public void turnDirectionVector(WorldPoint currentWP, WorldPoint wpToFace,
 			int eventID) {
 		if (currentWP == null || wpToFace == null) {

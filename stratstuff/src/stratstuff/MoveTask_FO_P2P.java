@@ -1,6 +1,6 @@
 package stratstuff;
 
-public class MoveTask_FO extends Task {
+public class MoveTask_FO_P2P extends Task {
 
 	private Galaxy galaxy;
 	private FloatingObject object;
@@ -8,8 +8,9 @@ public class MoveTask_FO extends Task {
 	private TaskManager taskManager;
 	private double vectorX, vectorY;
 	private boolean finished = false;
+	private DynamicTexture dynamicTexture;
 
-	public MoveTask_FO(Galaxy galaxy, TaskManager taskManager,
+	public MoveTask_FO_P2P(Galaxy galaxy, TaskManager taskManager,
 			FloatingObject object, SpacePosition targetPos) {
 		this.object = object;
 		this.galaxy = galaxy;
@@ -20,10 +21,20 @@ public class MoveTask_FO extends Task {
 				targetPos.getMacX(), targetPos.getMacY(), 10);
 		vectorX = vector[0];
 		vectorY = vector[1];
+
+		if (object instanceof Starship) {
+			dynamicTexture = ((Starship) object).getDynamicTexture();
+			dynamicTexture.turnDirectionVectorSpace(object.getPosition(),
+					targetPos);
+		}
 	}
 
 	@Override
 	public void update() {
+		dynamicTexture.update();
+		if (dynamicTexture != null && !dynamicTexture.hasTurned()) {
+			return;
+		}
 		if (finished)
 			return;
 		followVector();

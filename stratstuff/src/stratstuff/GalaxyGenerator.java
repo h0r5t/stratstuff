@@ -16,7 +16,7 @@ public class GalaxyGenerator {
 					s.addObject(p);
 				}
 
-				amount = (int) (Math.random() * 5);
+				amount = (int) (Math.random() * 3 + 2);
 
 				for (int a = 0; a < amount; a++) {
 					Starship ship = generateStarship(s);

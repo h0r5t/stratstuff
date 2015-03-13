@@ -56,7 +56,7 @@ public class GalaxyView implements View {
 		SpacePosition pos = galaxy.getCamera().screenPosToSpacePos(x, y);
 		Starship ship = galaxy.getSector(0, 0).getRandomStarship();
 		core.getTaskManager().runTask(
-				new MoveTask_FO(galaxy, core.getTaskManager(), ship, pos),
+				new MoveTask_FO_P2P(galaxy, core.getTaskManager(), ship, pos),
 				UniqueIDFactory.getID());
 	}
 
