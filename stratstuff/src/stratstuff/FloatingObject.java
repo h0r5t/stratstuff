@@ -1,6 +1,5 @@
 package stratstuff;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 public abstract class FloatingObject implements Drawable, Saveable {
@@ -44,11 +43,11 @@ public abstract class FloatingObject implements Drawable, Saveable {
 			double x = Double.parseDouble(split[2]);
 			double y = Double.parseDouble(split[3]);
 			String name = split[4];
+			int colorCode = Integer.parseInt(split[5]);
+			int diameter = Integer.parseInt(split[6]);
 
 			obj = new Planet(uniqueID, name, new SpacePosition(sector, x, y),
-					TextureGenerator.generateImage(new ColorData(Color.ORANGE,
-							GameSettings.COLOR_VARIATION, 0), 5, false,
-							TextureShape.circle));
+					colorCode, diameter);
 			UniqueIDFactory.increment();
 		}
 

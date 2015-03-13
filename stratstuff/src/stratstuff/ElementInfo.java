@@ -65,7 +65,7 @@ public class ElementInfo {
 		int col = (alpha << 24) | (red << 16) | (green << 8) | blue;
 		Color color = new Color(col);
 		for (int i = 0; i < images.length; i++) {
-			images[i] = TextureGenerator.generateImage(new ColorData(color,
+			images[i] = TextureGenerator.generateShapedImage20on20(new ColorData(color,
 					GameSettings.COLOR_VARIATION, 0), 5, collides, shape);
 		}
 	}

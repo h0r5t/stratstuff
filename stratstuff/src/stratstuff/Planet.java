@@ -7,11 +7,14 @@ public class Planet extends FloatingObject {
 
 	private int diameter;
 	private BufferedImage image;
+	private int colorCode;
 
-	public Planet(int ID, String name, SpacePosition pos, BufferedImage image) {
+	public Planet(int ID, String name, SpacePosition pos, int colorCode,
+			int diameter) {
 		super(ID, name, pos);
-		this.image = image;
-		this.diameter = image.getHeight();
+		this.image = TextureGenerator.generatePlanetImage(colorCode, diameter);
+		this.diameter = diameter;
+		this.colorCode = colorCode;
 	}
 
 	@Override
@@ -22,7 +25,8 @@ public class Planet extends FloatingObject {
 	@Override
 	public String save() {
 		return FloatingObject.ID_PLANET + " " + ID + " " + position.getMicX()
-				+ " " + position.getMicY() + " " + name;
+				+ " " + position.getMicY() + " " + name + " " + colorCode + " "
+				+ diameter;
 	}
 
 	@Override

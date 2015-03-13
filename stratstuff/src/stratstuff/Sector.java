@@ -1,7 +1,7 @@
 package stratstuff;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Sector implements Drawable {
@@ -11,7 +11,7 @@ public class Sector implements Drawable {
 
 	private ArrayList<FloatingObject> floatingObjects;
 	private Galaxy galaxy;
-
+	private BufferedImage backgroundImage;
 	private int xpos;
 	private int ypos;
 
@@ -20,6 +20,7 @@ public class Sector implements Drawable {
 		floatingObjects = new ArrayList<FloatingObject>();
 		this.xpos = xpos;
 		this.ypos = ypos;
+		backgroundImage = TextureGenerator.generateSectorBackground();
 	}
 
 	public int getXPos() {
@@ -39,7 +40,6 @@ public class Sector implements Drawable {
 			if (o instanceof Starship)
 				return (Starship) o;
 		}
-
 		return null;
 	}
 
@@ -49,8 +49,8 @@ public class Sector implements Drawable {
 
 	@Override
 	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
-		g.setColor(Color.BLACK);
-		g.fillRect(xinpixels, yinpixels, sectorWidth, sectorHeight);
+		g.drawImage(backgroundImage, xinpixels, yinpixels, sectorWidth,
+				sectorHeight, null);
 
 		for (FloatingObject object : floatingObjects) {
 			object.draw(g, xinpixels + (int) object.getPosition().getMicX(),
@@ -61,5 +61,4 @@ public class Sector implements Drawable {
 	public ArrayList<FloatingObject> getFloatingObjects() {
 		return floatingObjects;
 	}
-
 }
