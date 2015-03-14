@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Sector implements Drawable {
+public class Sector implements Drawable, Updatable {
 
 	public static final int sectorWidth = GameSettings.GAME_FRAME_WIDTH;
 	public static final int sectorHeight = GameSettings.GAME_FRAME_HEIGHT;
@@ -43,6 +43,17 @@ public class Sector implements Drawable {
 		return null;
 	}
 
+	public ArrayList<Starship> getAllStarships() {
+		ArrayList<Starship> shipList = new ArrayList<Starship>();
+		for (FloatingObject obj : floatingObjects) {
+			if (obj instanceof Starship) {
+				shipList.add((Starship) obj);
+			}
+		}
+
+		return shipList;
+	}
+
 	public void removeObject(FloatingObject o) {
 		floatingObjects.remove(o);
 	}
@@ -60,5 +71,12 @@ public class Sector implements Drawable {
 
 	public ArrayList<FloatingObject> getFloatingObjects() {
 		return floatingObjects;
+	}
+
+	@Override
+	public void update() {
+		for (FloatingObject obj : floatingObjects) {
+			obj.update();
+		}
 	}
 }

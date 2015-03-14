@@ -136,6 +136,25 @@ public class DynamicTexture {
 
 	}
 
+	public void setRotationGoal(int degrees) {
+		rotationGoal = degrees;
+		hasTurned = false;
+
+		if (rotationGoal > imageRotation) {
+			if (Math.abs(rotationGoal - imageRotation) > 180) {
+				turnDirection = turnDirectionCounterClockWise;
+			} else {
+				turnDirection = turnDirectionClockWise;
+			}
+		} else {
+			if (Math.abs(rotationGoal - imageRotation) > 180) {
+				turnDirection = turnDirectionClockWise;
+			} else {
+				turnDirection = turnDirectionCounterClockWise;
+			}
+		}
+	}
+
 	private int getAngle2D(WorldPoint p1, WorldPoint p2) {
 		double angle = Math.toDegrees(Math.atan2(p2.getX() - p1.getX(),
 				p1.getY() - p2.getY()));

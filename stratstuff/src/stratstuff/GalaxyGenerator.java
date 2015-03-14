@@ -5,11 +5,11 @@ public class GalaxyGenerator {
 	public static Galaxy generateGalaxy(String galaxyName) {
 		Galaxy g = new Galaxy(galaxyName, 100, 100);
 
-		for (int i = -5; i < 6; i++) {
-			for (int o = -5; o < 6; o++) {
+		for (int i = -2; i < 3; i++) {
+			for (int o = -2; o < 3; o++) {
 				Sector s = new Sector(g, i, o);
 
-				int amount = (int) (Math.random() * 30);
+				int amount = (int) (Math.random() * 20 + 10);
 
 				for (int a = 0; a < amount; a++) {
 					Planet p = generatePlanet(s);

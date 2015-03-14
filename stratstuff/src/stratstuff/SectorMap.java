@@ -66,4 +66,11 @@ public class SectorMap {
 		return a;
 	}
 
+	public void updateAll() {
+		for (Sector s : getAll()) {
+			if (s != null)
+				s.update();
+		}
+	}
+
 }

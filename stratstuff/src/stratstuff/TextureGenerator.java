@@ -161,4 +161,15 @@ public class TextureGenerator {
 
 		return image;
 	}
+
+	public static BufferedImage generateSelectionIndicatorImage() {
+		BufferedImage image = new BufferedImage(45 + 45, 45 + 45,
+				BufferedImage.TYPE_INT_ARGB_PRE);
+
+		Graphics g = image.getGraphics();
+		g.setColor(Color.ORANGE);
+		g.drawOval(45 - 45 / 2, 45 - 45 / 2, 45, 45);
+
+		return image;
+	}
 }

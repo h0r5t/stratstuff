@@ -179,6 +179,8 @@ public class GameMenu implements Drawable {
 
 		WorldPoint cursorWP = core.getVisualManager().getRenderedWorld()
 				.getWP(x, y, z);
+		if (cursorWP == null)
+			return;
 		int groundID = cursorWP.getGround();
 		int elementID = cursorWP.getAttachedElement();
 		ArrayList<MovingObject> objects = cursorWP.getAttachedMovingObjects();

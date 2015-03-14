@@ -156,12 +156,39 @@ public class WorldView implements View {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		int mouseX = e.getX();
+		int mouseY = e.getY();
+
+		int cameraX = core.getCamera().getStartX() * GameSettings.TILE_SIZE;
+		int cameraY = core.getCamera().getStartY() * GameSettings.TILE_SIZE;
+
+		int tileX = (mouseX + cameraX + core.getCamera().getMicroX())
+				/ GameSettings.TILE_SIZE;
+		int tileY = (mouseY + cameraY + core.getCamera().getMicroY())
+				/ GameSettings.TILE_SIZE;
+
+		core.getCursor().setXY(tileX, tileY);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 
 	}

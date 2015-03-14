@@ -59,6 +59,11 @@ public class WorldCursor implements Drawable {
 		return y;
 	}
 
+	public void setXY(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	@Override
 	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
 		g.drawImage(image, xinpixels, yinpixels, GameSettings.TILE_SIZE,

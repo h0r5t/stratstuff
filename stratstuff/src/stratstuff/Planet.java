@@ -34,4 +34,10 @@ public class Planet extends FloatingObject {
 		return null;
 	}
 
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

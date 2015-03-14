@@ -39,6 +39,7 @@ public class GamePanel extends JPanel {
 
 	@Override
 	public void paint(Graphics g) {
+		requestFocusInWindow();
 		if (!visualManager.drawNow()) {
 			return;
 		}
@@ -136,14 +137,12 @@ public class GamePanel extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			inputHandler.mousePressed(e);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			inputHandler.mouseReleased(e);
 		}
 
 		@Override
@@ -163,8 +162,7 @@ public class GamePanel extends JPanel {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			inputHandler.mouseDragged(e);
 		}
 
 		@Override

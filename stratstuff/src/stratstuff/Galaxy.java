@@ -55,7 +55,7 @@ public class Galaxy implements Drawable, Updatable {
 
 	@Override
 	public void update() {
-
+		sectorMap.updateAll();
 	}
 
 	public GalaxyCamera getCamera() {

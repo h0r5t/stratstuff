@@ -53,6 +53,9 @@ public class World extends Graph implements Saveable, Updatable {
 	}
 
 	public WorldPoint getWP(int x, int y, int z) {
+		if (x < 0 || y < 0 || z < 0 || x > width - 1 || y > height - 1
+				|| z > depth - 1)
+			return null;
 		return (WorldPoint) getNode(worldPointArray[z][x][y]);
 	}
 

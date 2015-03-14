@@ -86,4 +86,16 @@ public class InputManager implements Updatable {
 	public void mouseMoved(MouseEvent e) {
 		core.getVisualManager().getRenderedView().mouseMoved(e);
 	}
+
+	public void mousePressed(MouseEvent e) {
+		core.getVisualManager().getRenderedView().mousePressed(e);
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		core.getVisualManager().getRenderedView().mouseReleased(e);
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		core.getVisualManager().getRenderedView().mouseDragged(e);
+	}
 }

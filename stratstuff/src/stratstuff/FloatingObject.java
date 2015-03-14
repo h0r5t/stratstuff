@@ -2,7 +2,7 @@ package stratstuff;
 
 import java.awt.Graphics2D;
 
-public abstract class FloatingObject implements Drawable, Saveable {
+public abstract class FloatingObject implements Updatable, Drawable, Saveable {
 
 	protected int ID;
 	protected String name;
