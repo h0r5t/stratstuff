@@ -65,7 +65,8 @@ public class FrontendAdapter {
 		} else if (isUnix(OS))
 
 		{
-			String[] command = { "gnome-terminal", "--command",
+//			change this to be set in cfg file or smth
+			String[] command = { "konsole", "-e",
 					adapterStarterLocation + "start_adapter.sh" + argument };
 			try {
 				Process p = Runtime.getRuntime().exec(command);
