@@ -173,7 +173,7 @@ class EngineData():
         self.loadObjectData()
         
     def loadGroundIDs(self):
-        self.wp_array = numpy.empty((120, 120, 10), dtype=object)
+        self.wp_array = numpy.empty((120, 120, 10), dtype=object)  # @UndefinedVariable
         # numpy notation, for assignment use a[x, y, z], ez
     
         for z in range (0, 10):

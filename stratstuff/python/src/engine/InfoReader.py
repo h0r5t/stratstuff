@@ -1,4 +1,3 @@
-from string import rsplit
 dataDir = "/home/h0r5t/code/git/stratstuff/resources/data"
 
 # reads .info file and returns dictionary of dictionaries with parsed key/value pairs

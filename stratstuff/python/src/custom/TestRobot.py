@@ -2,7 +2,6 @@ from src.API.Mode import Mode
 from src.API.Robot import Robot
 from src.API.State import State
 
-
 class TestRobot(Robot):
     def __init__(self, adapter, m_objectID):
         Robot.__init__(self, adapter, m_objectID)

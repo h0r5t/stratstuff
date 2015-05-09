@@ -1,5 +1,5 @@
 import SocketServer
-from thread import start_new_thread
+import thread
 
 callbackFunction = None
 
@@ -13,4 +13,4 @@ def start(makeBarrier):
     global callbackFunction
     callbackFunction = makeBarrier
     server = SocketServer.UDPServer(("localhost", 32001), IPCServerHandler)
-    start_new_thread(server.serve_forever, ())
+    thread.start_new_thread(server.serve_forever, ())  # @UndefinedVariable

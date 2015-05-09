@@ -1,5 +1,5 @@
 from EngineData import WorldPoint
-from src.engine.EngineData import MovingObject
+from EngineData import MovingObject
 
 class Scope():
     def __init__(self, datastring):

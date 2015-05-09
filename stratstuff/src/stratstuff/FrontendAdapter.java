@@ -63,7 +63,6 @@ public class FrontendAdapter {
 			}
 
 		} else if (isUnix(OS))
-
 		{
 //			change this to be set in cfg file or smth
 			String[] command = { "konsole", "-e",

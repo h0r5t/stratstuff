@@ -36,9 +36,13 @@ class Robot(Thread):
             if event.wasCalledBack():
                 return event.getMessage()
             time.sleep(SLEEP_TIME)
-                
+    
+    # interface methods for the robot
+    
+    def signalReceived(self, message):
+        pass
         
-    # commands for the robot
+    # user commands for the robot
     
     def moveTo(self, x, y, z):
         # returns true if unit could successfully move to target, false if not
@@ -92,5 +96,4 @@ class Robot(Thread):
         self.wait(500)
         self.adapter.registerRadialSignal(self.objectID, message)
         self.wait(500)
-    
     

@@ -28,6 +28,7 @@ public class RadialSignal extends Signal {
 
 	@Override
 	public void update() {
+		super.update();
 		currentRadius += radiusIncrease;
 		if (currentRadius > maxRadius) {
 			source.removeMicroObject(this);
@@ -35,6 +36,23 @@ public class RadialSignal extends Signal {
 			return;
 		}
 		color = lowerAlpha(color);
+	}	
+	
+	@Override
+	protected void checkForReceivers() {
+		
+//		TODO
+		
+		int tileRadius = (maxRadius/GameSettings.TILE_SIZE)/2;
+		for (int i = -tileRadius; i <= tileRadius; i++)
+		{
+			for (int o = -tileRadius; o <= tileRadius; o++)
+			{
+				double x = i * GameSettings.TILE_SIZE;
+				double y = o * GameSettings.TILE_SIZE;
+				double distanceToCenter = Math.sqrt(x*x+y*y);
+			}
+		}
 	}
 
 	@Override
@@ -44,5 +62,7 @@ public class RadialSignal extends Signal {
 				yinpixels - currentRadius + GameSettings.TILE_SIZE / 2,
 				currentRadius * 2, currentRadius * 2);
 	}
+
+
 
 }
