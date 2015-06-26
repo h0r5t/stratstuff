@@ -17,3 +17,6 @@
 - Idea: User pauses game: edits script: assigns script as singleton or attaches it to unit/item/whatever:
   --> when attached to an object, a new instance of that script is assigned everytime an object of that type is created
   --> example: AI of a certain unit type: user assigns that script in debugconsole
+
+
+  Test
