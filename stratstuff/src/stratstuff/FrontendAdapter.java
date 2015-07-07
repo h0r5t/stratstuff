@@ -65,12 +65,19 @@ public class FrontendAdapter {
 		} else if (isUnix(OS))
 		{
 //			change this to be set in cfg file or smth, todo
+//			gnome-terminal, konsole
 			String[] command = { "gnome-terminal", "-e",
 					adapterStarterLocation + "start_adapter.sh" + argument };
 			try {
 				Process p = Runtime.getRuntime().exec(command);
 			} catch (IOException e) {
-				e.printStackTrace();
+				String[] command2 = { "konsole", "-e",
+						adapterStarterLocation + "start_adapter.sh" + argument };
+				try {
+					Process p = Runtime.getRuntime().exec(command2);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 
