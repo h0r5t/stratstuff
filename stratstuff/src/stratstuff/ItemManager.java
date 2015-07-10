@@ -21,7 +21,6 @@ public class ItemManager implements Updatable {
 
 	@Override
 	public void update() {
-
 	}
 
 	public ArrayList<Item> getItemList() {

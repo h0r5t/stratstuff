@@ -9,7 +9,7 @@ public class Laser extends MicroObject {
 
 	private World world;
 	private Color laserColor;
-	private WorldPoint startWP;
+	private WorldPoint startWP, targetWP;
 	private int vectorX, vectorY;
 	private int eventID;
 	private int durationMillis;
@@ -25,6 +25,7 @@ public class Laser extends MicroObject {
 				* GameSettings.TILE_SIZE;
 		this.durationMillis = durationMillis;
 		this.eventID = eventID;
+		this.targetWP = targetWP;
 		startWP.addMicroObject(this);
 	}
 
@@ -35,6 +36,7 @@ public class Laser extends MicroObject {
 			world.removeMicroObject(this);
 			startWP.removeMicroObject(this);
 			Core.tellFrontend(FrontendMessaging.eventOccurred(eventID, "true"));
+			world.removeElementFromWP(targetWP);
 		}
 	}
 

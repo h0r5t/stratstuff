@@ -104,14 +104,14 @@ class EngineAdapterClass:
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             newground = split[1]
-            self.world.groundChanged(newground, x, y, z)
+            # self.world.groundChanged(newground, x, y, z)
 
         elif messageID == "1":
             x = split[len(split) - 3]
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             movingObjectID = split[1]
-            self.world.movingObjectPositionChanged(movingObjectID, x, y, z)
+            # self.world.movingObjectPositionChanged(movingObjectID, x, y, z)
 
         elif messageID == "2":
             eventID = int(split[1])
@@ -130,7 +130,7 @@ class EngineAdapterClass:
             y = split[len(split) - 2]
             z = split[len(split) - 1]
             newelement = split[1]
-            self.world.elementChanged(newelement, x, y, z)
+            # self.world.elementChanged(newelement, x, y, z)
 
         elif messageID == "4":
             x = split[len(split) - 3]
@@ -138,7 +138,7 @@ class EngineAdapterClass:
             z = split[len(split) - 1]
             objID = split[1]
             objType = split[2]
-            self.world.addMovingObject(objID, objType, x, y, z)
+            # self.world.addMovingObject(objID, objType, x, y, z)
 
         elif messageID == "5":
             # set design for robot

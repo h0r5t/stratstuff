@@ -11,7 +11,7 @@ class TestRobot(Robot):
 
 class TestMode(Mode):
     def __init__(self, adapter, robot):
-        
+
         Mode.__init__(self, adapter, robot)
         teststate = MoveState1(adapter, robot, self)
         self.setState(0, teststate)

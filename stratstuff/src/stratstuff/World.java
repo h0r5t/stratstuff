@@ -318,6 +318,8 @@ public class World extends Graph implements Saveable, Updatable {
 
 	public void dropItem(WorldPoint p, int destroyedElementID) {
 		int droppedItemType = Element.getDroppedItemType(destroyedElementID);
+		if (destroyedElementID == -1)
+			return;
 		MovingObject object = new MovingObject(
 				Item.getLinkedObjectType(droppedItemType), this,
 				UniqueIDFactory.getID());

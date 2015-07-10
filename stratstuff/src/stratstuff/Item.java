@@ -49,6 +49,10 @@ public class Item implements Saveable {
 		return null;
 	}
 
+	public void pickedUpBy() {
+		// TODO
+	}
+
 	public static void loadFromInfoFile() {
 		info = InfoFileReader.readFile(FileSystem.DATA_FILE_ITEMS);
 	}
