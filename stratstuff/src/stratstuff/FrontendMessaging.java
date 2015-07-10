@@ -35,6 +35,10 @@ public class FrontendMessaging {
 	public static String removeRobotDesign(int objectID) {
 		return "6 " + objectID;
 	}
+	
+	public static String signalReceived(int objectID, Signal signal) {
+		return "7 " + objectID + " " + signal.getMessage();
+	}
 
 	public static String menuInputMessage(String name, String type,
 			String areaData) {

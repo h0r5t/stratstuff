@@ -9,7 +9,7 @@ class Scope():
         
     def decode(self, datastring):
         split = datastring.split("&")
-        
+
         for ele in split:
             split2 = ele.split(":")
             if split2[0] == "wp":
@@ -21,7 +21,7 @@ class Scope():
                 wp = WorldPoint(groundID, x, y, z)
                 wp.setElementID(elementID)
                 self.wps.append(wp)
-                
+
             elif split2[0] == "obj":
                 uniqueID = int(split2[1])
                 objType = int(split2[2])
@@ -30,11 +30,9 @@ class Scope():
                 z = int(split2[5])
                 obj = MovingObject(objType, uniqueID, x, y, z)
                 self.objs.append(obj)
-                
+
     def getWorldPoints(self):
         return self.wps
-    
+
     def getObjects(self):
         return self.objs
-                
-                

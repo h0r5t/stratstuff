@@ -2,6 +2,7 @@ package stratstuff;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import pathfinder.GraphNode;
 
@@ -67,8 +68,11 @@ public class WorldPoint extends GraphNode implements Drawable {
 	}
 
 	public void drawMicroObjects(Graphics2D g, int x, int y) {
-		for (MicroObject o : attachedMicroObjects) {
-			o.draw(g, x, y);
+		try {
+			for (MicroObject o : attachedMicroObjects) {
+				o.draw(g, x, y);
+			}
+		} catch (ConcurrentModificationException e) {
 		}
 	}
 

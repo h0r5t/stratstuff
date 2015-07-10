@@ -1,2 +1,3 @@
 TestRobot .\python\src\custom\TestRobot.py
 TestRobot2 .\python\src\custom\TestRobot2.py
+TestRobot3 ./python/src/custom/TestRobot3.py

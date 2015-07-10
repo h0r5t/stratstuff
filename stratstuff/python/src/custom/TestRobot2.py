@@ -13,9 +13,6 @@ class TestRobot2(Robot):
         self.testmode = TestMode(None, self)
         self.setMode(0, self.testmode)
 
-    def signalReceived(self, message):
-        print(message)
-
 class TestMode(Mode):
     def __init__(self, adapter, robot):
         Mode.__init__(self, adapter, robot)

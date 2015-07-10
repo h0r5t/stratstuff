@@ -196,7 +196,7 @@ public class FrontendAdapter {
 				World world = main.getObjectManager().getObject(objUID)
 						.getWorld();
 				WorldPoint wp = world.getObjectByUID(objUID).getPosition();
-				RadialSignal signal = new RadialSignal(world, wp, message);
+				RadialSignal signal = new RadialSignal(world, wp, world.getObjectByUID(objUID),message);
 				world.addMicroObject(signal);
 			}
 

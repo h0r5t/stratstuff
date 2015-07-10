@@ -2,22 +2,25 @@ package stratstuff;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class RadialSignal extends Signal {
 
 	private World world;
 	private WorldPoint source;
-	private String message;
 	private Color color = Color.RED;
 	private int currentRadius = 0;
 	private int radiusIncrease = 5;
 	private final int maxRadius = 255;
+	private MovingObject senderObj;
 
-	public RadialSignal(World world, WorldPoint source, String message) {
-		super(source);
+	public RadialSignal(World world, WorldPoint source, MovingObject senderObj,
+			String message) {
+		super(source, message);
 		this.world = world;
 		this.source = source;
 		this.message = message;
+		this.senderObj = senderObj;
 		source.addMicroObject(this);
 	}
 
@@ -33,24 +36,30 @@ public class RadialSignal extends Signal {
 		if (currentRadius > maxRadius) {
 			source.removeMicroObject(this);
 			world.removeMicroObject(this);
+			checkForReceivers();
 			return;
 		}
 		color = lowerAlpha(color);
-	}	
-	
+	}
+
 	@Override
 	protected void checkForReceivers() {
-		
-//		TODO
-		
-		int tileRadius = (maxRadius/GameSettings.TILE_SIZE)/2;
-		for (int i = -tileRadius; i <= tileRadius; i++)
-		{
-			for (int o = -tileRadius; o <= tileRadius; o++)
-			{
-				double x = i * GameSettings.TILE_SIZE;
-				double y = o * GameSettings.TILE_SIZE;
-				double distanceToCenter = Math.sqrt(x*x+y*y);
+
+		int tileRadius = (maxRadius / GameSettings.TILE_SIZE) / 2;
+		for (int i = -tileRadius; i <= tileRadius; i++) {
+			for (int o = -tileRadius; o <= tileRadius; o++) {
+				int x = source.getX() + i;
+				int y = source.getY() + o;
+				int z = source.getZ();
+				ArrayList<MovingObject> list = world.getWP(x, y, z)
+						.getAttachedMovingObjects();
+
+				for (MovingObject obj : list) {
+					if (obj.getUniqueID() != senderObj.getUniqueID()) {
+						Core.tellFrontend(FrontendMessaging.signalReceived(
+								obj.getUniqueID(), this));
+					}
+				}
 			}
 		}
 	}
@@ -62,7 +71,5 @@ public class RadialSignal extends Signal {
 				yinpixels - currentRadius + GameSettings.TILE_SIZE / 2,
 				currentRadius * 2, currentRadius * 2);
 	}
-
-
 
 }
