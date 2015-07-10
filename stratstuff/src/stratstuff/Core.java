@@ -18,7 +18,7 @@ public class Core implements Runnable {
 	private ItemManager itemManager;
 
 	private GameWindowAdapter windowAdapter;
-	private DesignFrame developerFrame;
+	private DevFrame developerFrame;
 
 	private SimpleTimer timer;
 
@@ -95,7 +95,7 @@ public class Core implements Runnable {
 		frontendAdapter = new FrontendAdapter(this);
 		frontendAdapter.start();
 
-		developerFrame = new DesignFrame(this);
+		developerFrame = new DevFrame(this);
 		updatables.add(developerFrame);
 
 		simulationManager = new SimulationManager();
@@ -239,7 +239,7 @@ public class Core implements Runnable {
 		return visualManager;
 	}
 
-	public DesignFrame getDeveloperFrame() {
+	public DevFrame getDeveloperFrame() {
 		return developerFrame;
 	}
 

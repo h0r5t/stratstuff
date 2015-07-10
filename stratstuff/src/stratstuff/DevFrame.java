@@ -22,7 +22,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class DesignFrame implements Updatable {
+public class DevFrame implements Updatable {
 
 	private Core core;
 	private JFrame frame;
@@ -38,7 +38,7 @@ public class DesignFrame implements Updatable {
 
 	private ArrayList<Design> loadedDesigns;
 
-	public DesignFrame(Core core) {
+	public DevFrame(Core core) {
 		this.core = core;
 		initFrame();
 		initTabbedPane();
