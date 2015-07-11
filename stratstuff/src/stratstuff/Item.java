@@ -49,8 +49,8 @@ public class Item implements Saveable {
 		return null;
 	}
 
-	public void pickedUpBy() {
-		// TODO
+	public void pickedUp() {
+
 	}
 
 	public static void loadFromInfoFile() {
