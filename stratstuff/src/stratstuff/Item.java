@@ -49,8 +49,11 @@ public class Item implements Saveable {
 		return null;
 	}
 
-	public void pickedUp() {
+	public void pickedUpBy(Unit unit) {
+		ownerUnit = unit;
+		ownerUnit.addToInventory(this);
 
+		linkedObject = null;
 	}
 
 	public static void loadFromInfoFile() {

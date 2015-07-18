@@ -1,12 +1,17 @@
-from EngineData import WorldPoint
 from EngineData import MovingObject
+from EngineData import WorldPoint
+
 
 class Scope():
-    def __init__(self, datastring):
-        self.wps = []  # list of worldpoints
-        self.objs = []  # list of objects
-        self.decode(datastring)
-        
+    def __init__(self, datastring, listofwps=None, listofobjs=None):
+        if (listofwps==None) and (listofobjs==None):
+            self.wps = []  # list of worldpoints
+            self.objs = []  # list of objects
+            self.decode(datastring)
+        else:
+            self.wps =  listofwps
+            self.objs = listofobjs
+
     def decode(self, datastring):
         split = datastring.split("&")
 

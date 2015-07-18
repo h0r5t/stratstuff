@@ -12,7 +12,6 @@ import IPCServer
 sys.path.append('..')
 
 
-
 client = IPCClient.IPCClient()
 SLEEP_TIME = 0.05
 

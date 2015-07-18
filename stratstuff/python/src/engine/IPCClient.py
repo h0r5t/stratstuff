@@ -1,5 +1,6 @@
 import socket
 
+
 class IPCClient():
     
     def __init__(self):

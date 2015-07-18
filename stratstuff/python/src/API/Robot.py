@@ -1,6 +1,8 @@
 from threading import Thread
 import time
+
 from src.engine.Scope import Scope
+
 
 SLEEP_TIME = 0.2
 
@@ -12,6 +14,7 @@ class Robot(Thread):
         self.modes = {}
         self.currentModeIndex = 0
         self.visionScope = None
+        self.scopeFilter = None
 
     def run(self):
         self.execute()
@@ -37,6 +40,11 @@ class Robot(Thread):
                 return event.getMessage()
             time.sleep(SLEEP_TIME)
 
+    # settings for the robot
+
+    def applyScopeFilter(self, scopeFilter):
+        self.scopeFilter = scopeFilter
+
     # interface methods for the robot
 
     def signalReceived(self, message):
@@ -56,10 +64,17 @@ class Robot(Thread):
         # returns everything the robot can see as a Scope object
         event = self.adapter.registerGetScope(self.objectID)
         if event == None:
-            return
+            scope = Scope("")
+            return scope
         msg = self.watchEvent(event)
         scope = Scope(msg)
-        return scope
+
+        # check for filter
+        if self.scopeFilter == None:
+            return scope
+
+        filteredScope = self.scopeFilter.parse(scope)
+        return filteredScope
 
     def turn(self, x, y, z):
         # turns the roboter until he faces the target point, returns true if successful

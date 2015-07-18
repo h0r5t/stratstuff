@@ -1,5 +1,7 @@
-import SocketServer
 import thread
+
+import SocketServer
+
 
 callbackFunction = None
 
