@@ -2,13 +2,16 @@ package stratstuff;
 
 public class TerrainGenerator extends WorldPartModificator {
 
-	public TerrainGenerator(Area3D bounds) {
+	private TerrainType surfaceType;
+
+	public TerrainGenerator(Area3D bounds, TerrainType type) {
 		super(bounds);
+		this.surfaceType = type;
 	}
 
 	@Override
 	public World modify(World world) {
-		setGrassOnSurface(world);
+		setSurface(world);
 		setUnderground(world);
 		createMinerals(world);
 		return world;
@@ -16,11 +19,11 @@ public class TerrainGenerator extends WorldPartModificator {
 
 	private void createMinerals(World world) {
 		int amountOfCoal = (bounds.getW() * bounds.getH() * bounds.getD())
-				/ WorldGeneratorSettings.COAL_DIVISOR;
+				/ WorldGeneratorValues.COAL_DIVISOR;
 		int amountOfIron = (bounds.getW() * bounds.getH() * bounds.getD())
-				/ WorldGeneratorSettings.IRON_DIVISOR;
+				/ WorldGeneratorValues.IRON_DIVISOR;
 		int amountOfDiamond = (bounds.getW() * bounds.getH() * bounds.getD())
-				/ WorldGeneratorSettings.DIAMOND_DIVISOR;
+				/ WorldGeneratorValues.DIAMOND_DIVISOR;
 
 		Area3D underGroundBounds = new Area3D(0, 0, 1, bounds.getW(),
 				bounds.getH(), world.getDepth());
@@ -44,12 +47,13 @@ public class TerrainGenerator extends WorldPartModificator {
 		}
 	}
 
-	private void setGrassOnSurface(World world) {
+	private void setSurface(World world) {
+		int groundType = Ground.getByName(surfaceType.toString());
 		int surfaceLayer = 0;
 		for (int y = 0; y < bounds.getH(); y++) {
 			for (int x = 0; x < bounds.getW(); x++) {
-				world.addWorldPoint(new WorldPoint(x, y, surfaceLayer, Ground
-						.getByName("grass")));
+				world.addWorldPoint(new WorldPoint(x, y, surfaceLayer,
+						groundType));
 			}
 		}
 	}

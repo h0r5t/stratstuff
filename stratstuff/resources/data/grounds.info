@@ -16,3 +16,12 @@
     tex_blue = 0
     tex_alpha = 255
 }
+2:{
+    name = desert
+    image = /2/0.png
+    collides = false
+    tex_red = 186
+    tex_green = 140
+    tex_blue = 34
+    tex_alpha = 255
+}

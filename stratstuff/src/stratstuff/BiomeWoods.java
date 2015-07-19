@@ -9,9 +9,9 @@ public class BiomeWoods extends Biome {
 	@Override
 	public World modify(World world) {
 		int amountOfTrees = (bounds.getW() * bounds.getH() * bounds.getD())
-				/ WorldGeneratorSettings.TREES_DIVISOR;
+				/ WorldGeneratorValues.TREES_DIVISOR;
 		int amountOfBushes = (bounds.getW() * bounds.getH() * bounds.getD())
-				/ WorldGeneratorSettings.BUSH_DIVISOR;
+				/ WorldGeneratorValues.BUSH_DIVISOR;
 
 		for (int i = 0; i < amountOfTrees; i++) {
 			int treeID = Element.getByName("tree");

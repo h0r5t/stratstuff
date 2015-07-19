@@ -21,6 +21,7 @@ public class World extends Graph implements Saveable, Updatable {
 	private int depth;
 
 	public World(Core main, String name, int width, int height, int depth) {
+		super();
 		worldPointArray = new Integer[depth][width][height];
 		this.width = width;
 		this.height = height;

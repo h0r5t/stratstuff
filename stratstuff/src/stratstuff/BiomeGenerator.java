@@ -22,7 +22,8 @@ public class BiomeGenerator {
 		Area3D surface = new Area3D(0, 0, 0, world.getWidth(),
 				world.getHeight(), 1);
 
-		biomes.add(new BiomeWoods(surface));
+		// biomes.add(new BiomeWoods(surface));
+		biomes.add(new BiomeDesert(surface));
 	}
 
 	private void activateBiomes(World world) {

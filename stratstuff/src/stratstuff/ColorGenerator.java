@@ -23,7 +23,7 @@ public class ColorGenerator {
 			color = PLANET_COLOR_DARK;
 		}
 
-		ColorData myData = new ColorData(new Color(color), 5, 0);
+		ColorAttributes myData = new ColorAttributes(new Color(color), 5, 0);
 		int r = myData.getRandomRed();
 		int g = myData.getRandomGreen();
 		int b = myData.getRandomBlue();

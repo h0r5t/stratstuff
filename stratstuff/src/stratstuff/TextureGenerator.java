@@ -39,7 +39,7 @@ public class TextureGenerator {
 	}
 
 	public static BufferedImage generatePlanetImage(int colorCode, int diameter) {
-		BufferedImage image = generateCircle(new ColorData(
+		BufferedImage image = generateCircle(new ColorAttributes(
 				new Color(colorCode), 20, 0), 5, false, diameter, diameter);
 
 		image = add3DEffect(image);
@@ -101,7 +101,7 @@ public class TextureGenerator {
 		return image;
 	}
 
-	public static BufferedImage generateShapedImage20on20(ColorData myData,
+	public static BufferedImage generateShapedImage20on20(ColorAttributes myData,
 			int sectionSize, boolean blackBorder, TextureShape shape) {
 		if (shape == TextureShape.rectangle) {
 			return generateRectangle(myData, sectionSize, blackBorder, 20, 20);
@@ -111,7 +111,7 @@ public class TextureGenerator {
 			return null;
 	}
 
-	private static BufferedImage generateRectangle(ColorData myData,
+	private static BufferedImage generateRectangle(ColorAttributes myData,
 			int sectionSize, boolean blackBorder, int width, int height) {
 		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
@@ -136,7 +136,7 @@ public class TextureGenerator {
 		return image;
 	}
 
-	private static BufferedImage generateCircle(ColorData myData,
+	private static BufferedImage generateCircle(ColorAttributes myData,
 			int sectionSize, boolean blackBorder, int width, int height) {
 		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_ARGB_PRE);

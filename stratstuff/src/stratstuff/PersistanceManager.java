@@ -89,6 +89,15 @@ public class PersistanceManager {
 		return world;
 	}
 
+	public static World loadObjectsIntoWorld(Core main, World world) {
+		String worldName = world.getName();
+		world = loadAndAddObjects(world, worldName);
+		world = loadAndAddUnits(main, world, worldName);
+		world = loadAndAddItems(world, worldName);
+
+		return world;
+	}
+
 	private static int[] loadWorldSize(String worldName) {
 		int[] size = new int[3];
 		try {

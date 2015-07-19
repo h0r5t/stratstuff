@@ -135,3 +135,29 @@
     tex_blue = 14
     tex_alpha = 255
 }
+10:{
+    name = desert_bush
+    collides = false
+    ladderdown = false
+    ladderup = false
+    lightsource = false
+    drops = 1
+    tex_shape = circle
+    tex_red = 191
+    tex_green = 156
+    tex_blue = 38
+    tex_alpha = 255
+}
+11:{
+    name = cactus
+    collides = true
+    ladderdown = false
+    ladderup = false
+    lightsource = false
+    drops = 0
+    tex_shape = rectangle
+    tex_red = 20
+    tex_green = 115
+    tex_blue = 27
+    tex_alpha = 255
+}

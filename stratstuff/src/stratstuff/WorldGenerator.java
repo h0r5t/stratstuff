@@ -4,15 +4,13 @@ public class WorldGenerator {
 
 	public static World generateWorld(Core main, World onTopOf) {
 		// TODO XD
-		int width = (int) (Math.random() * 150);
-		int height = (int) (Math.random() * 150);
-		int depth = (int) (Math.random() * 10);
-
 		World world = onTopOf;
 
-		Area3D wholeWorld = new Area3D(0, 0, 0, width, height, depth);
+		Area3D wholeWorld = new Area3D(0, 0, 0, world.getWidth(),
+				world.getHeight(), world.getDepth());
 
-		TerrainGenerator terrainGen = new TerrainGenerator(wholeWorld);
+		TerrainGenerator terrainGen = new TerrainGenerator(wholeWorld,
+				TerrainType.desert);
 		world = terrainGen.modify(world);
 
 		BiomeGenerator biomeGen = new BiomeGenerator();

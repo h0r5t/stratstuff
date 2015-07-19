@@ -80,15 +80,31 @@ public class Core implements Runnable {
 	}
 
 	private void loadWorlds() {
-		World world;
-		File worldsDir = new File(FileSystem.WORLDS_DIR);
+		if (GameSettings.GENERATE_NEW_WORLD) {
+			World world0 = WorldGenerator.generateWorld(this, new World(this,
+					"world0", 120, 120, 30));
+			PersistanceManager.loadObjectsIntoWorld(this, world0);
+			simulationManager.addSimulator(new WorldSimulator(this, world0));
 
-		for (File f : worldsDir.listFiles()) {
-			if (f.getName().startsWith("world")) {
-				world = PersistanceManager.loadWorld(this, f.getName());
-				simulationManager.addSimulator(new WorldSimulator(this, world));
+			World world1 = WorldGenerator.generateWorld(this, new World(this,
+					"world1", 120, 120, 30));
+			PersistanceManager.loadObjectsIntoWorld(this, world1);
+			simulationManager.addSimulator(new WorldSimulator(this, world1));
+		}
+
+		else {
+			World world;
+			File worldsDir = new File(FileSystem.WORLDS_DIR);
+
+			for (File f : worldsDir.listFiles()) {
+				if (f.getName().startsWith("world")) {
+					world = PersistanceManager.loadWorld(this, f.getName());
+					simulationManager.addSimulator(new WorldSimulator(this,
+							world));
+				}
 			}
 		}
+
 	}
 
 	private void createUpdatables() {

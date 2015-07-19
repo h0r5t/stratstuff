@@ -2,11 +2,11 @@ package stratstuff;
 
 import java.awt.Color;
 
-public class ColorData {
+public class ColorAttributes {
 
 	private int rmin, rmax, gmin, gmax, bmin, bmax, alphamin, alphamax;
 
-	public ColorData(Color c, int colorVariation, int alphaVariation) {
+	public ColorAttributes(Color c, int colorVariation, int alphaVariation) {
 		rmin = c.getRed() - colorVariation;
 		rmax = c.getRed() + colorVariation;
 		gmin = c.getGreen() - colorVariation;
