@@ -15,6 +15,7 @@ class Robot(Thread):
         self.currentModeIndex = 0
         self.visionScope = None
         self.scopeFilter = None
+        self.inventory = [] # TODO
 
     def run(self):
         self.execute()
@@ -105,6 +106,11 @@ class Robot(Thread):
             return
         msg = self.watchEvent(event)
         return bool(msg)
+
+    def pickUpItem(self, linkedObjUID):
+        # robot picks up item (needs to stand on the wp the item is on)
+        self.adapter.registerPickUpItem(self.objectID, linkedObjUID)
+        self.wait(500)
 
     def sendRadialSignal(self, message):
         # sends a signal in all directions with the given message

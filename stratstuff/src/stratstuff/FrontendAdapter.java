@@ -62,10 +62,9 @@ public class FrontendAdapter {
 				e.printStackTrace();
 			}
 
-		} else if (isUnix(OS))
-		{
-//			change this to be set in cfg file or smth, todo
-//			gnome-terminal, konsole
+		} else if (isUnix(OS)) {
+			// change this to be set in cfg file or smth, todo
+			// gnome-terminal, konsole
 			String[] command = { "gnome-terminal", "-e",
 					adapterStarterLocation + "start_adapter.sh" + argument };
 			try {
@@ -196,8 +195,21 @@ public class FrontendAdapter {
 				World world = main.getObjectManager().getObject(objUID)
 						.getWorld();
 				WorldPoint wp = world.getObjectByUID(objUID).getPosition();
-				RadialSignal signal = new RadialSignal(world, wp, world.getObjectByUID(objUID),message);
+				RadialSignal signal = new RadialSignal(world, wp,
+						world.getObjectByUID(objUID), message);
 				world.addMicroObject(signal);
+			}
+
+			else if (name.equals("pickupitem")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int linkedObjUID = Integer.parseInt(command.split(" ")[2]);
+				Unit unit = main.getObjectManager().getObject(objUID)
+						.getWorld().getUnitByObjectID(objUID);
+				if (main.getObjectManager().getObject(linkedObjUID).canPickUp()) {
+					Item item = main.getItemManager().getItemByObjUID(
+							linkedObjUID);
+					item.pickedUpBy(unit);
+				}
 			}
 
 			else if (name.equals("move")) {

@@ -30,6 +30,12 @@ public class Item implements Saveable {
 		return uniqueID;
 	}
 
+	public int getLinkedObjUniqueID() {
+		if (linkedObject == null)
+			return -1;
+		return linkedObject.getUniqueID();
+	}
+
 	@Override
 	public String save() {
 		String linkedObjString = "-1";
@@ -53,6 +59,7 @@ public class Item implements Saveable {
 		ownerUnit = unit;
 		ownerUnit.addToInventory(this);
 
+		linkedObject.getWorld().removeObjectFromWorld(linkedObject);
 		linkedObject = null;
 	}
 

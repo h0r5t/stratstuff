@@ -226,6 +226,11 @@ class EngineAdapterClass:
             return
         self.messages.append("radialsignal " + str(objectID) + " " + str(message))
 
+    def registerPickUpItem(self, objectID, linkedObjUID):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
+        self.messages.append("pickupitem " + str(objectID) + " " + str(linkedObjUID))
+
     # ----------------- Commands -----------------------
 
     def doShutdown(self):

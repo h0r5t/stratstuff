@@ -59,6 +59,10 @@ class EngineData():
         a = self.groundData[str(groundID)]
         return "true" == a["collides"]
 
+    def canPickUp(self, objID):
+        a = self.objectData[str(objID)]
+        return "true" == a["canpickup"]
+
     def getObjects(self):
         return self.m_objects
 

@@ -15,8 +15,17 @@ public class ItemManager implements Updatable {
 		itemMap.put(item.getUniqueID(), item);
 	}
 
-	public Item getItem(int uid) {
-		return itemMap.get(uid);
+	public Item getItem(int itemUID) {
+		return itemMap.get(itemUID);
+	}
+
+	public Item getItemByObjUID(int objUID) {
+		for (Item i : getItemList()) {
+			if (i.getLinkedObjUniqueID() == objUID) {
+				return i;
+			}
+		}
+		return null;
 	}
 
 	@Override
