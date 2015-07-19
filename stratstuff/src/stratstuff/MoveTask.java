@@ -10,7 +10,7 @@ public class MoveTask extends Task {
 			WorldPoint target) {
 		this.object = o;
 		this.taskManager = taskManager;
-		path = new MovePath(this, taskManager, world, o.getPosition(), target);
+		path = new MovePath(this, world, o.getPosition(), target);
 		object.updateRotation(path.seeNext());
 	}
 

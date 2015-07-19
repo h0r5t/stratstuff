@@ -148,6 +148,10 @@ public class World extends Graph implements Saveable, Updatable {
 		main.getObjectManager().removeObject(o.getUniqueID());
 	}
 
+	public void removeItem(Item item) {
+		main.getItemManager().removeItem(item);
+	}
+
 	public WorldPoint getObjectPosition(MovingObject o) {
 		return objectMap.get(o);
 	}

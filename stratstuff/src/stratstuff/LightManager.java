@@ -163,9 +163,17 @@ public class LightManager implements Updatable {
 	}
 
 	public boolean isDarkAt(WorldPoint p) {
-		if (lightArray[p.getX()][p.getY()][p.getZ()] == 0) {
-			return true;
+		if (p == null)
+			return false;
+		if (p.getX() > 0 && p.getX() < world.getWidth() && p.getY() > 0
+				&& p.getY() < world.getHeight() && p.getZ() > 0
+				&& p.getZ() < world.getDepth()) {
+
+			if (lightArray[p.getX()][p.getY()][p.getZ()] == 0) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 

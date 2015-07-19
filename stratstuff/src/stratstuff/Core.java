@@ -130,18 +130,19 @@ public class Core implements Runnable {
 	@Override
 	public void run() {
 		try {
-			update();
+			routine();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void update() throws InterruptedException {
+	public void routine() throws InterruptedException {
 
 		initialSleep();
 		timer.start();
 
 		unitManager.registerRobots();
+		unitManager.initItemsInFrontend();
 
 		while (true) {
 			if (!locked) {

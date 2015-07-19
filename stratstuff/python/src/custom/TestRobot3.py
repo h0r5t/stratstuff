@@ -13,8 +13,8 @@ class TestRobot3(Robot):
         Robot.__init__(self, adapter, m_objectID)
         self.setScopeFilter()
 
-        self.idlemode = IdleMode(adapter, self)
-        self.setMode(0, self.idlemode)
+        self.testmode = TestMode(adapter, self)
+        self.setMode(0, self.testmode)
 
     def setScopeFilter(self):
         groundlist = []
@@ -26,7 +26,7 @@ class TestRobot3(Robot):
         self.applyScopeFilter(sfilter)
 
     def signalReceived(self, message):
-        print(message)
+        pass
 
 class MyScopeFilter(ScopeFilter):
     def __init__(self):
@@ -52,13 +52,15 @@ class MyScopeFilter(ScopeFilter):
         newScope = Scope("", acceptedWPs, acceptedObjs)
         return newScope
 
-class IdleMode(Mode):
+class TestMode(Mode):
     def __init__(self, adapter, robot):
         Mode.__init__(self, adapter, robot)
-        idlestate = IdleState(adapter, robot, self)
-        self.setState(0, idlestate)
+        state1 = PickUpState(adapter, robot, self)
+        state2 = DropState(adapter, robot, self)
+        self.setState(0, state1)
+        self.setState(1, state2)
 
-class IdleState(State):
+class PickUpState(State):
     def __init__(self, adapter, robot, mode):
         State.__init__(self, adapter, robot, mode)
         self.adapter = adapter
@@ -66,13 +68,23 @@ class IdleState(State):
     def execute(self):
         scope = self.robot.getScope()
 
-        if len(scope.getObjects()) > 0:
-            obj = scope.getObjects()[0]
-            print str(self.adapter.getWorld().canPickUp(obj.getObjectType()))
+        for obj in scope.getObjects():
             x = obj.getX()
             y = obj.getY()
             z = obj.getZ()
             self.robot.moveTo(x, y, z)
             self.robot.pickUpItem(obj.getObjectID())
 
-        self.robot.wait(3000)
+class DropState(State):
+    def __init__(self, adapter, robot, mode):
+        State.__init__(self, adapter, robot, mode)
+        self.adapter = adapter
+
+    def execute(self):
+
+        for item in self.robot.getInventory()[:]:
+            x = randint(0, 30)
+            y = randint(0, 30)
+            z = 0
+            self.robot.moveTo(x, y, z)
+            self.robot.dropItem(item)

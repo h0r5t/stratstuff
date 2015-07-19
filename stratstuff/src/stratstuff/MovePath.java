@@ -10,17 +10,14 @@ public class MovePath {
 	private WorldPoint from;
 	private WorldPoint to;
 	private World world;
-	private TaskManager mgr;
 	private Task myTask;
 	private LinkedList<GraphNode> route;
 	private int index = 0;
 
-	public MovePath(Task myTask, TaskManager mgr, World w, WorldPoint from,
-			WorldPoint to) {
+	public MovePath(Task myTask, World w, WorldPoint from, WorldPoint to) {
 		this.from = from;
 		this.to = to;
 		this.world = w;
-		this.mgr = mgr;
 		this.myTask = myTask;
 		calculatePath();
 	}
@@ -67,7 +64,7 @@ public class MovePath {
 	}
 
 	public WorldPoint seeNext() {
-		if (index >= route.size()) {
+		if (route == null || index >= route.size()) {
 			return null;
 		}
 		GraphNode next = route.get(index);

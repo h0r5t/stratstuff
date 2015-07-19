@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.JPanel;
 
@@ -39,21 +40,24 @@ public class GamePanel extends JPanel {
 
 	@Override
 	public void paint(Graphics g) {
-		requestFocusInWindow();
-		if (!visualManager.drawNow()) {
-			return;
+		try {
+			requestFocusInWindow();
+			if (!visualManager.drawNow()) {
+				return;
+			}
+			Graphics2D g2 = (Graphics2D) g;
+
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+
+			View view = visualManager.getRenderedView();
+			view.draw(g2);
+
+			drawGameMenu(g2);
+			// drawInfoScreen(g2);
+			drawGameIsPaused(g2);
+		} catch (ConcurrentModificationException e) {
 		}
-		Graphics2D g2 = (Graphics2D) g;
-
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-
-		View view = visualManager.getRenderedView();
-		view.draw(g2);
-
-		drawGameMenu(g2);
-		// drawInfoScreen(g2);
-		drawGameIsPaused(g2);
 	}
 
 	private void drawGameIsPaused(Graphics2D g2) {

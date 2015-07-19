@@ -4,6 +4,7 @@ import sys
 import time
 
 import EngineData
+from EngineData import Item
 from Events import RemoteEvent
 import IPCClient
 import IPCServer
@@ -157,6 +158,24 @@ class EngineAdapterClass:
             if self.robotsMap.has_key(str(objUID)):
                 self.robotsMap[str(objUID)].signalReceived(msg)
 
+        elif messageID == "8":
+            # add item
+            objUID = int(split[1])
+            itemUID = int(split[2])
+            itemType = int(split[3])
+            if self.robotsMap.has_key(str(objUID)):
+                item = Item(itemUID, itemType)
+                self.robotsMap[str(objUID)].addToInventory(item)
+
+        elif messageID == "9":
+            # remove item
+            objUID = int(split[1])
+            itemUID = int(split[2])
+            itemType = int(split[3])
+            if self.robotsMap.has_key(str(objUID)):
+                item = Item(itemUID, itemType)
+                self.robotsMap[str(objUID)].removeFromInventory(item)
+
 
     # ----------------- Engine Messages ----------------
 
@@ -231,6 +250,16 @@ class EngineAdapterClass:
             return
         self.messages.append("pickupitem " + str(objectID) + " " + str(linkedObjUID))
 
+    def registerPlaceItem(self, objectID, item):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
+        self.messages.append("placeitem " + str(objectID) + " " + str(item.getItemID()))
+
+    def registerDropItem(self, objectID, item):
+        if self.robotsMap.has_key(str(objectID)) == False:
+            return
+        self.messages.append("dropitem " + str(objectID) + " " + str(item.getItemID()))
+
     # ----------------- Commands -----------------------
 
     def doShutdown(self):
@@ -242,5 +271,5 @@ if __name__ == '__main__':
     print(">>> starting...")
     IPCServer.start(adapter.messageReceived)
     print(">>> server started.")
-    print(">>> stratstuff Frontend v1.0")
+    print(">>> stratstuff python frontend v1.0")
     adapter.loop()

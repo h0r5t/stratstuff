@@ -212,6 +212,24 @@ public class FrontendAdapter {
 				}
 			}
 
+			else if (name.equals("placeitem")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int itemUID = Integer.parseInt(command.split(" ")[2]);
+				Unit unit = main.getObjectManager().getObject(objUID)
+						.getWorld().getUnitByObjectID(objUID);
+				Item item = main.getItemManager().getItem(itemUID);
+				item.placeItem(unit);
+			}
+
+			else if (name.equals("dropitem")) {
+				int objUID = Integer.parseInt(command.split(" ")[1]);
+				int itemUID = Integer.parseInt(command.split(" ")[2]);
+				Unit unit = main.getObjectManager().getObject(objUID)
+						.getWorld().getUnitByObjectID(objUID);
+				Item item = main.getItemManager().getItem(itemUID);
+				item.dropItem(unit);
+			}
+
 			else if (name.equals("move")) {
 				int objUID = Integer.parseInt(command.split(" ")[1]);
 				int x = Integer.parseInt(command.split(" ")[2]);

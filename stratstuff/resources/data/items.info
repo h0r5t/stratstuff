@@ -1,15 +1,19 @@
 0:{
     name = item_wood
     object = 2
+    element = 0
 }
 1:{
     name = item_leaves
     object = 3
+    element = 1
 }
 2:{
     name = item_stones
     object = 4
+    element = 9
 }
 3:{
     name = item_torch
     object = 5
+    element = 8

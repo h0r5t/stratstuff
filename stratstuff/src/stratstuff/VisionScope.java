@@ -24,10 +24,13 @@ public class VisionScope {
 			for (int y = obj.getPosition().getY() - 5; y <= obj.getPosition()
 					.getY() + 5; y++) {
 				WorldPoint wp = world.getWP(x, y, obj.getPosition().getZ());
-				if (!lightMgr.isDarkAt(wp)) {
-					wpList.add(wp);
-					objList.addAll(wp.getAttachedMovingObjects());
+				if (wp != null) {
+					if (!lightMgr.isDarkAt(wp)) {
+						wpList.add(wp);
+						objList.addAll(wp.getAttachedMovingObjects());
+					}
 				}
+
 			}
 		}
 

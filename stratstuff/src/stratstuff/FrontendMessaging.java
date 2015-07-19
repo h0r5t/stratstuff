@@ -35,9 +35,19 @@ public class FrontendMessaging {
 	public static String removeRobotDesign(int objectID) {
 		return "6 " + objectID;
 	}
-	
+
 	public static String signalReceived(int objectID, Signal signal) {
 		return "7 " + objectID + " " + signal.getMessage();
+	}
+
+	public static String addToInventory(int objectID, Item item) {
+		return "8 " + objectID + " " + item.getUniqueID() + " "
+				+ item.getType();
+	}
+
+	public static String removeFromInventory(int objectID, Item item) {
+		return "9 " + objectID + " " + item.getUniqueID() + " "
+				+ item.getType();
 	}
 
 	public static String menuInputMessage(String name, String type,

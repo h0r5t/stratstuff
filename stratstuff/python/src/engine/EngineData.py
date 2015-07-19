@@ -15,6 +15,7 @@ class EngineData():
         self.groundData = {}  # ground data, will be loaded
         self.elementData = {}  # element data, will be loaded
         self.objectData = {}  # object data, will be loaded
+        self.itemData = {} # item data, will be loaded
 
         self.loadFromFilesystem()
 
@@ -175,6 +176,7 @@ class EngineData():
         self.loadGroundData()
         self.loadElementData()
         self.loadObjectData()
+        self.loadItemData()
 
     def loadGroundIDs(self):
         self.wp_array = numpy.empty((120, 120, 10), dtype=object)  # @UndefinedVariable
@@ -237,6 +239,10 @@ class EngineData():
     def loadObjectData(self):
         f = dataDir + "/objects.info"
         self.objectData = InfoReader.readFile(f)
+
+    def loadItemData(self):
+        f = dataDir + "/items.info"
+        self.itemData = InfoReader.readFile(f)
 
 class WorldPoint():
     def __init__(self, ground_id, x, y, z):
@@ -310,69 +316,12 @@ class MovingObject():
 
 
 class Item():
-    def __init__(self, itemID, itemType, linkedObject, ownerObjID, infoText):
+    def __init__(self, itemID, itemType):
         self.itemID = itemID
         self.itemType = itemType
-        self.ownerObjID = ownerObjID
-        self.linkedObj = linkedObject  # -1 when no linked object exists
-        self.infoText = infoText
-        self.pickupTaskCreated = False
-        self.droptaskCreated = False
 
     def getItemID(self):
         return self.itemID
 
-    def setOwnerObjID(self, objID):
-        self.ownerObjID = objID
-
-    def getOwnerObjID(self):
-        return self.ownerObjID
-
-    def setPickUpTaskCreated(self, value):
-        self.pickupTaskCreated = value
-
-    def pickUpTaskCreated(self):
-        return self.pickupTaskCreated
-
-    def setDropTaskCreated(self, value):
-        self.droptaskCreated = value
-
-    def getDropTaskCreated(self):
-        return self.droptaskCreated
-
     def getItemType(self):
         return self.itemType
-
-    def setLinkedObjectUniqueID(self, objID):
-        self.linkedObj = int(objID)
-
-    def getLinkedObjectUniqueID(self):
-        return self.linkedObj
-
-    def getInfoText(self):
-        return self.infoText
-
-class Unit:
-    def __init__(self, m_object):
-        self.m_object = m_object
-        self.inventory = []
-
-    def getObject(self):
-        return self.m_object
-
-    def isIdle(self):
-        return self.ai.isIdle()
-
-    def getInventory(self):
-        return self.inventory
-
-    def addItemToInventory(self, item):
-        self.inventory.append(item)
-        item.setOwnerObjID(self.m_object.getObjectID())
-
-    def removeItemFromInventory(self, item):
-        self.inventory.remove(item)
-        item.setOwnerObjID(-1)
-
-    def update(self):
-        pass

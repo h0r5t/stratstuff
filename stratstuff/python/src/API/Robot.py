@@ -15,7 +15,7 @@ class Robot(Thread):
         self.currentModeIndex = 0
         self.visionScope = None
         self.scopeFilter = None
-        self.inventory = [] # TODO
+        self.inventory = [] # list of item objects
 
     def run(self):
         self.execute()
@@ -34,6 +34,15 @@ class Robot(Thread):
 
     def setMode(self, index, mode):
         self.modes[index] = mode
+
+    def addToInventory(self, item):
+        self.inventory.append(item)
+
+    def removeFromInventory(self, item):
+        itemID = item.getItemID()
+        for item in self.inventory[:]:
+            if int(item.getItemID()) == int(itemID):
+                self.inventory.remove(item)
 
     def watchEvent(self, event):
         while 1:
@@ -60,6 +69,9 @@ class Robot(Thread):
             return
         msg = self.watchEvent(event)
         return bool(msg)
+
+    def getInventory(self):
+        return self.inventory
 
     def getScope(self):
         # returns everything the robot can see as a Scope object
@@ -110,6 +122,16 @@ class Robot(Thread):
     def pickUpItem(self, linkedObjUID):
         # robot picks up item (needs to stand on the wp the item is on)
         self.adapter.registerPickUpItem(self.objectID, linkedObjUID)
+        self.wait(500)
+
+    def placeItem(self, item):
+        # robot places the item off his inventory
+        self.adapter.registerPlaceItem(self.objectID, item)
+        self.wait(500)
+
+    def dropItem(self, item):
+        # robot drops the item off his inventory to the ground
+        self.adapter.registerDropItem(self.objectID, item)
         self.wait(500)
 
     def sendRadialSignal(self, message):

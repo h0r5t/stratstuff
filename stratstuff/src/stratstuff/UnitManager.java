@@ -21,6 +21,12 @@ public class UnitManager implements Updatable {
 		return unitMap.get(uid);
 	}
 
+	public void initItemsInFrontend() {
+		for (Unit unit : getUnitList()) {
+			unit.initItemsInFrontend();
+		}
+	}
+
 	@Override
 	public void update() {
 

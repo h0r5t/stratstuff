@@ -54,10 +54,29 @@ public class Unit implements Saveable {
 
 	public void addToInventory(Item item) {
 		inventory.add(item);
+		Core.tellFrontend(FrontendMessaging.addToInventory(getMovingObjUID(),
+				item));
+	}
+
+	public void removeItemFromInventory(Item item) {
+		inventory.remove(item);
+		Core.tellFrontend(FrontendMessaging.removeFromInventory(
+				getMovingObjUID(), item));
+	}
+
+	public void initItemsInFrontend() {
+		for (Item item : inventory) {
+			Core.tellFrontend(FrontendMessaging.addToInventory(
+					getMovingObjUID(), item));
+		}
 	}
 
 	public int getMovingObjUID() {
 		return myObject.getUniqueID();
+	}
+
+	public MovingObject getMovingObject() {
+		return myObject;
 	}
 
 	public void fireBullet(World world) {

@@ -11,6 +11,10 @@ public class ItemManager implements Updatable {
 		itemMap = new HashMap<Integer, Item>();
 	}
 
+	public void removeItem(Item item) {
+		itemMap.remove(item.getUniqueID());
+	}
+
 	public void addItem(Item item) {
 		itemMap.put(item.getUniqueID(), item);
 	}

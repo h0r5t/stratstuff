@@ -36,6 +36,10 @@ public class Item implements Saveable {
 		return linkedObject.getUniqueID();
 	}
 
+	public int getType() {
+		return itemType;
+	}
+
 	@Override
 	public String save() {
 		String linkedObjString = "-1";
@@ -61,6 +65,33 @@ public class Item implements Saveable {
 
 		linkedObject.getWorld().removeObjectFromWorld(linkedObject);
 		linkedObject = null;
+	}
+
+	// places item, will be turned to element
+	public void placeItem(Unit u) {
+		WorldPoint placeLocation = u.getMovingObject().getPosition();
+		if (placeLocation.getAttachedElement() != -1) {
+			// element already present, cant place item here
+			return;
+		}
+		int elementID = myInfo.getValueInt("element");
+		u.getWorld().setElementForWP(false, placeLocation, elementID);
+
+		u.removeItemFromInventory(this);
+		world.removeItem(this);
+	}
+
+	// drops item, which just removes from Inventory and creates movingobject
+	public void dropItem(Unit u) {
+		WorldPoint dropLocation = u.getMovingObject().getPosition();
+		int droppedObjType = getLinkedObjectType();
+		MovingObject newObject = new MovingObject(droppedObjType, world,
+				UniqueIDFactory.getID());
+		world.spawnObject(newObject, dropLocation);
+
+		ownerUnit.removeItemFromInventory(this);
+		ownerUnit = null;
+		linkedObject = newObject;
 	}
 
 	public static void loadFromInfoFile() {
