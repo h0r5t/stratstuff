@@ -17,6 +17,7 @@ public class MovingObject implements Drawable, Saveable {
 	private String name;
 	private boolean collides;
 	private boolean canPickUp;
+	private boolean isLightSource;
 	private boolean paint = true;
 	private DynamicTexture texture;
 	private static HashMap<String, LoadedInfo> info;
@@ -32,6 +33,7 @@ public class MovingObject implements Drawable, Saveable {
 		}
 		this.collides = myInfo.getValueBool("collides");
 		this.canPickUp = myInfo.getValueBool("canpickup");
+		this.isLightSource = myInfo.getValueBool("lightsource");
 		this.world = world;
 		this.uniqueID = uniqueID;
 		this.myType = myType;
@@ -64,6 +66,10 @@ public class MovingObject implements Drawable, Saveable {
 
 	public boolean canPickUp() {
 		return canPickUp;
+	}
+
+	public boolean isLightSource() {
+		return isLightSource;
 	}
 
 	public int getUniqueID() {

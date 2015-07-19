@@ -50,9 +50,9 @@ public class LightManager implements Updatable {
 			for (int y = 0; y < world.getHeight(); y++) {
 				for (int z = 0; z < world.getDepth(); z++) {
 					if (z > 0) {
-						lightArray[x][y][z] = 5;
+						lightArray[x][y][z] = GameSettings.LIGHT_LEVEL_UNDERGROUND;
 					} else {
-						lightArray[x][y][z] = 5;
+						lightArray[x][y][z] = GameSettings.LIGHT_LEVEL_SURFACE;
 					}
 				}
 			}
@@ -150,9 +150,9 @@ public class LightManager implements Updatable {
 			for (int x = 0; x < world.getWidth(); x++) {
 				for (int y = 0; y < world.getHeight(); y++) {
 					if (z > 0) {
-						lightArray[x][y][z] = 5;
+						lightArray[x][y][z] = GameSettings.LIGHT_LEVEL_UNDERGROUND;
 					} else {
-						lightArray[x][y][z] = 5;
+						lightArray[x][y][z] = GameSettings.LIGHT_LEVEL_SURFACE;
 					}
 				}
 			}

@@ -3,40 +3,47 @@
     image = commander.png
     collides = false
     canpickup = false
+    lightsource = true
 }
 1:{
     name = testmob
     image = worker.png
     collides = false
     canpickup = false
+    lightsource = true
 }
 2:{
     name = item_wood
     image = item_sample.png
     collides = false
     canpickup = true
+    lightsource = false
 }
 3:{
     name = item_leaves
     image = item_sample.png
     collides = false
     canpickup = true
+    lightsource = false
 }
 4:{
     name = item_stones
     image = item_sample.png
     collides = false
     canpickup = true
+    lightsource = false
 }
 5:{
     name = item_torch
     image = item_sample.png
     collides = false
     canpickup = true
+    lightsource = false
 }
 6:{
     name = robot
     image = robot.png
     collides = false
     canpickup = false
+    lightsource = true
 }

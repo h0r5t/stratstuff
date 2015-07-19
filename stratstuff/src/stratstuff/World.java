@@ -128,15 +128,18 @@ public class World extends Graph implements Saveable, Updatable {
 
 	public void moveObjectTo(MovingObject o, WorldPoint p) {
 		WorldPoint old = o.getPosition();
-		myLightManager.unregisterLightSource(old);
+		if (o.isLightSource())
+			myLightManager.unregisterLightSource(old);
 		o.getPosition().removeObjectAttachment(o);
 		p.attachMovingObject(o);
 		objectMap.put(o, p);
-		myLightManager.registerLightSource(p);
+		if (o.isLightSource())
+			myLightManager.registerLightSource(p);
 	}
 
 	public void spawnObject(MovingObject o, WorldPoint p) {
-		myLightManager.registerLightSource(p);
+		if (o.isLightSource())
+			myLightManager.registerLightSource(p);
 		objectMap.put(o, p);
 		p.attachMovingObject(o);
 		main.getObjectManager().addUnit(o);
