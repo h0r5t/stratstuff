@@ -26,8 +26,7 @@ public class MovingObject implements Drawable, Saveable {
 		LoadedInfo myInfo = info.get(myType + "");
 		name = myInfo.getValueString("name");
 		try {
-			image = ImageIO.read(new File(FileSystem.TEXTURES_DIR + "/units/"
-					+ myInfo.getValueString("image")));
+			image = ImageIO.read(new File(FileSystem.TEXTURES_DIR + "/units/" + myInfo.getValueString("image")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,8 +78,7 @@ public class MovingObject implements Drawable, Saveable {
 	@Override
 	public String save() {
 		WorldPoint p = world.getObjectPosition(this);
-		return myType + " " + uniqueID + " " + p.getX() + " " + p.getY() + " "
-				+ p.getZ();
+		return myType + " " + uniqueID + " " + p.getX() + " " + p.getY() + " " + p.getZ();
 	}
 
 	@Override
@@ -115,8 +113,7 @@ public class MovingObject implements Drawable, Saveable {
 	@Override
 	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
 		if (paint) {
-			g.drawImage(texture.getImage(), xinpixels, yinpixels,
-					GameSettings.TILE_SIZE, GameSettings.TILE_SIZE, null);
+			g.drawImage(texture.getImage(), xinpixels, yinpixels, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE, null);
 		}
 	}
 

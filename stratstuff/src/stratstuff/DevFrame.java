@@ -36,7 +36,7 @@ public class DevFrame implements Updatable {
 	private JComboBox<String> unitsComboBox, designsComboBox;
 	private JButton applyButton, refreshButton;
 
-	private ArrayList<Design> loadedDesigns;
+	private ArrayList<RobotDesign> loadedDesigns;
 
 	public DevFrame(Core core) {
 		this.core = core;
@@ -89,7 +89,7 @@ public class DevFrame implements Updatable {
 	private void makeDesignComboBox() {
 		modelDesigns2 = new DefaultComboBoxModel<String>();
 		modelDesigns2.addElement("-");
-		for (Design d : loadedDesigns) {
+		for (RobotDesign d : loadedDesigns) {
 			modelDesigns2.addElement(d.getName());
 		}
 
@@ -111,7 +111,7 @@ public class DevFrame implements Updatable {
 		designsPanel.add(unitsComboBox);
 
 		String unit = (String) unitsComboBox.getSelectedItem();
-		Design actualDesign = core.getUnitManager()
+		RobotDesign actualDesign = core.getUnitManager()
 				.getUnit(Integer.parseInt(unit)).getDesign();
 		if (actualDesign == null) {
 			designsComboBox.setSelectedItem("-");
@@ -141,7 +141,7 @@ public class DevFrame implements Updatable {
 		}
 
 		// remove all designs that are already loaded
-		for (Design d : loadedDesigns) {
+		for (RobotDesign d : loadedDesigns) {
 			modelFiles.removeElement(d.getName());
 		}
 
@@ -158,13 +158,13 @@ public class DevFrame implements Updatable {
 		}
 
 		// remove all designs that are already loaded
-		for (Design d : loadedDesigns) {
+		for (RobotDesign d : loadedDesigns) {
 			modelFiles.removeElement(d.getName());
 		}
 	}
 
 	private void loadDesigns() {
-		loadedDesigns = new ArrayList<Design>();
+		loadedDesigns = new ArrayList<RobotDesign>();
 		try {
 			modelDesigns = new DefaultListModel<String>();
 			Scanner scanner = new Scanner(new File(FileSystem.GAME_DIR
@@ -174,7 +174,7 @@ public class DevFrame implements Updatable {
 				String[] split = scanner.nextLine().split(" ");
 				String name = split[0];
 				File path = new File(split[1]);
-				loadedDesigns.add(new Design(name, path));
+				loadedDesigns.add(new RobotDesign(name, path));
 				modelDesigns.addElement(name);
 			}
 
@@ -189,8 +189,8 @@ public class DevFrame implements Updatable {
 	}
 
 	private void deleteDesign(String designName) {
-		Design d = null;
-		for (Design design : loadedDesigns) {
+		RobotDesign d = null;
+		for (RobotDesign design : loadedDesigns) {
 			if (design.getName().equals(designName)) {
 				d = design;
 			}
@@ -203,7 +203,7 @@ public class DevFrame implements Updatable {
 		try {
 			PrintWriter writer = new PrintWriter(new File(FileSystem.GAME_DIR
 					+ "/designs/robots.txt"));
-			for (Design d : loadedDesigns) {
+			for (RobotDesign d : loadedDesigns) {
 				writer.append(d.getName() + " " + d.getPath() + "\n");
 			}
 			writer.close();
@@ -225,8 +225,8 @@ public class DevFrame implements Updatable {
 
 	}
 
-	public Design getDesignByName(String designName) {
-		for (Design d : loadedDesigns) {
+	public RobotDesign getDesignByName(String designName) {
+		for (RobotDesign d : loadedDesigns) {
 			if (d.getName().equals(designName)) {
 				return d;
 			}
@@ -265,7 +265,7 @@ public class DevFrame implements Updatable {
 				modelDesigns.addElement(designName);
 				modelFiles.removeElement(designName);
 				modelDesigns2.addElement(designName);
-				loadedDesigns.add(new Design(designName, new File(
+				loadedDesigns.add(new RobotDesign(designName, new File(
 						FileSystem.CUSTOM_DESIGNS_DIR + designName + ".py")));
 			} else if (e.getSource() == shiftFilesButton2) {
 				String designName = filesJList2.getSelectedValue();
@@ -287,7 +287,7 @@ public class DevFrame implements Updatable {
 					}
 					unit.setDesign(null);
 				} else {
-					Design d = getDesignByName(design);
+					RobotDesign d = getDesignByName(design);
 					if (unit.getDesign() == null) {
 						Core.tellFrontend(FrontendMessaging
 								.startRobotWithDesign(unit.getMovingObjUID(),
@@ -312,7 +312,7 @@ public class DevFrame implements Updatable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String unit = (String) unitsComboBox.getSelectedItem();
-			Design actualDesign = core.getUnitManager()
+			RobotDesign actualDesign = core.getUnitManager()
 					.getUnit(Integer.parseInt(unit)).getDesign();
 			if (actualDesign == null) {
 				designsComboBox.setSelectedItem("-");

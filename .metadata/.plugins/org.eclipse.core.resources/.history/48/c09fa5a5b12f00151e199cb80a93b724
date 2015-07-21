@@ -1,0 +1,7 @@
+package stratstuff;
+
+public interface UIElement extends Drawable {
+
+	public boolean overridesInput();
+
+}

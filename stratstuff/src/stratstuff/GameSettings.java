@@ -28,8 +28,8 @@ public class GameSettings {
 	public static final int COLOR_VARIATION = 5;
 	public static final int TEXTURE_AMOUNT = 30;
 
-	public static final int BULLET_SPEED = 150;
+	public static final int BULLET_SPEED = 50;
 
-	public static final int LIGHT_LEVEL_SURFACE = 3;
-	public static final int LIGHT_LEVEL_UNDERGROUND = 3;
+	public static final int LIGHT_LEVEL_SURFACE = 5;
+	public static final int LIGHT_LEVEL_UNDERGROUND = 5;
 }

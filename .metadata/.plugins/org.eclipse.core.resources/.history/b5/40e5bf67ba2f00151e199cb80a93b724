@@ -1,0 +1,21 @@
+package stratstuff;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+public class UnitSelectionMarker extends MicroObject {
+
+	public UnitSelectionMarker() {
+
+	}
+
+	@Override
+	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
+			}
+
+	@Override
+	public void update() {
+
+	}
+
+}

@@ -1,0 +1,13 @@
+package stratstuff;
+
+public class ContextCommand {
+	
+//	the design this contextcommand is assigned too
+	private RobotDesign design;
+	private String methodName;
+	
+	public ContextCommand(RobotDesign design) {
+		this.design = design;
+	}
+
+}

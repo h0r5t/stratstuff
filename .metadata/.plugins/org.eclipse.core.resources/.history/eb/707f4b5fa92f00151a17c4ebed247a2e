@@ -1,0 +1,11 @@
+package stratstuff;
+
+public class ContextCommand {
+	
+	private RobotDesign design;
+	
+	public ContextCommand(RobotDesign design) {
+		this.design = design;
+	}
+
+}

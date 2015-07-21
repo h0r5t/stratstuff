@@ -17,15 +17,26 @@ class TestRobot3(Robot):
         self.setMode(0, self.testmode)
 
     def setScopeFilter(self):
-        groundlist = []
-        elementlist = []
-        objlist = []
-        objlist.append(3)
-
         sfilter = MyScopeFilter()
         self.applyScopeFilter(sfilter)
 
     def signalReceived(self, message):
+        pass
+
+    #ContextCommand
+    def contextTest(self):
+        pass
+
+    #ContextCommand
+    def contextTest2(self):
+        pass
+
+    #ContextCommand
+    def contextTest3(self):
+        pass
+
+    #ContextCommand
+    def contextTest4(self):
         pass
 
 class MyScopeFilter(ScopeFilter):

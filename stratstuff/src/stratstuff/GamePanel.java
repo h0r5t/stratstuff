@@ -26,8 +26,7 @@ public class GamePanel extends JPanel {
 	private GameMenu gameMenu;
 	private InfoScreen currentInfoScreen;
 
-	public GamePanel(Core core, VisualManager visualManager,
-			InputManager handler, GameMenu gameMenu) {
+	public GamePanel(Core core, VisualManager visualManager, InputManager handler, GameMenu gameMenu) {
 		this.core = core;
 		this.visualManager = visualManager;
 		this.inputHandler = handler;
@@ -47,8 +46,7 @@ public class GamePanel extends JPanel {
 			}
 			Graphics2D g2 = (Graphics2D) g;
 
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			View view = visualManager.getRenderedView();
 			view.draw(g2);
@@ -65,9 +63,7 @@ public class GamePanel extends JPanel {
 			g2.setColor(Color.YELLOW);
 			Font f = new Font(Font.SANS_SERIF, Font.BOLD, 20);
 			g2.setFont(f);
-			g2.drawString(
-					"PAUSED",
-					(GameSettings.GAME_FRAME_WIDTH - GameSettings.MENU_WIDTH) / 2,
+			g2.drawString("PAUSED", (GameSettings.GAME_FRAME_WIDTH - GameSettings.MENU_WIDTH) / 2,
 					GameSettings.GAME_FRAME_HEIGHT / 2);
 		}
 	}

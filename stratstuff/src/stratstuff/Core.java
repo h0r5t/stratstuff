@@ -47,8 +47,7 @@ public class Core implements Runnable {
 		loadGalaxies();
 		loadWorlds();
 
-		visualManager = new VisualManager(this, inputManager, windowAdapter,
-				gameMenu);
+		visualManager = new VisualManager(this, inputManager, windowAdapter, gameMenu);
 		updatables.add(visualManager);
 
 		simulationManager.initLights();
@@ -58,8 +57,7 @@ public class Core implements Runnable {
 
 		developerFrame.makeUnitComboBox();
 
-		visualManager.setRenderedView(new WorldView(this, simulationManager
-				.getWorldWithName("world1")));
+		visualManager.setRenderedView(new WorldView(this, simulationManager.getWorldWithName("world1")));
 
 		visualManager.activate();
 	}
@@ -81,13 +79,11 @@ public class Core implements Runnable {
 
 	private void loadWorlds() {
 		if (GameSettings.GENERATE_NEW_WORLD) {
-			World world0 = WorldGenerator.generateWorld(this, new World(this,
-					"world0", 120, 120, 30));
+			World world0 = WorldGenerator.generateWorld(this, new World(this, "world0", 120, 120, 30));
 			PersistanceManager.loadObjectsIntoWorld(this, world0);
 			simulationManager.addSimulator(new WorldSimulator(this, world0));
 
-			World world1 = WorldGenerator.generateWorld(this, new World(this,
-					"world1", 120, 120, 30));
+			World world1 = WorldGenerator.generateWorld(this, new World(this, "world1", 120, 120, 30));
 			PersistanceManager.loadObjectsIntoWorld(this, world1);
 			simulationManager.addSimulator(new WorldSimulator(this, world1));
 		}
@@ -99,8 +95,7 @@ public class Core implements Runnable {
 			for (File f : worldsDir.listFiles()) {
 				if (f.getName().startsWith("world")) {
 					world = PersistanceManager.loadWorld(this, f.getName());
-					simulationManager.addSimulator(new WorldSimulator(this,
-							world));
+					simulationManager.addSimulator(new WorldSimulator(this, world));
 				}
 			}
 		}
@@ -273,17 +268,14 @@ public class Core implements Runnable {
 	}
 
 	public void test0() {
-		visualManager.setRenderedView(new WorldView(this, simulationManager
-				.getWorldWithName("world0")));
+		visualManager.setRenderedView(new WorldView(this, simulationManager.getWorldWithName("world0")));
 	}
 
 	public void test1() {
-		visualManager.setRenderedView(new WorldView(this, simulationManager
-				.getWorldWithName("world1")));
+		visualManager.setRenderedView(new WorldView(this, simulationManager.getWorldWithName("world1")));
 	}
 
 	public void test2() {
-		visualManager.setRenderedView(new GalaxyView(this, simulationManager
-				.getGalaxyWithName("galaxy0")));
+		visualManager.setRenderedView(new GalaxyView(this, simulationManager.getGalaxyWithName("galaxy0")));
 	}
 }

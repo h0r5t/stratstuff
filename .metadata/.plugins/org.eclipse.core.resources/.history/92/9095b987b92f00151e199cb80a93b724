@@ -1,0 +1,9 @@
+package stratstuff;
+
+public class UnitSelectionMarker implements Drawable {
+
+	public UnitSelectionMarker () {
+
+	}
+
+}

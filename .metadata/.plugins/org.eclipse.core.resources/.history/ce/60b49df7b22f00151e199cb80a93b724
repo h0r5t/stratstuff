@@ -1,0 +1,95 @@
+package stratstuff;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+public class ContextCommandsMenu implements UIElement {
+
+	private ArrayList<ContextCommand> listOfCommands;
+	private int posX;
+	private int posY;
+
+	public ContextCommandsMenu(ArrayList<ContextCommand> listOfCommands, int x, int y) {
+		this.listOfCommands = listOfCommands;
+		this.posX = x;
+		this.posY = y;
+	}
+
+	@Override
+	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
+
+		int boxHeight = listOfCommands.size() * 15 + 20;
+		g.setColor(Color.WHITE);
+		g.fillRect(posX, posY, 150, boxHeight);
+
+		int fontPosX = posX + 10;
+		int fontPosY = posY + 10;
+		g.setColor(Color.BLACK);
+		for (ContextCommand command : listOfCommands) {
+			g.drawString(command.getMethodName(), fontPosX, fontPosY);
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// user clicked in the box
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean overridesInput(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public UIElementType getType() {
+		return UIElementType.Tooltip;
+	}
+
+}

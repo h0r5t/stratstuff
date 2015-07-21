@@ -1,0 +1,5 @@
+package stratstuff;
+
+public interface UIElement extends Drawable {
+
+}

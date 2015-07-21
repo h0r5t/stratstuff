@@ -2,12 +2,12 @@ package stratstuff;
 
 import java.io.File;
 
-public class Design {
+public class RobotDesign {
 
 	private String name;
 	private File file;
 
-	public Design(String name, File file) {
+	public RobotDesign(String name, File file) {
 		this.name = name;
 		this.file = file;
 	}
@@ -18,5 +18,9 @@ public class Design {
 
 	public String getPath() {
 		return file.toString();
+	}
+	
+	public File getFile()  {
+		return file;
 	}
 }

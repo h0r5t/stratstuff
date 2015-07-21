@@ -1,0 +1,17 @@
+package stratstuff;
+
+import java.awt.Graphics2D;
+
+public class ContextCommandsMenu implements Drawable {
+
+	public ContextCommandsMenu(ArrayList<ContextCommand> listOfCommands)
+	{
+		
+	}
+
+	@Override
+	public void draw(Graphics2D g, int xinpixels, int yinpixels) {
+		
+	}
+
+}

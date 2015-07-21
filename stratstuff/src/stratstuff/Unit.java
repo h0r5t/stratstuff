@@ -10,25 +10,31 @@ public class Unit implements Saveable {
 	private int myUniqueID;
 	private MovingObject myObject;
 	private ArrayList<Item> inventory;
-	private Design design;
+	private RobotDesign design;
 	private static HashMap<String, LoadedInfo> info;
 	private World world;
+	private ArrayList<ContextCommand> contextCommands;
 
-	public Unit(Core core, World w, int uniqueID, int unitType, int objectUID,
-			String designName) {
+	public Unit(Core core, World w, int uniqueID, int unitType, int objectUID, String designName) {
 		LoadedInfo myInfo = info.get(unitType + "");
 		this.world = w;
 		myUniqueID = uniqueID;
 		myType = unitType;
 		myObject = w.getObjectByUID(objectUID);
 		inventory = new ArrayList<Item>();
+		contextCommands = new ArrayList<ContextCommand>();
 		if (!designName.equals("null")) {
 			design = core.getDeveloperFrame().getDesignByName(designName);
+			contextCommands = ContextCommand.scanDesignFile(design);
 		}
 	}
 
-	public Design getDesign() {
+	public RobotDesign getDesign() {
 		return design;
+	}
+
+	public ArrayList<ContextCommand> getContextCommands() {
+		return contextCommands;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -36,11 +42,10 @@ public class Unit implements Saveable {
 	public void registerRobot() {
 		if (design == null)
 			return;
-		Core.tellFrontend(FrontendMessaging.startRobotWithDesign(
-				myObject.getUniqueID(), design.getName()));
+		Core.tellFrontend(FrontendMessaging.startRobotWithDesign(myObject.getUniqueID(), design.getName()));
 	}
 
-	public void setDesign(Design d) {
+	public void setDesign(RobotDesign d) {
 		design = d;
 	}
 
@@ -54,20 +59,17 @@ public class Unit implements Saveable {
 
 	public void addToInventory(Item item) {
 		inventory.add(item);
-		Core.tellFrontend(FrontendMessaging.addToInventory(getMovingObjUID(),
-				item));
+		Core.tellFrontend(FrontendMessaging.addToInventory(getMovingObjUID(), item));
 	}
 
 	public void removeItemFromInventory(Item item) {
 		inventory.remove(item);
-		Core.tellFrontend(FrontendMessaging.removeFromInventory(
-				getMovingObjUID(), item));
+		Core.tellFrontend(FrontendMessaging.removeFromInventory(getMovingObjUID(), item));
 	}
 
 	public void initItemsInFrontend() {
 		for (Item item : inventory) {
-			Core.tellFrontend(FrontendMessaging.addToInventory(
-					getMovingObjUID(), item));
+			Core.tellFrontend(FrontendMessaging.addToInventory(getMovingObjUID(), item));
 		}
 	}
 
@@ -80,8 +82,7 @@ public class Unit implements Saveable {
 	}
 
 	public void fireBullet(World world) {
-		Bullet b = new Bullet(world, 0, myObject.getPosition(),
-				myObject.getCurrentAngleInDegrees());
+		Bullet b = new Bullet(world, 0, myObject.getPosition(), myObject.getCurrentAngleInDegrees());
 		world.addMicroObject(b);
 	}
 
@@ -92,8 +93,7 @@ public class Unit implements Saveable {
 
 	public void mineWorldPoint(World world, int eventID, WorldPoint wp) {
 		Color color = new Color(0x33, 0xCC, 0xFF);
-		Laser laser = new Laser(world, color, 5000, myObject.getPosition(), wp,
-				eventID);
+		Laser laser = new Laser(world, color, 5000, myObject.getPosition(), wp, eventID);
 		world.addMicroObject(laser);
 	}
 
@@ -107,8 +107,7 @@ public class Unit implements Saveable {
 		if (design != null) {
 			designName = design.getName();
 		}
-		return myUniqueID + " " + myType + " " + myObject.getUniqueID() + " "
-				+ designName;
+		return myUniqueID + " " + myType + " " + myObject.getUniqueID() + " " + designName;
 	}
 
 	@Override
@@ -123,4 +122,5 @@ public class Unit implements Saveable {
 	public World getWorld() {
 		return world;
 	}
+
 }

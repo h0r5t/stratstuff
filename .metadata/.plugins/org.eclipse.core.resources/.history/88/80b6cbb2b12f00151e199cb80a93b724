@@ -1,0 +1,7 @@
+package stratstuff;
+
+public interface UIElement extends Drawable extends KeyListener {
+
+	public boolean overridesInput();
+
+}
