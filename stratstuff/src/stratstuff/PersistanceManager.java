@@ -37,8 +37,7 @@ public class PersistanceManager {
 				while (scanner.hasNextLine()) {
 					temp = scanner.nextLine();
 
-					FloatingObject obj = FloatingObject.createFromSave(temp,
-							sector);
+					FloatingObject obj = FloatingObject.createFromSave(temp, sector);
 
 					sector.addObject(obj);
 				}
@@ -134,8 +133,7 @@ public class PersistanceManager {
 				int ownerUnitID = Integer.parseInt(splitLine[3]);
 				String infoText = splitLine[4];
 
-				Item item = new Item(world, uniqueID, itemType, linkedObjUID,
-						ownerUnitID, infoText);
+				Item item = new Item(world, uniqueID, itemType, linkedObjUID, ownerUnitID, infoText);
 				world.addItem(item);
 				UniqueIDFactory.increment();
 			}
@@ -149,8 +147,7 @@ public class PersistanceManager {
 		return world;
 	}
 
-	private static World loadAndAddUnits(Core core, World world,
-			String worldName) {
+	private static World loadAndAddUnits(Core core, World world, String worldName) {
 		try {
 			Scanner scanner = new Scanner(getUnitsFile(worldName));
 
@@ -164,8 +161,7 @@ public class PersistanceManager {
 				int objUID = Integer.parseInt(splitLine[2]);
 				String designName = splitLine[3];
 
-				Unit unit = new Unit(core, world, uniqueID, unitType, objUID,
-						designName);
+				Unit unit = new Unit(core, world, uniqueID, unitType, objUID, designName);
 				world.addUnit(unit);
 				UniqueIDFactory.increment();
 			}
@@ -284,8 +280,7 @@ public class PersistanceManager {
 			for (Sector sector : g.getAllSectors()) {
 				if (sector == null)
 					continue;
-				File f = getSectorFile(g.getName(), sector.getXPos(),
-						sector.getYPos());
+				File f = getSectorFile(g.getName(), sector.getXPos(), sector.getYPos());
 
 				PrintWriter writer = new PrintWriter(f);
 
@@ -346,8 +341,7 @@ public class PersistanceManager {
 	}
 
 	private static void generateItemsTxt(String name) {
-		File itemsTxt = new File(FileSystem.WORLDS_DIR + "/" + name
-				+ "/items.txt");
+		File itemsTxt = new File(FileSystem.WORLDS_DIR + "/" + name + "/items.txt");
 		if (!itemsTxt.exists()) {
 			try {
 				itemsTxt.createNewFile();
@@ -391,8 +385,7 @@ public class PersistanceManager {
 						int elementID = w.getWP(x, y, z).getAttachedElement();
 						if (elementID != -1) {
 							// defined
-							String out = elementID + " " + x + " " + y + " "
-									+ z + "\n";
+							String out = elementID + " " + x + " " + y + " " + z + "\n";
 							writer.append(out);
 						}
 					}
@@ -412,8 +405,7 @@ public class PersistanceManager {
 
 			PrintWriter writer = new PrintWriter(f);
 
-			ArrayList<MovingObject> objects = new ArrayList<MovingObject>(main
-					.getObjectManager().getUnits().values());
+			ArrayList<MovingObject> objects = new ArrayList<MovingObject>(main.getObjectManager().getUnits().values());
 
 			for (MovingObject object : objects) {
 				if (object.getWorld() != world)
@@ -474,18 +466,15 @@ public class PersistanceManager {
 	}
 
 	private static File getLayerFile(String worldName, int i) {
-		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/" + i
-				+ ".layer");
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/" + i + ".layer");
 	}
 
 	private static File getElementsFile(String worldName) {
-		return new File(FileSystem.WORLDS_DIR + "/" + worldName
-				+ "/elements.txt");
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/elements.txt");
 	}
 
 	private static File getObjectsFile(String worldName) {
-		return new File(FileSystem.WORLDS_DIR + "/" + worldName
-				+ "/objects.txt");
+		return new File(FileSystem.WORLDS_DIR + "/" + worldName + "/objects.txt");
 	}
 
 	private static File getItemsFile(String worldName) {
@@ -501,17 +490,14 @@ public class PersistanceManager {
 	}
 
 	private static File getGalaxySizeFile(String galaxyName) {
-		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName
-				+ "/size.info");
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/size.info");
 	}
 
 	private static File[] getSectorFiles(String galaxyName) {
-		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/")
-				.listFiles(new SectorFileFilter());
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/").listFiles(new SectorFileFilter());
 	}
 
 	private static File getSectorFile(String galaxyName, int x, int y) {
-		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/" + x
-				+ "_" + y + ".sector");
+		return new File(FileSystem.GALAXIES_DIR + "/" + galaxyName + "/" + x + "_" + y + ".sector");
 	}
 }
