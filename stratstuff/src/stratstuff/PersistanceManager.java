@@ -136,6 +136,7 @@ public class PersistanceManager {
 				Item item = new Item(world, uniqueID, itemType, linkedObjUID, ownerUnitID, infoText);
 				world.addItem(item);
 				UniqueIDFactory.increment();
+
 			}
 
 			scanner.close();
