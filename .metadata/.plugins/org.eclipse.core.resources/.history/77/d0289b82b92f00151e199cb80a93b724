@@ -1,9 +1,0 @@
-package stratstuff;
-
-public class UnitSelectionMarker {
-
-	public UnitSelectionMarker selectionMarker(Unit u) {
-
-	}
-
-}

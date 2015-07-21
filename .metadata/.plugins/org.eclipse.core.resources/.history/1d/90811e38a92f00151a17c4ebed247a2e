@@ -1,9 +1,0 @@
-package stratstuff;
-
-public class ContextCommand {
-	
-	public ContextCommand() {
-		
-	}
-
-}
