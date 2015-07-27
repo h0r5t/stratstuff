@@ -25,7 +25,7 @@ public class Unit implements Saveable {
 		contextCommands = new ArrayList<ContextCommand>();
 		if (!designName.equals("null")) {
 			design = core.getDeveloperFrame().getDesignByName(designName);
-			contextCommands = ContextCommand.scanDesignFile(design);
+			contextCommands = ContextCommand.scanDesignFile(this, design);
 		}
 	}
 

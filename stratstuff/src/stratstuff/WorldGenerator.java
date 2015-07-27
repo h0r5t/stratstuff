@@ -10,7 +10,7 @@ public class WorldGenerator {
 				world.getHeight(), world.getDepth());
 
 		TerrainGenerator terrainGen = new TerrainGenerator(wholeWorld,
-				TerrainType.desert);
+				TerrainType.grass);
 		world = terrainGen.modify(world);
 
 		BiomeGenerator biomeGen = new BiomeGenerator();

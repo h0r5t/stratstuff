@@ -44,7 +44,7 @@ public class ContextCommandsMenu implements UIElement {
 			}
 			g.setColor(Color.BLACK);
 			g.drawString(command.getMethodName(), fontPosX, fontPosY);
-			for (int i = fontPosY - 10; i < fontPosY; i++)
+			for (int i = fontPosY - 11; i < fontPosY; i++)
 				boxMap.put(i, command);
 			fontPosY += 10;
 		}
@@ -74,7 +74,7 @@ public class ContextCommandsMenu implements UIElement {
 		int clickY = e.getY();
 
 		ContextCommand selectedCommand = boxMap.get(clickY);
-		System.out.println(selectedCommand.getMethodName());
+		selectedCommand.run(worldPoint);
 	}
 
 	@Override

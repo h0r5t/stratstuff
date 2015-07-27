@@ -9,19 +9,22 @@ public class ContextCommand {
 	// the design this contextcommand is assigned too
 	private RobotDesign design;
 
+	private Unit unit;
+
 	// the name of the method in the python script of the robot design
 	private String methodName;
 
-	public ContextCommand(RobotDesign design, String methodName) {
+	public ContextCommand(Unit unit, RobotDesign design, String methodName) {
 		this.design = design;
 		this.methodName = methodName;
+		this.unit = unit;
 	}
 
 	public String getMethodName() {
 		return methodName;
 	}
 
-	public static ArrayList<ContextCommand> scanDesignFile(RobotDesign design) {
+	public static ArrayList<ContextCommand> scanDesignFile(Unit u, RobotDesign design) {
 		ArrayList<ContextCommand> list = new ArrayList<ContextCommand>();
 		String line, methodName = "";
 
@@ -33,7 +36,7 @@ public class ContextCommand {
 				if (line.contains("#ContextCommand")) {
 					line = scanner.nextLine().trim();
 					methodName = line.split(" ")[1].split("\\(")[0].trim();
-					ContextCommand command = new ContextCommand(design, methodName);
+					ContextCommand command = new ContextCommand(u, design, methodName);
 					list.add(command);
 				}
 			}
@@ -43,6 +46,10 @@ public class ContextCommand {
 		}
 		return list;
 
+	}
+
+	public void run(WorldPoint worldPoint) {
+		Core.tellFrontend(FrontendMessaging.runContextCommand(unit, this, worldPoint));
 	}
 
 }

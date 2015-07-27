@@ -1,39 +1,61 @@
-from src.API.Mode import Mode
+from random import randint
+
+
 from src.API.Robot import Robot
-from src.API.State import State
+
+from src.API.ScopeFilter import ScopeFilter
+from src.engine.Scope import Scope
+
 
 class TestRobot(Robot):
     def __init__(self, adapter, m_objectID):
         Robot.__init__(self, adapter, m_objectID)
+        self.setScopeFilter()
 
-        testmode = TestMode(None, self)
-        self.setMode(0, testmode)
+    def setScopeFilter(self):
+        sfilter = MyScopeFilter()
+        self.applyScopeFilter(sfilter)
 
-class TestMode(Mode):
-    def __init__(self, adapter, robot):
+    def signalReceived(self, message):
+        pass
 
-        Mode.__init__(self, adapter, robot)
-        teststate = MoveState1(adapter, robot, self)
-        self.setState(0, teststate)
-        teststate = MoveState2(adapter, robot, self)
-        self.setState(1, teststate)
+    #ContextCommand
+    def move(self, worldPoint):
+        self.moveTo(worldPoint.getX(), worldPoint.getY(), worldPoint.getZ())
 
-class MoveState1(State):
-    def __init__(self, adapter, robot, mode):
-        State.__init__(self, adapter, robot, mode)
+    #ContextCommand
+    def shoot(self, worldPoint):
+        self.turn(worldPoint.getX(), worldPoint.getY(), worldPoint.getZ())
+        self.fire()
 
-    def execute(self):
-        self.robot.moveTo(23, 20, 0)
-        self.robot.mine(25, 22, 0)
-        for i in range(0, 3):
-            self.robot.sendRadialSignal("hi1")
+    #ContextCommand
+    def contextTest3(self, worldPoint):
+        pass
 
-class MoveState2(State):
-    def __init__(self, adapter, robot, mode):
-        State.__init__(self, adapter, robot, mode)
+    #ContextCommand
+    def contextTest4(self, worldPoint):
+        pass
 
-    def execute(self):
-        self.robot.moveTo(23, 25, 0)
-        self.robot.mine(21, 23, 0)
-        for i in range(0, 3):
-            self.robot.sendRadialSignal("hi2")
+class MyScopeFilter(ScopeFilter):
+    def __init__(self):
+        self.accepted_ground_list = []
+        self.accepted_element_list = []
+        self.accepted_obj_list = [3]
+
+    # parses a scope and returns a new Scope with only the wanted (accepted) stuff
+    def parse(self, scope):
+        scopeWPs = scope.getWorldPoints()
+        scopeObjs = scope.getObjects()
+        acceptedWPs = []
+        acceptedObjs = []
+
+        for wp in scopeWPs:
+            if (wp.getGroundID() in self.accepted_ground_list) or (wp.getElementID() in self.accepted_element_list):
+                acceptedWPs.append(wp)
+
+        for obj in scopeObjs:
+            if obj.getObjectType() in self.accepted_obj_list:
+                acceptedObjs.append(obj)
+
+        newScope = Scope("", acceptedWPs, acceptedObjs)
+        return newScope

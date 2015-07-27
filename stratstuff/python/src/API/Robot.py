@@ -11,17 +11,17 @@ class Robot(Thread):
         Thread.__init__(self)
         self.adapter = adapter
         self.objectID = m_objectID
-        self.modes = {}
         self.currentModeIndex = 0
         self.visionScope = None
         self.scopeFilter = None
         self.inventory = [] # list of item objects
+        self.contextCommandsQueue = [] # list of contextCommands
 
     def run(self):
         self.execute()
 
     def destroy(self):
-        self.modes[self.currentModeIndex].destroyMode()
+        pass
 
     def update(self):
         pass
@@ -29,11 +29,20 @@ class Robot(Thread):
     def getObjectID(self):
         return self.objectID
 
-    def execute(self):
-        self.modes[self.currentModeIndex].execute()
+    def queueContextCommand(self, methodName, worldPoint):
+        l = [str(methodName), worldPoint]
+        self.contextCommandsQueue.append(l)
 
-    def setMode(self, index, mode):
-        self.modes[index] = mode
+    def execute(self):
+        while 1:
+            for l in self.contextCommandsQueue[:]:
+                methodName = l[0]
+                worldPoint = l[1]
+
+                getattr(self, methodName)(worldPoint)
+                self.contextCommandsQueue.pop(0)
+
+            time.sleep(SLEEP_TIME)
 
     def addToInventory(self, item):
         self.inventory.append(item)

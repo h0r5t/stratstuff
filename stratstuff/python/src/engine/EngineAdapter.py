@@ -99,6 +99,18 @@ class EngineAdapterClass:
         elif messageID == "START":
             self.unlock()
 
+        elif messageID == "conCom":
+            # run context command
+            objUID = int(split[1])
+            methodName = str(split[2])
+            wpX = int(split[3])
+            wpY = int(split[4])
+            wpZ = int(split[5])
+            if self.robotsMap.has_key(str(objUID)):
+                robot = self.robotsMap[str(objUID)]
+                worldPoint = EngineData.WorldPoint(0, wpX, wpY, wpZ)
+                robot.queueContextCommand(methodName, worldPoint)
+
         elif messageID == "0":
             x = split[len(split) - 3]
             y = split[len(split) - 2]

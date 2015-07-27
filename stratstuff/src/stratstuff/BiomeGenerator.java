@@ -23,7 +23,7 @@ public class BiomeGenerator {
 				world.getHeight(), 1);
 
 		// biomes.add(new BiomeWoods(surface));
-		biomes.add(new BiomeDesert(surface));
+		biomes.add(new BiomeWoods(surface));
 	}
 
 	private void activateBiomes(World world) {

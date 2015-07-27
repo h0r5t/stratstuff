@@ -14,10 +14,8 @@ public class GameSettings {
 
 	public static final int TILE_SIZE = 20;
 
-	public static int GAME_FRAME_WIDTH = (int) Toolkit.getDefaultToolkit()
-			.getScreenSize().getWidth();
-	public static int GAME_FRAME_HEIGHT = (int) Toolkit.getDefaultToolkit()
-			.getScreenSize().getHeight();
+	public static int GAME_FRAME_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int GAME_FRAME_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	public static final int GAME_FRAME_XPOS = 0;
 	public static final int GAME_FRAME_YPOS = 0;
 
@@ -30,6 +28,6 @@ public class GameSettings {
 
 	public static final int BULLET_SPEED = 50;
 
-	public static final int LIGHT_LEVEL_SURFACE = 5;
-	public static final int LIGHT_LEVEL_UNDERGROUND = 5;
+	public static final int LIGHT_LEVEL_SURFACE = 4;
+	public static final int LIGHT_LEVEL_UNDERGROUND = 4;
 }

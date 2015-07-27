@@ -120,6 +120,15 @@ public class WorldView implements View {
 				(cursor.getY() - cam.getStartY()) * GameSettings.TILE_SIZE - cam.getMicroY());
 	}
 
+	private void removeAllTooltips() {
+		ArrayList<UIElement> toRemove = new ArrayList<UIElement>();
+		for (UIElement uie : uiElements) {
+			if (uie.getType() == UIElementType.Tooltip)
+				toRemove.add(uie);
+		}
+		uiElements.removeAll(toRemove);
+	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 
@@ -166,24 +175,28 @@ public class WorldView implements View {
 		for (UIElement element : uiElements) {
 			if (element.overridesInput(e.getX(), e.getY())) {
 				element.mouseClicked(e);
+				removeAllTooltips();
 				return;
 			}
 		}
 
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			ArrayList<UIElement> toRemove = new ArrayList<UIElement>();
-			for (UIElement uie : uiElements) {
-				if (uie.getType() == UIElementType.Tooltip)
-					toRemove.add(uie);
-			}
-			uiElements.removeAll(toRemove);
-
+			removeAllTooltips();
 			checkForUnitSelection();
 
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			removeAllTooltips();
+			if (selectedUnit == null)
+				return;
 			WorldCamera cam = world.getGameCamera();
-			int tileX = (e.getX() - cam.getStartX()) * GameSettings.TILE_SIZE - cam.getMicroX();
-			int tileY = (e.getY() - cam.getStartY()) * GameSettings.TILE_SIZE - cam.getMicroY();
+			int mouseX = e.getX();
+			int mouseY = e.getY();
+
+			int cameraX = core.getCamera().getStartX() * GameSettings.TILE_SIZE;
+			int cameraY = core.getCamera().getStartY() * GameSettings.TILE_SIZE;
+
+			int tileX = (mouseX + cameraX + core.getCamera().getMicroX()) / GameSettings.TILE_SIZE;
+			int tileY = (mouseY + cameraY + core.getCamera().getMicroY()) / GameSettings.TILE_SIZE;
 
 			WorldPoint wp = world.getWP(tileX, tileY, cam.getLayer());
 			int menuX = e.getX();
@@ -244,7 +257,6 @@ public class WorldView implements View {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -6,8 +6,7 @@ public class FrontendMessaging {
 		return "0 " + newGroundID + " " + x + " " + y + " " + z;
 	}
 
-	public static String objectMovedUpdate(int objectID, int newx, int newy,
-			int newz) {
+	public static String objectMovedUpdate(int objectID, int newx, int newy, int newz) {
 		return "1 " + objectID + " " + newx + " " + newy + " " + newz;
 	}
 
@@ -23,8 +22,7 @@ public class FrontendMessaging {
 		return "3 " + newElementID + " " + x + " " + y + " " + z;
 	}
 
-	public static String objectSpawnedUpdate(int objectID, int objectType,
-			int x, int y, int z) {
+	public static String objectSpawnedUpdate(int objectID, int objectType, int x, int y, int z) {
 		return "4 " + objectID + " " + objectType + " " + x + " " + y + " " + z;
 	}
 
@@ -41,17 +39,19 @@ public class FrontendMessaging {
 	}
 
 	public static String addToInventory(int objectID, Item item) {
-		return "8 " + objectID + " " + item.getUniqueID() + " "
-				+ item.getType();
+		return "8 " + objectID + " " + item.getUniqueID() + " " + item.getType();
 	}
 
 	public static String removeFromInventory(int objectID, Item item) {
-		return "9 " + objectID + " " + item.getUniqueID() + " "
-				+ item.getType();
+		return "9 " + objectID + " " + item.getUniqueID() + " " + item.getType();
 	}
 
-	public static String menuInputMessage(String name, String type,
-			String areaData) {
+	public static String runContextCommand(Unit unit, ContextCommand command, WorldPoint wp) {
+		return "conCom " + unit.getMovingObjUID() + " " + command.getMethodName() + " " + wp.getX() + " " + wp.getY()
+				+ " " + wp.getZ();
+	}
+
+	public static String menuInputMessage(String name, String type, String areaData) {
 		return "input::" + name + " " + type + " " + areaData;
 	}
 
